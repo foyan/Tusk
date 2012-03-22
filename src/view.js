@@ -1,4 +1,7 @@
 model = Array();
+cells = Array();
+
+running = false;
 
 function load() {
 	
@@ -18,12 +21,21 @@ function load() {
 			var cell = document.createElement("td");
 			row.appendChild(cell);
 			
-			model[i][j] = new CellData();
+			var cellData = new CellData();
+			cells[cell] = cellData;
+			model[i][j] = cellData;
 			model[i][j].cell = cell;
-			model[i][j].currentGradients[0] = i == 0 && j == 0 ? 255 : 0;
+			model[i][j].currentGradients[0] = 0; //i == 0 && j == 0 ? 255 : 0;
 			
-			//cell.innerHTML = model[i][j].currentGradients[0];
-			cell.style.backgroundColor = "rgb(" + model[i][j].currentGradients[0] + ", " + model[i][j].currentGradients[0] + ", " + model[i][j].currentGradients[0] + ")";
+			updateCellView(cellData);
+			
+			cell.onclick = (function(ii, jj) {
+				return function() {
+					var c = model[ii][jj];
+					c.currentGradients[0] = 255;
+					updateCellView(c);
+				}
+			})(i, j);
 		}
 	}
 	
@@ -31,6 +43,10 @@ function load() {
 }
 
 function step() {
+	
+	if (!running) {
+		return;
+	}
 	
 	for (i = 0; i < 50; i++) {
 		for (j = 0; j < 50; j++) {
@@ -54,14 +70,22 @@ function step() {
 			var me = model[i][j];
 			var prev = me.currentGradients[0];
 			me.currentGradients[0] = me.nextGradients[0];
-			var u = Math.floor(me.currentGradients[0])
-			me.cell.style.backgroundColor = "rgb(" + u + ", " + u + ", " + u + ")";
-			//me.cell.innerHTML = u + "/" + prev;
+			updateCellView(me);
 		}
 	}
 	
 	window.setTimeout(step, 300);
 	
+}
+
+function toggle() {
+	running = !running;
+	step();
+}
+
+function updateCellView(cell) {
+	cell.cell.style.backgroundColor = "rgb(" + Math.floor(cell.currentGradients[0]) + ", 0, 0)"
+	cell.cell.title  = cell.currentGradients[0];
 }
 
 function CellData() {
