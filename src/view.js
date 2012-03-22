@@ -29,7 +29,7 @@ function load() {
 			
 			updateCellView(cellData);
 			
-			cell.onclick = (function(ii, jj) {
+			cell.onmouseover = (function(ii, jj) {
 				return function() {
 					var c = model[ii][jj];
 					c.currentGradients[0] = 0;
@@ -39,7 +39,7 @@ function load() {
 		}
 	}
 	
-	window.setTimeout(step, 300);
+	step();
 }
 
 function step() {
@@ -74,7 +74,7 @@ function step() {
 		}
 	}
 	
-	window.setTimeout(step, 300);
+	window.setTimeout(step, 20);
 	
 }
 
