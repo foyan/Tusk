@@ -25,14 +25,14 @@ function load() {
 			cells[cell] = cellData;
 			model[i][j] = cellData;
 			model[i][j].cell = cell;
-			model[i][j].currentGradients[0] = 0; //i == 0 && j == 0 ? 255 : 0;
+			model[i][j].currentGradients[0] = 255; //i == 0 && j == 0 ? 255 : 0;
 			
 			updateCellView(cellData);
 			
 			cell.onclick = (function(ii, jj) {
 				return function() {
 					var c = model[ii][jj];
-					c.currentGradients[0] = 255;
+					c.currentGradients[0] = 0;
 					updateCellView(c);
 				}
 			})(i, j);
@@ -84,7 +84,8 @@ function toggle() {
 }
 
 function updateCellView(cell) {
-	cell.cell.style.backgroundColor = "rgb(" + Math.floor(cell.currentGradients[0]) + ", 0, 0)"
+	var color  = Math.floor(cell.currentGradients[0]);
+	cell.cell.style.backgroundColor = "rgb(" + color + ", " + color + ", " + color + ")";
 	cell.cell.title  = cell.currentGradients[0];
 }
 
