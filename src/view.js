@@ -6,6 +6,9 @@ running = false;
 ROWS = 100;
 COLS = 100;
 
+cycleCounter = 0;
+DISPLAY_LOOP = 5;
+
 function load() {
 	
 	var body = document.body;
@@ -13,7 +16,8 @@ function load() {
 	var table = document.createElement("table");
 	table.style.backgroundColor = "black";
 	body.appendChild(table);
-	
+	cycleCounter = 0;
+
 	for (i = 0; i < ROWS; i++) {
 		
 		model[i] = Array();
@@ -51,7 +55,9 @@ function step() {
 	if (!running) {
 		return;
 	}
-	
+
+	cycleCounter++;
+
 	for (i = 0; i < ROWS; i++) {
 		for (j = 0; j < COLS; j++) {
 			var nord = i == 0 ? null : model[i-1][j];
@@ -75,14 +81,18 @@ function step() {
 			}
 		}
 	}
-	
-	for (i = 0; i < ROWS; i++) {
-		for (j = 0; j < COLS; j++) {
-			var me = model[i][j];
-			me.currentGradients = me.nextGradients;
-			updateCellView(me);
-		}
-	}
+
+if (cycleCounter % DISPLAY_LOOP == 0)
+	    for (i = 0; i < ROWS; i++) {
+		    for (j = 0; j < COLS; j++) {
+			    var me = model[i][j];
+			    me.currentGradients = me.nextGradients;
+
+			    // updateCellView(me);
+			    du = me.currentGradients;
+			    me.cell.style.backgroundColor = getColor(du[0]);
+		    }
+	    }
 	
 	window.setTimeout(step, 20);
 	
@@ -91,9 +101,10 @@ function step() {
 function w_Diffusion(me, dimensions) {
 	var du = Array();
 	du[0] = 0;
-	for(n = 0; n < dimensions.length; n++) {
-		du[0] += (dimensions[n].previous[0] - me[0]) * 0.3 / dimensions.length / 2;
-		du[0] += (dimensions[n].next[0] - me[0]) * 0.3 / dimensions.length / 2;
+	for (n = 0; n < dimensions.length; n++) {
+	    dn = dimensions[n];
+		du[0] += (dn.previous[0] - me[0]) * 0.3 / dimensions.length / 2;
+		du[0] += (dn.next[0] - me[0]) * 0.3 / dimensions.length / 2;
 	}
 	return du;
 }
@@ -103,9 +114,10 @@ function w(me, dimensions) {
 	du[0] = 0;
 	du[1] = 0;
 	for (n = 0; n < dimensions.length; n++) {
-		du[0] += (dimensions[n].previous[1] - dimensions[n].next[1]) / dimensions.length;
-		du[1] += (dimensions[n].previous[0] - me[0]) / dimensions.length / 2;
-		du[1] += (me[0] - dimensions[n].next[0]) / dimensions.length / 2;
+	    dn = dimensions[n];
+		du[0] += (dn.previous[1] - dn.next[1]) / dimensions.length;
+		du[1] += (dn.previous[0] - me[0]) / dimensions.length / 2;
+		du[1] += (me[0] - dn.next[0]) / dimensions.length / 2;
 	}
 	return du;
 }
