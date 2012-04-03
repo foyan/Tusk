@@ -3,8 +3,8 @@ model = Array();
 
 running = false;
 
-ROWS = 500;
-COLS = 500;
+ROWS = 100;
+COLS = 100;
 
 WIDTH = 500;
 HEIGHT = 500;
@@ -70,6 +70,16 @@ function load() {
 			})(i, j);*/
 		}
 	}
+	
+	model[49][49].currentGradients[0] = 1;
+	model[50][49].currentGradients[0] = 1;
+	model[49][50].currentGradients[0] = 1;
+	model[50][50].currentGradients[0] = 1;
+	
+	updateCellView(model[49][49]);
+	updateCellView(model[50][49]);
+	updateCellView(model[50][50]);
+	updateCellView(model[49][50]);
 		
 	step();
 }
@@ -107,7 +117,9 @@ function step() {
 	for (i = 0; i < ROWS; i++) {
 		for (j = 0; j < COLS; j++) {
 			var me = model[i][j];
-			me.currentGradients = me.nextGradients;
+			for (g = 0; g < me.nextGradients.length; g++) {
+				me.currentGradients[g] = me.nextGradients[g];
+			}
 			updateCellView(me);
 		}
 	}
@@ -128,14 +140,20 @@ function w_Diffusion(me, dimensions) {
 	return du;
 }
 
+c = 0.3;
+
 function w(me, dimensions) {
 	var du = Array();
 	du[0] = 0;
 	du[1] = 0;
 	for (n = 0; n < dimensions.length; n++) {
-		du[0] += (dimensions[n].previous[1] - dimensions[n].next[1]) / dimensions.length;
-		du[1] += (dimensions[n].previous[0] - me[0]) / dimensions.length / 2;
-		du[1] += (me[0] - dimensions[n].next[0]) / dimensions.length / 2;
+		du[0] += c * (dimensions[n].previous[1] - me[1]) / dimensions.length / 2;
+		du[0] += c * (me[1] - dimensions[n].next[1]) / dimensions.length / 2;
+		du[1] += c * (dimensions[n].previous[0] - me[0]) / dimensions.length / 2;
+		du[1] += c * (me[0] - dimensions[n].next[0]) / dimensions.length / 2;
+	}
+	for (d = 0; d < du.length; d++) {
+		du[d] = Math.sqrt(du[d]);
 	}
 	return du;
 }
@@ -147,7 +165,7 @@ function toggle() {
 }
 
 function updateCellView(cell) {
-	return;
+
 	var du = cell.currentGradients;
 	var c = getColor(du[0]);
 	
