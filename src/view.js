@@ -1,52 +1,99 @@
 model = Array();
-cells = Array();
+//cells = Array();
 
 running = false;
 
 ROWS = 100;
 COLS = 100;
 
+<<<<<<< HEAD
 cycleCounter = 0;
 DISPLAY_LOOP = 5;
+=======
+WIDTH = 500;
+HEIGHT = 500;
+
+iterationLabel = null;
+canvas = null;
+ctx = null;
+iterations = 0;
+>>>>>>> 0b2ff4d16d680f5bb020ebad4650d2a42a11ad86
 
 function load() {
 	
 	var body = document.body;
 	
+<<<<<<< HEAD
 	var table = document.createElement("table");
 	table.style.backgroundColor = "black";
 	body.appendChild(table);
 	cycleCounter = 0;
 
+=======
+	//var table = document.createElement("table");
+	//table.style.backgroundColor = "black";
+	//body.appendChild(table);
+	
+	iterationLabel = document.getElementById("iterationCount");
+	canvas = document.getElementById("pool");
+	canvas.width = WIDTH;
+	canvas.height = HEIGHT;
+	ctx = canvas.getContext("2d");
+	
+	canvas.onmousemove = function(e) {
+		if (e.button > 0) {
+			var x = Math.floor((e.clientX - e.target.offsetLeft - 2) / (WIDTH / COLS));
+			var y = Math.floor((e.clientY - e.target.offsetTop - 2) / (HEIGHT / ROWS));
+			var cell = model[y][x];
+			cell.currentGradients[0] = 1;
+			cell.currentGradients[1] = 0;
+			updateCellView(cell);
+		}
+	};
+		
+>>>>>>> 0b2ff4d16d680f5bb020ebad4650d2a42a11ad86
 	for (i = 0; i < ROWS; i++) {
 		
 		model[i] = Array();
 		
-		var row = document.createElement("tr");
-		table.appendChild(row);
+		//var row = document.createElement("tr");
+		//table.appendChild(row);
 		for (j = 0; j < COLS; j++) {
-			var cell = document.createElement("td");
-			row.appendChild(cell);
+			//var cell = document.createElement("td");
+			//row.appendChild(cell);
 			
 			var cellData = new CellData();
-			cells[cell] = cellData;
+			//cells[cell] = cellData;
 			model[i][j] = cellData;
-			model[i][j].cell = cell;
-			model[i][j].currentGradients[0] = 0; //j < COLS / 3 ? -1 : j < 2 * COLS / 3 ? 0 : 1; //i == 0 && j == 0 ? 255 : 0;
-			model[i][j].currentGradients[1] = 0;
+			//model[i][j].cell = cell;
+			cellData.currentGradients[0] = 0; //j < COLS / 3 ? -1 : j < 2 * COLS / 3 ? 0 : 1; //i == 0 && j == 0 ? 255 : 0;
+			cellData.currentGradients[1] = 0;
+			
+			cellData.x = j;
+			cellData.y = i;
 			
 			updateCellView(cellData);
 			
-			cell.onmousemove = (function(ii, jj) {
+			/*cell.onmousemove = (function(ii, jj) {
 				return function() {
 					var c = model[ii][jj];
 					c.currentGradients[0] = 1;
 					updateCellView(c);
 				}
-			})(i, j);
+			})(i, j);*/
 		}
 	}
 	
+	model[49][49].currentGradients[0] = 1;
+	model[50][49].currentGradients[0] = 1;
+	model[49][50].currentGradients[0] = 1;
+	model[50][50].currentGradients[0] = 1;
+	
+	updateCellView(model[49][49]);
+	updateCellView(model[50][49]);
+	updateCellView(model[50][50]);
+	updateCellView(model[49][50]);
+		
 	step();
 }
 
@@ -81,6 +128,7 @@ function step() {
 			}
 		}
 	}
+<<<<<<< HEAD
 
 if (cycleCounter % DISPLAY_LOOP == 0)
 	    for (i = 0; i < ROWS; i++) {
@@ -93,6 +141,20 @@ if (cycleCounter % DISPLAY_LOOP == 0)
 			    me.cell.style.backgroundColor = getColor(du[0]);
 		    }
 	    }
+=======
+	
+	for (i = 0; i < ROWS; i++) {
+		for (j = 0; j < COLS; j++) {
+			var me = model[i][j];
+			for (g = 0; g < me.nextGradients.length; g++) {
+				me.currentGradients[g] = me.nextGradients[g];
+			}
+			updateCellView(me);
+		}
+	}
+>>>>>>> 0b2ff4d16d680f5bb020ebad4650d2a42a11ad86
+	
+	iterationLabel.innerHTML = "# Iterations: " + iterations++;
 	
 	window.setTimeout(step, 20);
 	
@@ -109,15 +171,27 @@ function w_Diffusion(me, dimensions) {
 	return du;
 }
 
+c = 0.3;
+
 function w(me, dimensions) {
 	var du = Array();
 	du[0] = 0;
 	du[1] = 0;
 	for (n = 0; n < dimensions.length; n++) {
+<<<<<<< HEAD
 	    dn = dimensions[n];
 		du[0] += (dn.previous[1] - dn.next[1]) / dimensions.length;
 		du[1] += (dn.previous[0] - me[0]) / dimensions.length / 2;
 		du[1] += (me[0] - dn.next[0]) / dimensions.length / 2;
+=======
+		du[0] += c * (dimensions[n].previous[1] - me[1]) / dimensions.length / 2;
+		du[0] += c * (me[1] - dimensions[n].next[1]) / dimensions.length / 2;
+		du[1] += c * (dimensions[n].previous[0] - me[0]) / dimensions.length / 2;
+		du[1] += c * (me[0] - dimensions[n].next[0]) / dimensions.length / 2;
+	}
+	for (d = 0; d < du.length; d++) {
+		du[d] = Math.sqrt(du[d]);
+>>>>>>> 0b2ff4d16d680f5bb020ebad4650d2a42a11ad86
 	}
 	return du;
 }
@@ -129,8 +203,21 @@ function toggle() {
 }
 
 function updateCellView(cell) {
+
 	var du = cell.currentGradients;
-	cell.cell.style.backgroundColor = getColor(du[0]);
+	var c = getColor(du[0]);
+	
+	ctx.fillStyle = c;
+	
+	var width = WIDTH / COLS;
+	var height = HEIGHT / ROWS;
+	
+	var x = cell.x * width;
+	var y = cell.y * height;
+	
+	ctx.fillRect(x,y,width,height);
+		
+	//cell.cell.style.backgroundColor = getColor(du[0]);
 	//cell.cell.title = "";
 	//for (g = 0; g < du.length; g++) {
 	//	cell.cell.title += g + "=" + du[g] + ";";
@@ -149,6 +236,8 @@ function CellData() {
 	this.currentGradients = Array();
 	this.nextGradients = Array();
 	this.cell = null;
+	this.x = 0;
+	this.y = 0;
 }
 
 function Dimension() {
