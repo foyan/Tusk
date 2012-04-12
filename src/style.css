@@ -1,5 +1,6 @@
 body {
 	background-color: black;
+	color: white;
 }
 
 table {
@@ -8,7 +9,7 @@ table {
 
 table td {
 	border: none;
-	width: 3px;
-	height: 3px;
-	background-color: rgb(128,128,255);
+	width: 7px;
+	height: 7px;
+	/*background-color: rgb(128,128,255);*/
 }

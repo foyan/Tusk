@@ -7,7 +7,23 @@
 	</head>
 
 	<body>
-		<input type="button" onclick="toggle();" value="Toggle" />
+		<input type="button" onclick="toggle();" value="Toggle" /><p id="iterationCount"># Iterations: 0</p>
+		<table>
+			<tr>
+				<td>u(x, t)</td><td>d/dx u(x, t)</td><td>d^2/dx^2 u(x, t)</td>
+			</tr>
+			<tr>
+				<td>
+					<canvas style="border: 1px solid green;" id="pool"></canvas>
+				</td>
+				<td>
+					<canvas style="border: 1px solid green;" id="pool1"></canvas>
+				</td>
+				<td>
+					<canvas style="border: 1px solid green;" id="pool2"></canvas>
+				</td>
+			</tr>
+		</table>
 	</body>	
 	
 </html>
