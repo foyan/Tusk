@@ -117,8 +117,6 @@ function step() {
 		return;
 	}
 
-	cycleCounter++;
-
 	for (i = 0; i < ROWS; i++) {
 		for (j = 0; j < COLS; j++) {
 			var nord = i == 0 ? null : model[i-1][j];
@@ -155,7 +153,7 @@ function step() {
 		}
 	}
 	
-		iterationLabel.innerHTML = "# Iterations: " + iterations++;
+	iterationLabel.innerHTML = "# Iterations: " + iterations++;
 	
 	window.setTimeout(step, 0);
 	
