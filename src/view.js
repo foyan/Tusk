@@ -51,13 +51,13 @@ function load() {
 		//}
 	};
 		
-	for (i = 0; i < ROWS; i++) {
+	for (var i = 0; i < ROWS; i++) {
 		
 		model[i] = Array();
 		
 		//var row = document.createElement("tr");
 		//table.appendChild(row);
-		for (j = 0; j < COLS; j++) {
+		for (var j = 0; j < COLS; j++) {
 			//var cell = document.createElement("td");
 			//row.appendChild(cell);
 			
@@ -65,7 +65,7 @@ function load() {
 			//cells[cell] = cellData;
 			model[i][j] = cellData;
 			//model[i][j].cell = cell;
-			cellData.currentGradients[0] = -0.5 + 0.5 * Math.sin(i * 5 * Math.PI / ROWS) + 0.5 * Math.sin(j * 5 * Math.PI / COLS); //0; //j < COLS / 3 ? -1 : j < 2 * COLS / 3 ? 0 : 1; //i == 0 && j == 0 ? 255 : 0;
+			cellData.currentGradients[0] = 0; //-0.5 + 0.5 * Math.sin(i * 5 * Math.PI / ROWS) + 0.5 * Math.sin(j * 5 * Math.PI / COLS); //0; //j < COLS / 3 ? -1 : j < 2 * COLS / 3 ? 0 : 1; //i == 0 && j == 0 ? 255 : 0;
 			cellData.currentGradients[1] = 0;
 			cellData.currentGradients[2] = 0;
 			
@@ -83,6 +83,9 @@ function load() {
 			})(i, j);*/
 		}
 	}
+	
+	model[10][10].currentGradients[0] = 1;
+	updateCellView(model[10][10]);
 	
 	//for (i = 0; )
 	
@@ -117,8 +120,8 @@ function step() {
 		return;
 	}
 
-	for (i = 0; i < ROWS; i++) {
-		for (j = 0; j < COLS; j++) {
+	for (var i = 0; i < ROWS; i++) {
+		for (var j = 0; j < COLS; j++) {
 			var nord = i == 0 ? null : model[i-1][j];
 			var south = i == ROWS-1 ? null : model[i+1][j];
 			var west = j == 0 ? null : model[i][j-1];
@@ -135,16 +138,16 @@ function step() {
 			y.next = (south != null ? south : me).currentGradients;
 			
 			var du = w(me.currentGradients, [x,y]);
-			for (g = 0; g < du.length; g++) {
-				me.nextGradients[g] = du[g];
+			for (var g = 0; g < du.length; g++) {
+				me.nextGradients[g] = me.currentGradients[g] + du[g];
 			}
 		}
 	}
 	
-	for (i = 0; i < ROWS; i++) {
-		for (j = 0; j < COLS; j++) {
+	for (var i = 0; i < ROWS; i++) {
+		for (var j = 0; j < COLS; j++) {
 			var me = model[i][j];
-			for (g = 0; g < me.nextGradients.length; g++) {
+			for (var g = 0; g < me.nextGradients.length; g++) {
 				me.currentGradients[g] = me.nextGradients[g];
 			}
 			//if (iterations % 1 == 0) {
@@ -162,7 +165,7 @@ function step() {
 function w_jh(me, dimensions) {
 	var du = Array();
 	du[0] = 0;
-	for (n = 0; n < dimensions.length; n++) {
+	for (var n = 0; n < dimensions.length; n++) {
 	    dn = dimensions[n];
 		du[0] += (dn.previous[0] - me[0]) * 0.3 / dimensions.length / 2;
 		du[0] += (dn.next[0] - me[0]) * 0.3 / dimensions.length / 2;
@@ -171,9 +174,52 @@ function w_jh(me, dimensions) {
 }
 
 c = 1.0;
-dt = 0.001;
+dt = 0.01;
 
 function w(me, dimensions) {
+
+	var y = Array();
+	y[0] = 0;
+	y[1] = 0;
+	for (var nn = 0; nn < dimensions.length; nn++) {
+		y[0] += ( me[0] - dimensions[nn].previous[0]) / dimensions.length;
+		y[1] += (dimensions[nn].previous[0] - 2 * me[0] + dimensions[nn].next[0]) / dimensions.length / 2.0;
+	}
+
+	for (var ss = 0; ss < (1.0 / dt); ss++) {
+		var k = schwingung(y);
+		y = add(y, multiply(dt, k));
+	}
+	
+	return y;
+}
+
+function schwingung(y) {
+	var res = Array();
+	res[1] = y[0];
+	res[0] = -y[1];
+	return res;
+}
+
+function add(v1, v2) {
+	var n = v1.length;
+	var res = Array();
+	for (var nn = 0; nn < n; nn++) {
+		res[nn] = v1[nn] + v2[nn];
+	}
+	return res;
+}
+
+function multiply(scalar, vector) {
+	var n = vector.length;
+	var res = Array();
+	for (var nn = 0; nn < n; nn++) {
+		res[nn] = vector[nn] * scalar;
+	}
+	return res;
+}
+
+function w_kjkk(me, dimensions) {
 	
 	// d^2u/dt^2 = c*d^2u/dx^2
 	
@@ -183,7 +229,7 @@ function w(me, dimensions) {
 	var d2t = 0;
 	var d1t = 0;
 	
-	for (n = 0; n < dimensions.length; n++) {
+	for (var n = 0; n < dimensions.length; n++) {
 		d1x += dimensions[n].next[0] - me[0];
 		d2x += -dimensions[n].previous[0] + 2 * me[0] - dimensions[n].next[0];
 		d1t += (me[0] - me[1]);
