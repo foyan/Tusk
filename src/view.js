@@ -3,11 +3,11 @@ model = Array();
 
 running = false;
 
-ROWS = 200;
-COLS = 200;
+ROWS = 100;
+COLS = 100;
 
-WIDTH = 500;
-HEIGHT = 500;
+WIDTH = 800;
+HEIGHT = 800;
 
 iterationLabel = null;
 canvas = Array();
@@ -44,7 +44,7 @@ function load() {
 			var x = Math.floor((e.clientX - off.x - 2) / (WIDTH / COLS));
 			var y = Math.floor((e.clientY - off.y - 2) / (HEIGHT / ROWS));
 			var cell = model[y][x];
-			cell.currentGradients[0] = 1;
+			cell.currentGradients[0] = -0.8;
 			cell.currentGradients[1] = 0;
 			cell.currentGradients[2] = 0;
 			updateCellView(cell);
@@ -87,7 +87,7 @@ function load() {
 		}
 	}
 	
-	model[100][100].currentGradients[0] = 1;
+	//model[100][100].currentGradients[0] = 1;
 	updateCellView(model[10][10]);
 	
 	//for (i = 0; )
