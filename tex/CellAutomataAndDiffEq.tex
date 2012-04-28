@@ -74,6 +74,12 @@
 
 \section{Einleitung}
 
+Diese Projektarbeit (bestehend aus diesem Dokument sowie der zugehörigen Software {\tt Tusk}) hat zum Ziel, partielle Differentialgleichungen aus dem Umfeld der physikalischen Simulationen mit einem zellulären Automaten zu berechnen sowie darzustellen. Es soll gezeigt werden, dass dies unter den konzeptionellen Restriktionen der Theorie der zellulären Automaten möglich ist, insbesondere soll die Annahme Konrad Zuses, dass die Naturgesetze diskreten Regeln folgten und das gesamte Geschehen im Universum das Ergebnis der Arbeit eines gigantischen zellulären Automaten sei \cite{wiki:zellautomat, zuse1969}, zumindest für den Scope dieser Arbeit bestätigt werden. Ausserdem soll gezeigt werden, dass die intuitiv erwarteten Resultate in sinnvoller Rechenzeit dargestellt werden können.
+
+Diese Projektarbeit wurde im Rahmen des Kurses Softwareprojekt 2 an der Hochschule für Technik Zürich durchgeführt. Der Quellcode sowie auch dieses Dokument sind Online auf \url{http://www.github.com/foyan/Tusk} zu finden.
+
+Der Autoren Dank geht an Albert Heuberger für geballte mathematische Kompetenz gepaart mit unendlicher Geduld, an Lukas Eppler für die ständige Begleitung, sowie an Philippe Nahlik für die tolle Kursführung.
+
 \section{Zelluläre Automaten}
 
 \begin{quote}Ein zellulärer Automat ist eine regelmäßige Annordnung von Zellen. Jede Zelle kann eine endliche Zahl
@@ -116,8 +122,8 @@ ergo existieren 8 mögliche Zustandsänderungen. Ein Beispiel:
 \begin{center}
 \begin{tabular}{|r||c|c|c|c|c|c|c|c|}
 \hline
-alte $R_{i-1}R_iR_{i+1}$ &000 &001 &010 &011 &100 &101 &110 &111 \\\hline
-neues $R_i$ & 0 & 1 & 0 & 1& 1 & 0 & 1 & 0 \\\hline
+alte $R_{i-1}R_iR_{i+1}$ &111& 110 & 101 &100 &011 &010 &001 &000  \\\hline
+neues $R_i$ & 0 & 1 & 1 & 0& 1 & 1 & 1 & 0 \\\hline
 \end{tabular}
 \end{center}
 \caption{Wolfram-Konfugration 110}
@@ -134,12 +140,12 @@ Jeder dieser Konfigurationen kann eine natürliche Zahl $\left\{0, 1, 2, \dots, 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c||l|}
 \hline
-000 &001 &010 &011 &100 &101 &110 &111 & Zahl \\\hline\hline
+111 & 110 & 101 &100 &011 &010 &001 &000 & Zahl \\\hline\hline
  0 & 0 & 0 & 0& 0 & 0 & 0 & 0 & $00000000_b = 0_d$ \\\hline
  0 & 0 & 0 & 0& 0 & 0 & 0 & 1 & $00000001_b = 1_d$ \\\hline
  0 & 0 & 0 & 0& 0 & 0 & 1 & 0 & $00000010_b = 2_d$ \\\hline
 \multicolumn{9}{|c|}{$\vdots$} \\\hline
- 0 & 1 & 0 & 1& 1 & 0 & 1 & 0 & $01011010_b = 110_d$ \\\hline
+ 0 & 1 & 1 & 0& 1 & 1 & 1 & 0 & $01101110_b = 110_d$ \\\hline
 \multicolumn{9}{|c|}{$\vdots$} \\\hline
  1 & 1 & 1 & 1& 1 & 1 & 1 & 1 & $11111111_b = 255_d$ \\\hline
 \end{tabular}
@@ -187,16 +193,47 @@ k_n \frac{\partial^n u}{\partial t^n} + k_{n-1} \frac{\partial^{n-1} u}{\partial
 mit zellulären Automaten kann durchgeführt werden, indem folgendes getan wird:
 \begin{itemize}
 \item $R$ entspricht einer sinnvollen (groben) Diskretisierung der örtlichen Variablen $\vec{x}$ in einer, zwei oder drei Dimensionen
-\item Jede Zelle in $R$ ist ein Tupel $(Q, D)$ mit $Q$ als einer Menge von berechnungsfernen Zustandsinformationen und $D = \left( u, \frac{\partial u}{\vec x}, \frac{\partial^2 u}{\vec{x}^2}, \cdots, \frac{\partial^n u}{\partial \vec{x}^n} \right)  \in \mathbb{R}^n$
+\item Jede Zelle in $R$ ist ein Tupel $(Q, D)$ mit $Q$ als einer Menge von berechnungsfernen Zustandsinformationen und den Differentialen nach der Zeit $D = \left( u, \frac{\partial u}{t}, \frac{\partial^2 u}{\partial t^2}, \cdots, \frac{\partial^n u}{t^n} \right)  \in \mathbb{R}^n$
 \item Eine neue Generation entspricht jeweils der fortgelaufenen Zeit $\partial t$, welche sehr fein diskretisiert werden muss
 \item In der Übergangsfunktion $\delta$ steckt die eigentliche Differentialgleichung. In der Regel verändert sie nur die Elemente von $D$.
 \end{itemize}
 
-\section{Implementierte Differentialgleichungen}
+\section{$\delta$ der Wellengleichung}
+
+Ausgehend von der homogenen Wellengleichung
+\begin{equation*}
+\frac{\partial^2 u}{\partial t^2} = k\cdot \frac{\partial^2 u}{\partial \vec{x}^2}
+\end{equation*}
+und folgenden Zusammenhängen:
+%\begin{equation*}
+%\begin{array}{rcl}
+\begin{align*}
+u_i &&& u_i(t+\Delta t) = u_i(t) +  \frac{\partial u_i(t+\Delta t)}{\partial t}\Delta t \\
+\downarrow &&& \uparrow \\
+\frac{\partial u_i}{\partial \vec x} = u_i - \sum u_{i-1} &&& \frac{\partial u_i(t+\Delta t)}{\partial t} = \frac{\partial u_i(t)}{\partial t} + \frac{\partial^2 u}{\partial t^2}\Delta t \\
+\downarrow &&& \uparrow \\
+\frac{\partial^2 u_i}{\partial \vec x^2} = -2u_i + \sum u_{i-1} + \sum u_{i+1} & \underbrace{\longrightarrow}_{\frac{\partial^2 u}{\partial t^2} = k\cdot \frac{\partial^2 u}{\partial \vec{x}^2}} && \frac{\partial^2 u}{\partial t^2}
+\end{align*}
+%\end{array}
+%\end{equation*}
+
+kann die Übergangsfunktion $\delta$ für die Wellengleichung folgendermassen formuliert werden:
+
+\begin{eqnarray*}
+\delta(bla)
+\end{eqnarray*}
 
 \section{Numerische Verfahren}
 
 \section{Bemerkungen zur Implementation}
+
+\subsection{Wahl des Umfelds}
+
+Die Wahl des Umfelds fiel auf eine Kombination aus JavaScript und dem HTML5-{\tt canvas}-Element für die grafische Ausgabe. Die hauptsächlichen Gründe dafür sind die einfache Umsetzung sowie die sehr gute Portabilität, vorallem auch auf portable Devices mit Touch-Bedienung. Dadurch kommt der primäre Use Case der Software (Bewegung einer Flüssigkeit mittels dem Pointing Input) besonders gut zur Geltung, weil der Input eben mit dem Finger vorgenommen werden kann.
+
+Bedenken wurden vorgängig und während der ersten Implementierungsphase vor allem in Bezug auf die Perfomance geäussert, konnten aber im Laufe des Projekts zerstreut werden, auch weil gezeigt werden konnte, dass Optimierungen möglich sind (paralleles Berechnen, Umstellung von Vektorgrafik-Operationen auf Bitmap-Manipulationen).
+
+Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in der Haupthalle des zürcher Hauptbahnhofs in Betracht gezogen worden.
 
 \section{Schlussfolgerung}
 
