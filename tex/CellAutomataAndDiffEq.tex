@@ -78,7 +78,7 @@ Diese Projektarbeit (bestehend aus diesem Dokument sowie der zugehörigen Softwa
 
 Diese Projektarbeit wurde im Rahmen des Kurses Softwareprojekt 2 an der Hochschule für Technik Zürich durchgeführt. Der Quellcode sowie auch dieses Dokument sind Online auf \url{http://www.github.com/foyan/Tusk} zu finden.
 
-Der Autoren Dank geht an Albert Heuberger für geballte mathematische Kompetenz gepaart mit unendlicher Geduld, an Lukas Eppler für die ständige Begleitung, sowie an Philippe Nahlik für die tolle Kursführung.
+Der Autoren Dank geht (in alphabetischer Reihenfolge der Vornamen) an Albert Heuberger für geballte mathematische Kompetenz gepaart mit unendlicher Geduld, an Lukas Eppler für die ständige Begleitung, sowie an Philippe Nahlik für die tolle Kursführung.
 
 \section{Zelluläre Automaten}
 
@@ -216,11 +216,17 @@ u_i &&& u_i(t+\Delta t) = u_i(t) +  \frac{\partial u_i(t+\Delta t)}{\partial t}\
 \end{align*}
 %\end{array}
 %\end{equation*}
+sowie unter der Annahme, dass die Richtung der Nachbarzellen bekannt sind (d.h. jeweils der Vorgänger beziehungsweise der Nachfolger innerhalb einer Dimension bekannt sind und deswegen $N$ auch ausgedrückt werden kann als:)
+\[
+N^* =\begin{pmatrix} \overbrace{n_{1,1} \in N}^{\textrm{1. Dimension}} & \overbrace{n_{2,1} \in N}^{\textrm{2. Dimension}} & \cdots & \overbrace{n_{\frac{1}{2}|N|, 1} \in N}^{\textrm{$\frac{1}{2}|N|$te Dimension}} & \textrm{Vorgänger} \\
+n_{1,2} \in N & n_{2,2} \in N & \cdots & n_{\frac{1}{2}|N|, 2} \in N & \textrm{Nachfolger}
+ \end{pmatrix}
+\]
 
 kann die Übergangsfunktion $\delta$ für die Wellengleichung folgendermassen formuliert werden:
 
 \begin{eqnarray*}
-\delta(bla)
+\delta(r, N^*) = 
 \end{eqnarray*}
 
 \section{Numerische Verfahren}
