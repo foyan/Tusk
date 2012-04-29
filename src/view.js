@@ -7,8 +7,8 @@ ROWS = 50;
 COLS = 50;
 SLICES= 10;
 
-WIDTH = 500;
-HEIGHT = 500;
+WIDTH = 400;
+HEIGHT = 400;
 
 iterationLabel = null;
 canvas = Array();
@@ -53,7 +53,7 @@ function load() {
 	
 	canvas[0].onmousemove = function(e) {
 		if (e.altKey) {		
-		    var initVal= cellDefaultValue.value == null ? 1 : parseFloat(cellDefaultValue.value);
+		    var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
 			var cell= getCell(e);
 			cell.currentGradients[0] = initVal;
 			cell.currentGradients[1] = 0;
@@ -120,11 +120,13 @@ function load() {
 	// model[10][10].currentGradients[0] = 1;
 	// updateCellView(model[10][10]);
 	
+	/*
 	if( 1>2) {
 	setCells("0,0,0;10,10,1");
 	} else if(1<2){
 		setCells("0,0,0;24,24,1,1;25,24,1,1");
 	}
+	*/
 	//for (i = 0; )
 	
 	/*
@@ -286,6 +288,8 @@ function calcCell(me, dimensions) {
 
 }
 
+var damping = 0.99;
+
 function w(me, dimensions) {
 
 	var c = 1.0;
@@ -299,7 +303,7 @@ function w(me, dimensions) {
 	
 	var upp = udxdx * c;
 	var up = uCurrent[1] + upp * dt;
-	var ut = u + up * dt;
+	var ut = (u + up * dt) * damping;
 	
 	return [
 		ut,
@@ -392,20 +396,20 @@ function updateCellView(cell) {
 	var x = cell.x * width;
 	var y = cell.y * height;
 	
-	ctx[0].fillStyle = getColor(du[0]);
+	ctx[0].fillStyle = getColor(du[0], 128, 128, 255);
 	ctx[0].fillRect(x,y,width,height);
 
-	ctx[1].fillStyle = getColor(du[1]);
+	ctx[1].fillStyle = getColor(du[1], 128, 128, 128);
 	ctx[1].fillRect(x,y,width,height);
 
-	ctx[2].fillStyle = getColor(du[4]);
+	ctx[2].fillStyle = getColor(du[4], 128, 128, 128);
 	ctx[2].fillRect(x,y,width,height);
 }
 
-function getColor(du) {
-	var r = Math.min(255, Math.max(0, Math.floor(128 * (1+du))));
-	var g = Math.min(255, Math.max(0, Math.floor(128 * (1+du))));
-	var b = Math.min(255, Math.max(0, Math.floor(255 * (1+du))));
+function getColor(du, r0, g0, b0) {
+	var r = Math.min(255, Math.max(0, Math.floor(r0 * (1+du))));
+	var g = Math.min(255, Math.max(0, Math.floor(g0 * (1+du))));
+	var b = Math.min(255, Math.max(0, Math.floor(b0 * (1+du))));
 	
 	return "rgb(" + r + "," + g + "," + b + ")";
 }
