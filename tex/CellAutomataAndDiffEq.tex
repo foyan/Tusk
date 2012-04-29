@@ -229,6 +229,16 @@ kann die Übergangsfunktion $\delta$ für die Wellengleichung folgendermassen fo
 \delta(r, N^*) = 
 \end{eqnarray*}
 
+\section{$\delta$ der Ente}
+
+Zu jeder ernstzunehmenden Simulation von Wasser gehören sich darin (aktiv oder passiv) bewegende Objekte -- im Idealfall sind das Enten. Die Differentialgleichung der Badeente im Wasser lautet:
+\[
+\frac{\partial \vec{x}}{\partial t} = k\cdot \frac{\partial u}{\partial \vec{x}}
+\]
+Sprich: der Geschwindigkeitsvektor im $\vec{x}$-Vektorfeld (also die Ableitung nach der Zeit $t$) ist abhängig von den Steigungen (also der Differenzen der Höhe $u$) entlang aller Dimensionen.
+
+Speziell dabei ist noch, dass so eine Ente natürlich nur in endlich vielen Zellen vorkommen kann. Da die $\vec{x}$-Komponente 
+
 \section{Numerische Verfahren}
 
 \section{Bemerkungen zur Implementation}
@@ -239,7 +249,7 @@ Die Wahl des Umfelds fiel auf eine Kombination aus JavaScript und dem HTML5-{\tt
 
 Bedenken wurden vorgängig und während der ersten Implementierungsphase vor allem in Bezug auf die Perfomance geäussert, konnten aber im Laufe des Projekts zerstreut werden, auch weil gezeigt werden konnte, dass Optimierungen möglich sind (paralleles Berechnen, Umstellung von Vektorgrafik-Operationen auf Bitmap-Manipulationen).
 
-Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in der Haupthalle des zürcher Hauptbahnhofs in Betracht gezogen worden.
+Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in der Haupthalle des Zürcher Hauptbahnhofs in Betracht gezogen worden.
 
 \section{Schlussfolgerung}
 

@@ -14,8 +14,10 @@ iterationLabel = null;
 canvas = Array();
 ctx = Array();
 iterations = 0;
+rainIntensity = null;
 
-
+var duckImage = new Image();
+duckImage.src = "duck.png";
 
 supportedFunctions= {INIT : 0, DIFFUS : 1, WAFE : 2 } ;
 currentFunction= supportedFunctions.WAFE;
@@ -31,6 +33,7 @@ function load() {
 	//body.appendChild(table);
 	
 	iterationLabel = document.getElementById("iterationCount");
+	rainIntensity = document.getElementById("rain");
 	canvas[0] = document.getElementById("pool");
 	canvas[0].width = WIDTH;
 	canvas[0].height = HEIGHT;
@@ -66,6 +69,11 @@ function load() {
 		if (e.shiftKey ) {
 			var cell = getCell(e);
 			statusLabel.innerHTML =  getCellInfo(cell); 
+		}
+		if (e.ctrlKey) {
+			var cell = getCell(e);
+			cell.hasDuck = !cell.hasDuck;
+			updateCellView(cell);
 		}
 	};
 		
@@ -129,6 +137,9 @@ function load() {
 	*/
 	//for (i = 0; )
 	
+	model[20][20].hasDuck = true;
+	updateCellView(model[20][20]);
+	
 	/*
 	model[49][49].currentGradients[0] = 1;
 	model[50][49].currentGradients[0] = 1;
@@ -164,11 +175,13 @@ function getCell(e) {
 
 function getCellInfo(cell){
 	var info= 
-		"u="+formatNum(cell.currentGradients[0]) + "</br>"+
-		"u'="+formatNum(cell.currentGradients[2]) + "</br>"+
-		"u''="+formatNum(cell.currentGradients[3])+"</br>"+
-		"u.="+formatNum(cell.currentGradients[1]) + "</br>"+
-		"u..="+formatNum(cell.currentGradients[4]);
+		"u="+formatNum(cell.currentGradients[0]) + "<br/>"+
+		"u'="+formatNum(cell.currentGradients[2]) + "<br/>"+
+		"u''="+formatNum(cell.currentGradients[3])+"<br/>"+
+		"u.="+formatNum(cell.currentGradients[1]) + "<br/>"+
+		"u..="+formatNum(cell.currentGradients[4]) + "<br/>"+
+		"v_x"+formatNum(cell.currentVelocities[0]) + "<br/>"+
+		"v_y"+formatNum(cell.currentVelocities[1]) + "<br/>"
 	return info;
 }
 
@@ -212,6 +225,21 @@ function step() {
 		return;
 	}
 	
+	var drops = rainIntensity.value == 0 ? 0
+		: rainIntensity.value >= 1 ? rainIntensity.value
+		: iterations % (Math.floor(1/rainIntensity.value)) == 0 ? 1 : 0;
+	
+	for (var i = 0; i < drops; i++) {
+		var x = Math.floor(Math.random() * COLS);
+		var y = Math.floor(Math.random() * ROWS);
+		model[x][y].currentGradients[0] = -0.5;
+		model[x][y].currentGradients[1] = 0;
+		model[x][y].currentGradients[2] = 0;
+		model[x][y].currentGradients[3] = 0;
+		model[x][y].currentGradients[4] = 0;
+		model[x][y].currentGradients[5] = 0;
+	}
+	
 	for (var t = 0; t < SLICES; t++) {
 
 		for (var i = 0; i < ROWS; i++) {
@@ -235,6 +263,8 @@ function step() {
 				for (var g = 0; g < du.length; g++) {
 					me.nextGradients[g] = du[g];
 				}
+				
+				me.nextVelocities = w_Duck(me.currentGradients[0], [x.previous[0], x.next[0]], me.currentVelocities);
 			}
 		}
 		
@@ -244,16 +274,38 @@ function step() {
 				for (var g = 0; g < me.nextGradients.length; g++) {
 					me.currentGradients[g] = me.nextGradients[g];
 				}
+				me.currentVelocities = me.nextVelocities;
+				if (me.hasDuck) {
+					var x = me.currentVelocities[0] <= -0.01 ? -1 : me.currentVelocities[0] >= 0.01 ? 1 : 0;
+					var y = me.currentVelocities[1] <= -0.01 ? -1 : me.currentVelocities[1] >= 0.01 ? 1 : 0;
+					if (i+x < 0 || i+x >= ROWS) {
+						x = -x;
+					}
+					if (j+y < 0 || j+y >= COLS) {
+						y = -y;
+					}
+					me.hasDuck = false;
+					model[i+x][j+y].hasDuck = true;
+				}
 			}
 		}
 	
 	}
 	
+	var cellsWithDuck = [];
+	
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
 			var me = model[i][j];
 			updateCellView(me);
+			if (me.hasDuck) {
+				cellsWithDuck.push(me);
+			}
 		}
+	}
+	
+	for (var i = 0; i < cellsWithDuck.length; i++) {
+		updateCellView(cellsWithDuck[i]);
 	}
 
 	iterationLabel.innerHTML = "# Iterations: " + iterations++;
@@ -288,7 +340,7 @@ function calcCell(me, dimensions) {
 
 }
 
-var damping = 0.99;
+var damping = 0.995;
 
 function w(me, dimensions) {
 
@@ -314,7 +366,15 @@ function w(me, dimensions) {
 		ut
 	];
 	
-	return y;
+}
+
+function w_Duck(u, neighbourUs, currentVs) {
+	var dt = 1/SLICES;
+		
+	return [
+		/*currentVs[0] +*/ (u - neighbourUs[0]) * dt,
+		/*currentVs[1] +*/ (u - neighbourUs[1]) * dt
+	]
 }
 
 function waerme(y) {
@@ -387,7 +447,7 @@ function toggle() {
 }
 
 function updateCellView(cell) {
-
+	
 	var du = cell.currentGradients;
 	
 	var width = WIDTH / COLS;  		// TODO: calc this var just once
@@ -404,6 +464,17 @@ function updateCellView(cell) {
 
 	ctx[2].fillStyle = getColor(du[4], 128, 128, 128);
 	ctx[2].fillRect(x,y,width,height);
+
+	if (cell.hasDuck) {
+		
+		var phi = cell.currentVelocities[1] == 0 ? 0 : Math.asin(cell.currentVelocities[0] / cell.currentVelocities[1]);
+		
+		ctx[0].translate(x, y);
+		ctx[0].rotate(phi);
+		ctx[0].drawImage(duckImage, width / 2 - 18, width / 2 - 18);
+		ctx[0].rotate(-phi);
+		ctx[0].translate(-x, -y);
+	}
 }
 
 function getColor(du, r0, g0, b0) {
@@ -420,6 +491,9 @@ function CellData() {
 	this.cell = null;
 	this.x = 0;
 	this.y = 0;
+	this.hasDuck = false;
+	this.currentVelocities = [0, 0];
+	this.nextVelocities = [0, 0];
 }
 
 function Dimension() {
