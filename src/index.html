@@ -7,22 +7,46 @@
 	</head>
 
 	<body>
-		<input type="button" onclick="toggle();" value="Toggle" /><p id="iterationCount"># Iterations: 0</p>
 		<table>
 			<tr>
 				<td>u(x, t)</td><td>d/dx u(x, t)</td><td>d^2/dx^2 u(x, t)</td>
 			</tr>
 			<tr>
-				<td>
+				<td >
 					<canvas style="border: 1px solid green;" id="pool"></canvas>
+					<p>Set Value with ALT&nbsp;&nbsp;>Get Value with Shift</p> 
 				</td>
 				<td>
 					<canvas style="border: 1px solid green;" id="pool1"></canvas>
+					<p>Get Value with Shift</p> 
 				</td>
 				<td>
 					<canvas style="border: 1px solid green;" id="pool2"></canvas>
+					<p>Get Value with Shift</p> 
 				</td>
 			</tr>
+		</table>
+		<table id='Controls' width="60%">
+			<tr>
+			  <td  width="20%">
+				<input type="button" onclick="toggle();" value="Toggle" />
+				<p id="iterationCount"># Iterations: 0</p>
+			  </td>	
+			  <td width="20%">
+			    <p>
+					set value:&nbsp;&nbsp;<input type="text" id="SetValue" defaultValue="1" size="5" />
+				</p>
+			  </td>
+			  <td width="20%px">
+			    <p id="statusLabel">-</p>
+			  </td>
+			  <td width="10%px">
+			    <p>
+				  <input type="textbox" id="InitData" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"  /></br>
+				  <input type="button" onclick="initCells();" value="Init" />
+				</p>
+			  </td>
+			</tr>  
 		</table>
 	</body>	
 	
