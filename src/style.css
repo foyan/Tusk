@@ -1,6 +1,8 @@
 body {
 	background-color: black;
 	color: white;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
 }
 
 table {
@@ -11,5 +13,6 @@ table td {
 	border: none;
 	width: 7px;
 	height: 7px;
+	font-size: 8pt;
 	/*background-color: rgb(128,128,255);*/
 }
