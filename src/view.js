@@ -8,31 +8,36 @@ ROWS = 50;
 COLS = 50;
 SLICES= 10;
 
-WIDTH = 400;
-HEIGHT = 400;
+WIDTH = 500;
+HEIGHT = 500;
+MAXITEMS=6;  // Gradienten in Cell
 
 iterationLabel = null;
 canvas = Array();
 ctx = Array();
+
 iterations = 0;
 rainIntensity = null;
 fountainIntensity=null;
 
-var duckImage = new Image();
-duckImage.src = "pics/duck.png";
+var duckImage = null; 
+var damping = 0.995;
 
 supportedFunctions= {INIT : 0, DIFFUS : 1, WAFE : 2 } ;
 currentFunction= supportedFunctions.WAFE;
-	
+
+firstTime=true;
+
+var head = null;
+var diffFunctionality=new DiffFunctionality();
 
 
 function load() {
 	
 	var body = document.body;
-	
-	//var table = document.createElement("table");
-	//table.style.backgroundColor = "black";
-	//body.appendChild(table);
+	head=document.getElementsByTagName("head")[0];
+
+	//TODO: loadjscssfile(supportedFunctions[currentFunction] &".js","js");
 	
 	iterationLabel = document.getElementById("iterationCount");
 	rainIntensity = document.getElementById("rain");
@@ -48,26 +53,22 @@ function load() {
 	canvas[1].height = HEIGHT;
 	ctx[1] = canvas[1].getContext("2d");
 
-	canvas[2] = document.getElementById("pool2");
-	canvas[2].width = WIDTH;
-	canvas[2].height = HEIGHT;
-	ctx[2] = canvas[2].getContext("2d");
+	// canvas[2] = document.getElementById("pool2");
+	// canvas[2].width = WIDTH;
+	// canvas[2].height = HEIGHT;
+	// ctx[2] = canvas[2].getContext("2d");
 
 	cellDefaultValue = document.getElementById("SetValue");
 	
 	statusLabel = document.getElementById("statusLabel");
 	initDataTextbox = document.getElementById("InitData");
 	
+	
 	canvas[0].onmousemove = function(e) {
-		if (e.altKey) {		
-		    var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
-			var cell= getCell(e);
-			cell.currentGradients[0] = initVal;
-			cell.currentGradients[1] = 0;
-			cell.currentGradients[2] = 0;
-			cell.currentGradients[3] = 0;
-			cell.currentGradients[4] = 0;
-			cell.currentGradients[5] = 0;
+		if (e.altKey) {	
+		    var cell= getCell(e);
+			mouseMoveAlt(cell, cellDefaultValue);
+			cell.currentGradients[0]=1;
 			updateCellView(cell);
 		}
 		if (e.shiftKey ) {
@@ -86,76 +87,24 @@ function load() {
 			statusLabel.innerHTML = getCellInfo(getCell(e));									  
 		}
 	};		
-	canvas[2].onmousemove = function(e) {
-		if (e.shiftKey ) {
-			statusLabel.innerHTML = getCellInfo(getCell(e));									  
-		}
-	};		
+		
 		
 		
 	for (var i = 0; i < ROWS; i++) {
-		
 		model[i] = Array();
-		
-		//var row = document.createElement("tr");
-		//table.appendChild(row);
 		for (var j = 0; j < COLS; j++) {
-			//var cell = document.createElement("td");
-			//row.appendChild(cell);
-			
 			var cellData = new CellData();
-			//cells[cell] = cellData;
+			for(var idx=0;idx< MAXITEMS;idx++) {
+				cellData.currentGradients[idx] = 0;
+				cellData.nextGradients[idx] = 0;
+			}
 			model[i][j] = cellData;
-			//model[i][j].cell = cell;
-			cellData.currentGradients[0] = 0; //-0.5 + 0.5 * Math.sin(i * 5 * Math.PI / ROWS) + 0.5 * Math.sin(j * 5 * Math.PI / COLS); //0; //j < COLS / 3 ? -1 : j < 2 * COLS / 3 ? 0 : 1; //i == 0 && j == 0 ? 255 : 0;
-			cellData.currentGradients[1] = 0;
-			cellData.currentGradients[2] = 0;
-			cellData.currentGradients[3] = 0;
-			cellData.currentGradients[4] = 0;
-			cellData.currentGradients[5] = 0;
-			
 			cellData.x = j;
 			cellData.y = i;
-			
 			updateCellView(cellData);
-			
-			/*cell.onmousemove = (function(ii, jj) {
-				return function() {
-					var c = model[ii][jj];
-					c.currentGradients[0] = 1;
-					updateCellView(c);
-				}
-			})(i, j);*/
 		}
 	}
-	
-	// model[10][10].currentGradients[0] = 1;
-	// updateCellView(model[10][10]);
-	
-	/*
-	if( 1>2) {
-	setCells("0,0,0;10,10,1");
-	} else if(1<2){
-		setCells("0,0,0;24,24,1,1;25,24,1,1");
-	}
-	*/
-	//for (i = 0; )
-	
-	model[20][20].hasDuck = true;
-	updateCellView(model[20][20]);
-	
-	/*
-	model[49][49].currentGradients[0] = 1;
-	model[50][49].currentGradients[0] = 1;
-	model[49][50].currentGradients[0] = 1;
-	model[50][50].currentGradients[0] = 1;
-	
-	updateCellView(model[49][49]);
-	updateCellView(model[50][49]);
-	updateCellView(model[50][50]);
-	updateCellView(model[49][50]);
-	*/
-	
+		
 	step();
 }
 
@@ -176,24 +125,6 @@ function getCell(e) {
 	var cell = model[y][x];
 	return cell;
 }	
-
-function getCellInfo(cell){
-	var info= 
-		"u="+formatNum(cell.currentGradients[0]) + "<br/>"+
-		"u'="+formatNum(cell.currentGradients[2]) + "<br/>"+
-		"u''="+formatNum(cell.currentGradients[3])+"<br/>"+
-		"u.="+formatNum(cell.currentGradients[1]) + "<br/>"+
-		"u..="+formatNum(cell.currentGradients[4]) + "<br/>"+
-		"v_x="+formatNum(cell.currentVelocities[0]) + "<br/>"+
-		"v_y="+formatNum(cell.currentVelocities[1]) + "<br/>"+
-		"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])) + "<br/>"
-	return info;
-}
-
-function formatNum(num){
-  return num.toPrecision(4);
-}
-  
   
 function initCells(){
 	var initData=initDataTextbox.value;	
@@ -224,40 +155,90 @@ function setCells(data)	{
 }
 		
 
+function toggle() {
+	running = !running;
+	step();
+}
+
 function step() {
+
+	if( firstTime){
+	//	loadjscssfile("wave.js", "js") //dynamically load and add this .js file	
+
+		firstTime=false;
+		statusLabel.innerHTML= sayHello();
+		
+		for (var i = 0; i < ROWS; i++) {
+			model[i] = Array();
+			for (var j = 0; j < COLS; j++) {
+				var cellData = new CellData();
+				initCell(cellData);
+				model[i][j] = cellData;
+				
+				cellData.x = j;
+				cellData.y = i;
+				
+				updateCellView(cellData);
+			}
+		}
+		
+		diffFunctionality.fountainSupport= supportsFountain();
+		diffFunctionality.rainSupport= supportsRain();
+		diffFunctionality.duckSupport= supportsDuck();
+		if(diffFunctionality.duckSupport){
+			duckImage=getDuckImage();
+			var ducks= getDucks();
+			for( var i=0;i<ducks.length;i++) {
+			    var duck=ducks[i];
+				var cell=model[duck.x][duck.y];
+				cell.hasDuck = true;   // TODO: to wave.js
+				updateCellView(cell);
+			}
+		}
+		
+		customFirstTime();
+		firstTime=false;
+	}
 	
 	if (!running) {
 		return;
 	}
-	
-	var drops = rainIntensity.value == 0 ? 0
-		: rainIntensity.value >= 1 ? rainIntensity.value
-		: iterations % (Math.floor(1/rainIntensity.value)) == 0 ? 1 : 0;
-	
-	
-	
-	for (var i = 0; i < drops; i++) {
-		var x = Math.floor(Math.random() * COLS);
-		var y = Math.floor(Math.random() * ROWS);
-		model[x][y].currentGradients[0] = -0.5;
-		model[x][y].currentGradients[1] = 0;
-		model[x][y].currentGradients[2] = 0;
-		model[x][y].currentGradients[3] = 0;
-		model[x][y].currentGradients[4] = 0;
-		model[x][y].currentGradients[5] = 0;
-	}
-	
-	if( fountainIntensity.value >0 && iterations % 20==0) {
-	    var foundX=COLS/2;
-		var foundY=ROWS/2;
-		model[foundX][foundY].currentGradients[0] = parseFloat(fountainIntensity.value);
-		for (var i= 1;i<= 5;i++) 
-			model[foundX][foundY].currentGradients[i]=0;
-	}
-	
-	
-	for (var t = 0; t < SLICES; t++) {
 
+	if( diffFunctionality.rainSupport){
+		var drops = rainIntensity.value == 0 ? 0
+			: rainIntensity.value >= 1 ? rainIntensity.value
+			: iterations % (Math.floor(1/rainIntensity.value)) == 0 ? 1 : 0;
+		
+		for (var i = 0; i < drops; i++) {
+			var x = Math.floor(Math.random() * COLS);
+			var y = Math.floor(Math.random() * ROWS);
+			model[x][y].currentGradients[0] = -0.5;  //TODO: move to ITusk
+			model[x][y].currentGradients[1] = 0;
+			model[x][y].currentGradients[2] = 0;
+			model[x][y].currentGradients[3] = 0;
+			model[x][y].currentGradients[4] = 0;
+			model[x][y].currentGradients[5] = 0;
+		}
+	}  // rainSupport
+	
+	if( diffFunctionality.fountainSupport) {	
+		if( fountainIntensity.value !=0 && iterations % 20==0) {
+			var fountains=getFountains(fountainIntensity.value, ROWS, COLS);  // returns Fountain[]
+			if( fountains.length >0){
+				for (var fi = 0; fi < fountains.length; fi++) {
+					var f=fountains[fi];
+					var g=model[f.x][f.y];
+					g.currentGradients[0] = f.intensity;
+					var b=g.hasDuck;
+					for (var i= 1;i<= 5;i++) 
+						g.currentGradients[i]=0;
+				}
+			}
+		}
+	}  // fountainSupport	
+	
+	var dt = 1/SLICES;
+	for (var t = 0; t < SLICES; t++) {
 		for (var i = 0; i < ROWS; i++) {
 			for (var j = 0; j < COLS; j++) {
 				var nord = i == 0 ? null : model[i-1][j];
@@ -267,7 +248,6 @@ function step() {
 				
 				var x = new Dimension();
 				var y = new Dimension();
-				
 				var me = model[i][j];
 				
 				x.previous = (west != null ? west : me).currentGradients;
@@ -275,12 +255,12 @@ function step() {
 				y.previous = (nord != null ? nord : me).currentGradients;
 				y.next = (south != null ? south : me).currentGradients;
 				
-				var du = calcCell(me.currentGradients, [x,y]);
+				var du = calcCell(me.currentGradients, [x,y], dt, damping);
 				for (var g = 0; g < du.length; g++) {
 					me.nextGradients[g] = du[g];
 				}
 				
-				me.nextVelocities = w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities);
+				me.nextVelocities = (diffFunctionality.duckSupport==false? 0: w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
 			}
 		}
 		
@@ -291,7 +271,8 @@ function step() {
 					me.currentGradients[g] = me.nextGradients[g];
 				}
 				me.currentVelocities = me.nextVelocities;
-				if (me.hasDuck) {
+				
+				if (diffFunctionality.duckSupport && me.hasDuck) {
 					var x = me.currentVelocities[0] <= -0.0001 ? -1 : me.currentVelocities[0] >= 0.0001 ? 1 : 0;
 					var y = me.currentVelocities[1] <= -0.0001 ? -1 : me.currentVelocities[1] >= 0.0001 ? 1 : 0;
 					if (i+x < 0 || i+x >= ROWS) {
@@ -302,87 +283,40 @@ function step() {
 					}
 					me.hasDuck = false;
 					model[i+x][j+y].hasDuck = true;
-				}
+				} // duckSupport
 			}
 		}
 	
 	}
-	
-	var cellsWithDuck = [];
-	
+
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
 			var me = model[i][j];
 			updateCellView(me);
-			if (me.hasDuck) {
-				cellsWithDuck.push(me);
-			}
 		}
 	}
 	
-	for (var i = 0; i < cellsWithDuck.length; i++) {
-		updateCellView(cellsWithDuck[i]);
-	}
-
 	iterationLabel.innerHTML = "# Iterations: " + iterations++;
 	
 	window.setTimeout(step, 0);
 	
 }
 
-function w_jh(me, dimensions) {
-	var du = Array();
-	du[0] = 0;
-	for (var n = 0; n < dimensions.length; n++) {
-	    dn = dimensions[n];
-		du[0] += (dn.previous[0] - me[0]) * 0.3 / dimensions.length / 2;
-		du[0] += (dn.next[0] - me[0]) * 0.3 / dimensions.length / 2;
-	}
-	return du;
-}
+// function calcCell(me, dimensions) {
+
+	// switch(currentFunction){
+		// case supportedFunctions.DIFFUS:
+			// break ;
+		// case supportedFunctions.WAFE:
+			// return w(me, dimensions);
+		// default:
+			// alert("sorry not supported");
+			// break;
+	// }
+
+// }
 
 
-function calcCell(me, dimensions) {
-
-	switch(currentFunction){
-		case supportedFunctions.DIFFUS:
-			break ;
-		case supportedFunctions.WAFE:
-			return w(me, dimensions);
-		default:
-			alert("sorry not supported");
-			break;
-	}
-
-}
-
-var damping = 0.995;
-
-function w(me, dimensions) {
-
-	var c = 1.0;
-	var dt = 1/SLICES;
-
-	var uCurrent = me;
-	var u = uCurrent[0];
-	
-	var udx = u - (dimensions[0].previous[0] + dimensions[1].previous[0]) / 2;
-	var udxdx = -2 * u + (dimensions[0].previous[0] + dimensions[1].previous[0]) / 2 + (dimensions[0].next[0] + dimensions[1].next[0]) / 2;
-	
-	var upp = udxdx * c;
-	var up = uCurrent[1] + upp * dt;
-	var ut = (u + up * dt) * damping;
-	
-	return [
-		ut,
-		up,
-		udx,
-		udxdx,
-		upp,
-		ut
-	];
-	
-}
 
 function w_Duck(u, neighbourUs, currentVs) {
 	var dt = 1/SLICES;
@@ -393,77 +327,8 @@ function w_Duck(u, neighbourUs, currentVs) {
 	]
 }
 
-function waerme(y) {
-	var res = Array();
-	res[0] = y[0];
-	//res[1] = y[1];
-	return res;
-}
 
-function schwingung(y) {
-	var res = Array();
-	res[1] = y[0];
-	res[0] = -y[1];
-	return res;
-}
-
-function add(v1, v2) {
-	var n = v1.length;
-	var res = Array();
-	for (var nn = 0; nn < n; nn++) {
-		res[nn] = v1[nn] + v2[nn];
-	}
-	return res;
-}
-
-function multiply(scalar, vector) {
-	var n = vector.length;
-	var res = Array();
-	for (var nn = 0; nn < n; nn++) {
-		res[nn] = vector[nn] * scalar;
-	}
-	return res;
-}
-
-function w_kjkk(me, dimensions) {
-	
-	// d^2u/dt^2 = c*d^2u/dx^2
-	
-	var du = Array();
-	var d2x = 0;
-	var d1x = 0;
-	var d2t = 0;
-	var d1t = 0;
-	
-	for (var n = 0; n < dimensions.length; n++) {
-		d1x += dimensions[n].next[0] - me[0];
-		d2x += -dimensions[n].previous[0] + 2 * me[0] - dimensions[n].next[0];
-		d1t += (me[0] - me[1]);
-		d2t += (2*me[1] - me[2] - me[0])/dt;
-		//d1t += dimensions[n].next[0] - me[0];
-		//d2t += -dimensions[n].previous[0] + 2 * me[0] - dimensions[n].next[0];
-	}
-	
-	d2x /= dimensions.length;
-	d1x /= dimensions.length;
-	d1t /= dimensions.length;
-	d2t /= dimensions.length;
-	
-	var res = me[0] + (d1x + c*d2x) + (d1t + d2t*dt)*dt;
-	du[0] = res;
-	du[2] = me[1];
-	du[1] = me[0];
-	
-	return du;
-}
-
-function toggle() {
-	running = !running;
-	step();
-}
-
-function updateCellView(cell) {
-	
+function updateCellView(cell) {	
 	var du = cell.currentGradients;
 	
 	var width = WIDTH / COLS;  		// TODO: calc this var just once
@@ -478,21 +343,21 @@ function updateCellView(cell) {
 	ctx[1].fillStyle = getColor(du[1], 128, 128, 128);
 	ctx[1].fillRect(x,y,width,height);
 
-	ctx[2].fillStyle = getColor(du[4], 128, 128, 128);
-	ctx[2].fillRect(x,y,width,height);
+	// ctx[2].fillStyle = getColor(du[4], 128, 128, 128);
+	//ctx[2].fillRect(x,y,width,height);
 
-	if (cell.hasDuck) {
-		ctx[0].fillStyle = "rgb(255,255,0)";
-		ctx[0].fillRect(x,y,width,height);
-			/*	
-		var phi = calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])
-				
-		ctx[0].translate(x, y);
-		ctx[0].rotate(phi);
-		ctx[0].drawImage(duckImage, width / 2 - 18, width / 2 - 18);
-		ctx[0].rotate(-phi);
-		ctx[0].translate(-x, -y);
-		*/
+	if (diffFunctionality.duckSupport && cell.hasDuck) {
+		if( duckImage==null) {
+			ctx[0].fillStyle = "rgb(255,255,0)";
+			ctx[0].fillRect(x,y,width,height);
+		} else {
+			var phi = calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])
+			ctx[0].translate(x, y);
+			ctx[0].rotate(phi);
+			ctx[0].drawImage(duckImage, width / 2 - 18, width / 2 - 18);
+			ctx[0].rotate(-phi);
+			ctx[0].translate(-x, -y);
+		}
 	}
 }
 
@@ -521,6 +386,7 @@ function CellData() {
 	this.hasDuck = false;
 	this.currentVelocities = [0, 0];
 	this.nextVelocities = [0, 0];
+	this.custom=null;  // content depends on function
 }
 
 function Dimension() {
@@ -528,16 +394,41 @@ function Dimension() {
 	this.next = Array();
 }
 
-
-function CellValues() {
-	this.u=0;
-	this.up=0;
-	this.upp=0;
-	this.udx=0;
-	this.udxdx=0;
-	this.newU=0;
+function Fountain() {
+	this.x=-1;
+	this.y=-1;
+	this.intensity=0;
 }
 
+function DiffFunctionality(){
+	this.duckSupport=false;
+	this.fountainSupport=false;
+	this.rainSupport=false;
+}
+
+function Point(x, y){
+	this.x = x;
+	this.y = y;
+}	
+
+function loadjscssfile(filename, filetype){
+ if (filetype=="js"){ //if filename is a external JavaScript file
+  var fileref=document.createElement('script')
+  fileref.setAttribute("type","text/javascript")
+  fileref.setAttribute("src", filename)
+ }
+ else if (filetype=="css"){ //if filename is an external CSS file
+  var fileref=document.createElement("link")
+  fileref.setAttribute("rel", "stylesheet")
+  fileref.setAttribute("type", "text/css")
+  fileref.setAttribute("href", filename)
+ }
+ if (typeof fileref!="undefined")
+ {   
+  document.getElementsByTagName("head")[0].appendChild(fileref)
+  // head.appendChild(fileref);
+  }
+}
 
 
 window.onload = load;
