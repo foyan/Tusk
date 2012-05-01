@@ -181,8 +181,9 @@ function getCellInfo(cell){
 		"u''="+formatNum(cell.currentGradients[3])+"<br/>"+
 		"u.="+formatNum(cell.currentGradients[1]) + "<br/>"+
 		"u..="+formatNum(cell.currentGradients[4]) + "<br/>"+
-		"v_x"+formatNum(cell.currentVelocities[0]) + "<br/>"+
-		"v_y"+formatNum(cell.currentVelocities[1]) + "<br/>"
+		"v_x="+formatNum(cell.currentVelocities[0]) + "<br/>"+
+		"v_y="+formatNum(cell.currentVelocities[1]) + "<br/>"+
+		"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])) + "<br/>"
 	return info;
 }
 
@@ -240,6 +241,7 @@ function step() {
 		model[x][y].currentGradients[4] = 0;
 		model[x][y].currentGradients[5] = 0;
 	}
+	
 	
 	for (var t = 0; t < SLICES; t++) {
 
@@ -373,8 +375,8 @@ function w_Duck(u, neighbourUs, currentVs) {
 	var dt = 1/SLICES;
 		
 	return [
-		/*currentVs[0] +*/ (u - neighbourUs[0]) * dt,
-		/*currentVs[1] +*/ (u - neighbourUs[1]) * dt
+		/*currentVs[0] +*/ (-u + neighbourUs[0]) * dt,
+		/*currentVs[1] +*/ (-u + neighbourUs[1]) * dt
 	]
 }
 
@@ -467,15 +469,26 @@ function updateCellView(cell) {
 	ctx[2].fillRect(x,y,width,height);
 
 	if (cell.hasDuck) {
-		
-		var phi = cell.currentVelocities[1] == 0 ? 0 : Math.asin(cell.currentVelocities[0] / cell.currentVelocities[1]);
-		
+		ctx[0].fillStyle = "rgb(255,255,0)";
+		ctx[0].fillRect(x,y,width,height);
+			/*	
+		var phi = calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])
+				
 		ctx[0].translate(x, y);
 		ctx[0].rotate(phi);
 		ctx[0].drawImage(duckImage, width / 2 - 18, width / 2 - 18);
 		ctx[0].rotate(-phi);
 		ctx[0].translate(-x, -y);
+		*/
 	}
+}
+
+function calculateDuckPhi(x, y) {
+	return x >= 0 && y < 0 ? Math.atan(x/-y)
+		: x > 0 && y >= 0 ? Math.PI/2 + Math.atan(-y/x)
+		: x <= 0 && y > 0 ? Math.PI + Math.atan(x/-y)
+		: x < 0 && y <= 0 ? Math.PI * 3/2 + Math.atan(-y/x)
+		: 0;
 }
 
 function getColor(du, r0, g0, b0) {
