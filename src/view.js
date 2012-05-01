@@ -16,6 +16,7 @@ canvas = Array();
 ctx = Array();
 iterations = 0;
 rainIntensity = null;
+fountainIntensity=null;
 
 var duckImage = new Image();
 duckImage.src = "pics/duck.png";
@@ -35,7 +36,9 @@ function load() {
 	
 	iterationLabel = document.getElementById("iterationCount");
 	rainIntensity = document.getElementById("rain");
+	fountainIntensity= document.getElementById("fountain");
 	canvas[0] = document.getElementById("pool");
+	
 	canvas[0].width = WIDTH;
 	canvas[0].height = HEIGHT;
 	ctx[0] = canvas[0].getContext("2d");
@@ -231,6 +234,8 @@ function step() {
 		: rainIntensity.value >= 1 ? rainIntensity.value
 		: iterations % (Math.floor(1/rainIntensity.value)) == 0 ? 1 : 0;
 	
+	
+	
 	for (var i = 0; i < drops; i++) {
 		var x = Math.floor(Math.random() * COLS);
 		var y = Math.floor(Math.random() * ROWS);
@@ -240,6 +245,14 @@ function step() {
 		model[x][y].currentGradients[3] = 0;
 		model[x][y].currentGradients[4] = 0;
 		model[x][y].currentGradients[5] = 0;
+	}
+	
+	if( fountainIntensity.value >0 && iterations % 20==0) {
+	    var foundX=COLS/2;
+		var foundY=ROWS/2;
+		model[foundX][foundY].currentGradients[0] = parseFloat(fountainIntensity.value);
+		for (var i= 1;i<= 5;i++) 
+			model[foundX][foundY].currentGradients[i]=0;
 	}
 	
 	
@@ -267,7 +280,7 @@ function step() {
 					me.nextGradients[g] = du[g];
 				}
 				
-				me.nextVelocities = w_Duck(me.currentGradients[0], [x.previous[0], x.next[0]], me.currentVelocities);
+				me.nextVelocities = w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities);
 			}
 		}
 		
@@ -279,8 +292,8 @@ function step() {
 				}
 				me.currentVelocities = me.nextVelocities;
 				if (me.hasDuck) {
-					var x = me.currentVelocities[0] <= -0.01 ? -1 : me.currentVelocities[0] >= 0.01 ? 1 : 0;
-					var y = me.currentVelocities[1] <= -0.01 ? -1 : me.currentVelocities[1] >= 0.01 ? 1 : 0;
+					var x = me.currentVelocities[0] <= -0.0001 ? -1 : me.currentVelocities[0] >= 0.0001 ? 1 : 0;
+					var y = me.currentVelocities[1] <= -0.0001 ? -1 : me.currentVelocities[1] >= 0.0001 ? 1 : 0;
 					if (i+x < 0 || i+x >= ROWS) {
 						x = -x;
 					}
