@@ -18,7 +18,7 @@ iterations = 0;
 rainIntensity = null;
 
 var duckImage = new Image();
-duckImage.src = "duck.png";
+duckImage.src = "pics/duck.png";
 
 supportedFunctions= {INIT : 0, DIFFUS : 1, WAFE : 2 } ;
 currentFunction= supportedFunctions.WAFE;
