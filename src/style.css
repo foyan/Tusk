@@ -8,13 +8,31 @@ body {
 }
 
 table {
-	border-collapse: collapse;
+	bborder-collapse: collapse;
+	border-style: solid;
+	border-width: 2px;
+}
+td {
+	border-style: solid;
+	border-width: 1px;
 }
 
 table td {
-	border: none;
+	border: nonee;
 	width: 7px;
 	height: 7px;
 	font-size: 8pt;
 	/*background-color: rgb(128,128,255);*/
 }
+
+p.cellvalues { font-size: 14pt; }
+
+.cellTitle {
+	height: 50px;
+}
+
+.button { height:30px; width:80px; }
+
+p.iterationCount { font-size: 20pt; }
+
+.keyShortHelp li { float:left; width:140px;}

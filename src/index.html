@@ -8,47 +8,84 @@
 	</head>
 
 	<body>
-		<table >
-			<tr>
-				<td>u(x, t)</td><td>d/dx u(x, t)</td>
+		<table width="100%" border="2" >
+			<colgroup>
+				<col width="25%">
+				<col width="25%">
+				<col width="25%">
+				<col width="25%">
+			</colgroup>
+			<tr class="cellTitle">
+				<td colspan="2"><img src="pics/u(x,t).png" alt="u(x,t)" height="25px" /></td>
+				<td colspan="2">
+					<input type="radio" name="canves2" value="2"  onChange="radioCanvesChanged(this);"  checked><img src="pics/udx.png" alt="d/dx u(x, t)" height="40px" /></Input>
+					<input type="radio" name="canves2" value="3"  onChange="radioCanvesChanged(this);" ><img src="pics/udxdx.png" alt="d/dx^2 u(x, t)" height="40px" /></Input>
+					<input type="radio" name="canves2" value="1"  onChange="radioCanvesChanged(this);" ><img src="pics/udt.png" alt="d/dt u(x, t)" height="40px" /></Input>
+					<input type="radio" name="canves2" value="0"  onChange="radioCanvesChanged(this);" ><img src="pics/u(x,t+dt).png" alt="u(x, t+dt)" height="40px" /></Input>
+				</td>
 			</tr>
-			<tr>
-				<td >
+			<tr style="height=80%">
+				<td width="50%" colspan="2">
 					<canvas style="border: 1px solid green;" id="pool"></canvas>
-					<p>Set Value with ALT&nbsp;&nbsp;>Get Value with Shift</p> 
-					<p>Add/Kill Duck with Ctrl</p>
+				</td>
+				<td  colspan="2">
+					<canvas style="border: 1px solid green;" id="pool1"></canvas>
+				</td>
+			</tr>
+			<tr><td colspan="4"><hr /></td></tr>
+			<tr>
+				<td colspan="2">
+					<ul class="keyShortHelp">
+						<li>Set Value with ALT</li>
+						<li>Get Value with Shift</li>
+						<li>Add/Kill Duck with Ctrl</li>
+					</ul>
 				</td>
 				<td>
-					<canvas style="border: 1px solid green;" id="pool1"></canvas>
-					<p>Get Value with Shift</p> 
+					set value:&nbsp;&nbsp;<input type="text" id="SetValue" defaultValue="1" size="3" maxlength="5" />
 				</td>
-				
+				<td rowspan="3">
+					<table border="1" width="100%" heigth="100%">
+						<colgroup>
+							<col width="33%">
+							<col width="33%">
+							<col width="34%">
+						</colgroup>
+						<tr>
+							<td>&nbsp;</td><td><p class="cellvalues" id="u_north">-</p></td><td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td><p class="cellvalues" id="u_left">-</p></td><td><p class="cellvalues" id="u_me">-</p></td><td><p class="cellvalues" id="u_right">-</p></td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td><td><p class="cellvalues" id="u_south">-</p></td><td>&nbsp;</td>
+						</tr>
+					</table>
+				</td>
 			</tr>
-		</table>
-		<table id='Controls' width="60%">
 			<tr>
-			  <td  width="20%">
-				<input type="button" onclick="toggle();" value="Toggle" />
-				<p id="iterationCount"># Iterations: 0</p>
-				<p>Rain Intensity: <input type="textbox" id="rain" value="0" /> drops per iteration</p>
-				<p>Fountain Intensity: <input type="textbox" id="fountain" value="0" /> drops per iteration</p>
-			  </td>	
-			  <td width="20%">
-			    <p>
-					set value:&nbsp;&nbsp;<input type="text" id="SetValue" defaultValue="1" size="5" />
-				</p>
-			  </td>
-			  <td width="20%px">
-			    <p id="statusLabel">-</p>
-			  </td>
-			  <td width="10%px">
-			    <p>
-				  <input type="textbox" id="InitData" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"  /></br>
-				  <input type="button" onclick="initCells();" value="Init" />
-				</p>
-			  </td>
+				<td>
+					<p id="iterationCount"># Iterations: 0</p>
+					<input type="button" onclick="toggle();" value="Toggle" class="button" />
+					&nbsp;&nbsp;
+					<input type="button" onclick="singleStep();" value="single step" class="button"/>
+				</td>
+				<td >
+					<p>Rain Intensity: <input type="textbox" id="rain" value="0"  size="3" maxlength="5" /> drops per iteration</p>
+					<p>Fountain Intensity: <input type="textbox" id="fountain" value="0"  size="3" maxlength="5"/></p>
+				</td>	
+				<td >
+				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"  size="30" /></br>
+				  <input type="button" onclick="initCells();" value="Init" class="button"/>
+				</td>
+				<td >
+				</td>
+			</tr>  
+			<tr>
+				<td colspan="3">
+					<p id="statusLabel">-</p>
+				</td>
 			</tr>  
 		</table>
 	</body>	
-	
 </html>

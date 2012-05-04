@@ -19,6 +19,7 @@ ctx = Array();
 iterations = 0;
 rainIntensity = null;
 fountainIntensity=null;
+statusMap=Array();
 
 var duckImage = null; 
 var damping = 0.995;
@@ -27,6 +28,8 @@ supportedFunctions= {INIT : 0, DIFFUS : 1, WAFE : 2 } ;
 currentFunction= supportedFunctions.WAFE;
 
 firstTime=true;
+
+canves2Idx=0;
 
 var head = null;
 var diffFunctionality=new DiffFunctionality();
@@ -53,6 +56,8 @@ function load() {
 	canvas[1].height = HEIGHT;
 	ctx[1] = canvas[1].getContext("2d");
 
+	
+		
 	// canvas[2] = document.getElementById("pool2");
 	// canvas[2].width = WIDTH;
 	// canvas[2].height = HEIGHT;
@@ -62,7 +67,17 @@ function load() {
 	
 	statusLabel = document.getElementById("statusLabel");
 	initDataTextbox = document.getElementById("InitData");
+
 	
+	statusMapNorth= document.getElementById("u_north");
+	statusMapSouth= document.getElementById("u_south");
+	statusMapLeft= document.getElementById("u_left");
+	statusMapRight= document.getElementById("u_right");
+	statusMapMe= document.getElementById("u_me");
+	statusMap[0]=statusMapNorth; statusMap[1]=statusMapSouth;
+	statusMap[2]=statusMapLeft; statusMap[3]=statusMapRight;
+	statusMap[4]=statusMapMe;
+
 	
 	canvas[0].onmousemove = function(e) {
 		if (e.altKey) {	
@@ -73,7 +88,8 @@ function load() {
 		}
 		if (e.shiftKey ) {
 			var cell = getCell(e);
-			statusLabel.innerHTML =  getCellInfo(cell); 
+			statusLabel.innerHTML =  getCellInfo(cell);
+			setStatusMap(cell);
 		}
 		if (e.ctrlKey) {
 			var cell = getCell(e);
@@ -154,6 +170,29 @@ function setCells(data)	{
 	}
 }
 		
+function setStatusMap(cell){
+	var x=cell.x;
+	var y=cell.y;
+	
+	statusMapRight.innerHTML= getStatusMapInfo(y,x+1);  
+	statusMapLeft.innerHTML= getStatusMapInfo(y,x-1);  
+	statusMapNorth.innerHTML= getStatusMapInfo(y-1,x); 
+	statusMapSouth.innerHTML= getStatusMapInfo(y+1,x); 
+	statusMapMe.innerHTML=getStatusMapInfo(y,x);
+}		
+		
+function getStatusMapInfo(y,x){
+	var m=model[y][x]
+	var u=m.currentGradients[canves2Idx];
+	var s=formatNum(u);
+	return s;
+}		
+
+
+function radioCanvesChanged(radioButton) {
+	canves2Idx= radioButton.value;
+	updateAllCellView();
+}
 
 function toggle() {
 	running = !running;
@@ -181,6 +220,7 @@ function step() {
 				updateCellView(cellData);
 			}
 		}
+
 		
 		diffFunctionality.fountainSupport= supportsFountain();
 		diffFunctionality.rainSupport= supportsRain();
@@ -199,6 +239,7 @@ function step() {
 		customFirstTime();
 		firstTime=false;
 	}
+	
 	
 	if (!running) {
 		return;
@@ -302,21 +343,6 @@ function step() {
 	
 }
 
-// function calcCell(me, dimensions) {
-
-	// switch(currentFunction){
-		// case supportedFunctions.DIFFUS:
-			// break ;
-		// case supportedFunctions.WAFE:
-			// return w(me, dimensions);
-		// default:
-			// alert("sorry not supported");
-			// break;
-	// }
-
-// }
-
-
 
 function w_Duck(u, neighbourUs, currentVs) {
 	var dt = 1/SLICES;
@@ -327,6 +353,14 @@ function w_Duck(u, neighbourUs, currentVs) {
 	]
 }
 
+
+function updateAllCellView(){
+	for (var i = 0; i < ROWS; i++) {
+		for (var j = 0; j < COLS; j++) {
+			updateCellView(model[i][j]);
+		}
+	}
+}		
 
 function updateCellView(cell) {	
 	var du = cell.currentGradients;
@@ -340,7 +374,7 @@ function updateCellView(cell) {
 	ctx[0].fillStyle = getColor(du[0], 128, 128, 255);
 	ctx[0].fillRect(x,y,width,height);
 
-	ctx[1].fillStyle = getColor(du[1], 128, 128, 128);
+	ctx[1].fillStyle = getColor(du[canves2Idx], 128, 128, 128);
 	ctx[1].fillRect(x,y,width,height);
 
 	// ctx[2].fillStyle = getColor(du[4], 128, 128, 128);
@@ -375,6 +409,10 @@ function getColor(du, r0, g0, b0) {
 	var b = Math.min(255, Math.max(0, Math.floor(b0 * (1+du))));
 	
 	return "rgb(" + r + "," + g + "," + b + ")";
+}
+
+function formatNum(num){
+  return num.toPrecision(4);
 }
 
 function CellData() {

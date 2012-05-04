@@ -3,7 +3,7 @@
 	- Wave -
 	
 	implementiert die Welle.
-	implementiert Interface Tusk
+	implementiert Interface ITusk
 
 */
 
@@ -37,20 +37,18 @@ function getDucks(rows, cols){
 function customFirstTime(){ ; }
 
 function getCellInfo(cell){
+    var lf="<br />";
+	lf="\t";
 	var info= 
-		"u="+formatNum(cell.currentGradients[0]) + "<br/>"+
-		"u'="+formatNum(cell.currentGradients[2]) + "<br/>"+
-		"u''="+formatNum(cell.currentGradients[3])+"<br/>"+
-		"u.="+formatNum(cell.currentGradients[1]) + "<br/>"+
-		"u..="+formatNum(cell.currentGradients[4]) + "<br/>"+
-		"v_x="+formatNum(cell.currentVelocities[0]) + "<br/>"+
-		"v_y="+formatNum(cell.currentVelocities[1]) + "<br/>"+
+		"u="+formatNum(cell.currentGradients[0]) + lf+
+		"u'="+formatNum(cell.currentGradients[2]) + lf+
+		"u''="+formatNum(cell.currentGradients[3])+lf+
+		"u.="+formatNum(cell.currentGradients[1]) + lf+
+		"u..="+formatNum(cell.currentGradients[4]) + lf+
+		"v_x="+formatNum(cell.currentVelocities[0]) + lf+
+		"v_y="+formatNum(cell.currentVelocities[1]) + lf+
 		"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1]))*360/6.28 + "°<br/>"
 	return info;
-}
-
-function formatNum(num){
-  return num.toPrecision(4);
 }
 
 
