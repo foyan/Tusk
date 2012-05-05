@@ -57,18 +57,12 @@ function load() {
 	ctx[1] = canvas[1].getContext("2d");
 
 	
-		
-	// canvas[2] = document.getElementById("pool2");
-	// canvas[2].width = WIDTH;
-	// canvas[2].height = HEIGHT;
-	// ctx[2] = canvas[2].getContext("2d");
-
-	cellDefaultValue = document.getElementById("SetValue");
+	cellDefaultValue = document.getElementById("setValue");
 	
 	statusLabel = document.getElementById("statusLabel");
 	initDataTextbox = document.getElementById("InitData");
+	modelname=document.getElementById("modelname");
 
-	
 	statusMapNorth= document.getElementById("u_north");
 	statusMapSouth= document.getElementById("u_south");
 	statusMapLeft= document.getElementById("u_left");
@@ -83,7 +77,6 @@ function load() {
 		if (e.altKey) {	
 		    var cell= getCell(e);
 			mouseMoveAlt(cell, cellDefaultValue);
-			cell.currentGradients[0]=1;
 			updateCellView(cell);
 		}
 		if (e.shiftKey ) {
@@ -206,6 +199,7 @@ function step() {
 
 		firstTime=false;
 		statusLabel.innerHTML= sayHello();
+		modelname.innerHTML=sayHello();
 		
 		for (var i = 0; i < ROWS; i++) {
 			model[i] = Array();
