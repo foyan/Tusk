@@ -323,12 +323,21 @@ function step() {
 		}
 	
 	}
+	
+	var cellsWithDuck = [];
 
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
 			var me = model[i][j];
 			updateCellView(me);
+			if (me.hasDuck) {
+				cellsWithDuck.push(me);
+			}
 		}
+	}
+	
+	for (var i = 0; i < cellsWithDuck.length; i++) {
+		updateCellView(cellsWithDuck[i]);
 	}
 	
 	iterationLabel.innerHTML = "# Iterations: " + iterations++;

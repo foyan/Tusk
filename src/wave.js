@@ -19,7 +19,7 @@ function supportsRain() { return waveSUPPORTDEFAULT;}
 function supportsDuck() { return waveSUPPORTDEFAULT;}
 
 function getDuckImage(){
-	return null;
+//	return null;
 	
 	duckImage=new Image(); 
 	duckImage.src = "pics/duck.png";
@@ -47,7 +47,7 @@ function getCellInfo(cell){
 		"u..="+formatNum(cell.currentGradients[4]) + lf+
 		"v_x="+formatNum(cell.currentVelocities[0]) + lf+
 		"v_y="+formatNum(cell.currentVelocities[1]) + lf+
-		"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1]))*360/6.28 + "°<br/>"
+		"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1]))*360/6.28 + "ï¿½<br/>"
 	return info;
 }
 
