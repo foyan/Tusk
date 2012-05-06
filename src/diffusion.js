@@ -56,10 +56,10 @@ function calcCell(me, dimensions, dt, damping, viscosity) {
 	du[0] = 0;
 	for (n = 0; n < dimensions.length; n++) {
 	    dn = dimensions[n];
-		diff= (-dn.previous[0] + me[0])*0.01;
+		diff= (-dn.previous[0] + me.currentGradients[0])*0.01;
 		du[0]-=diff;
 	}
-	du[0]+=me[0];
+	du[0]+=me.currentGradients[0];
 	return du;
 }
 

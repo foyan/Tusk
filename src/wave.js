@@ -15,7 +15,7 @@ function sayHello(){
 waveSUPPORTDEFAULT=true;
 
 function supportsFountain() { return waveSUPPORTDEFAULT;}
-function supportsRain() { return waveSUPPORTDEFAULT;}
+function supportsRains() { return waveSUPPORTDEFAULT;}
 function supportsDuck() { return waveSUPPORTDEFAULT;}
 
 function getDuckImage(){
@@ -100,7 +100,7 @@ function calcCell(me, dimensions, dt, damping, viscosity) {
 	var c = 1.0;
 	c=1/viscosity;
 
-	var uCurrent = me;
+	var uCurrent = me.currentGradients;
 	var u = uCurrent[0];
 	
 	var udx = u - (dimensions[0].previous[0] + dimensions[1].previous[0]) / 2;

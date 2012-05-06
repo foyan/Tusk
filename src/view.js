@@ -229,7 +229,7 @@ function step() {
 		}
 		
 		diffFunctionality.fountainSupport= supportsFountain();
-		diffFunctionality.rainSupport= supportsRain();
+		diffFunctionality.rainSupport= supportsRains();
 		diffFunctionality.duckSupport= supportsDuck();
 		if(diffFunctionality.duckSupport){
 			duckImage=getDuckImage();
@@ -297,7 +297,7 @@ function step() {
 				y.previous = (nord != null ? nord : me).currentGradients;
 				y.next = (south != null ? south : me).currentGradients;
 				
-				var du = calcCell(me.currentGradients, [x,y], dt, damping, viscosity);
+				var du = calcCell(me, [x,y], dt, damping, viscosity);
 				for (var g = 0; g < du.length; g++) {
 					me.nextGradients[g] = du[g];
 				}
