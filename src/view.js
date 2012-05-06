@@ -138,7 +138,8 @@ function getCell(e) {
 function initCells(){
 	var initData=initDataTextbox.value;	
 	setCells(initData);
-}	
+}
+
 function setCells(data)	{
 	var idRows=data.split(";");	
 	var idx=0;
@@ -149,16 +150,13 @@ function setCells(data)	{
 		var startX=parseFloat(idCols[1]);
 		var maxCols=(idCols.length < COLS? idCols.length: COLS);
 		for (var j = 2; j < maxCols; j++) {	
-                idx= startX+j-2;
-                idx=(idx>COLS?COLS:idx);				
-				var cellData= model[y][idx] ;
-				cellData.currentGradients[0] = parseFloat(idCols[j]); 
-				cellData.currentGradients[1] = 0;
-				cellData.currentGradients[2] = 0;
-				cellData.currentGradients[3] = 0;
-				cellData.currentGradients[4] = 0;
-				cellData.currentGradients[5] = 0;
-				updateCellView(cellData);
+			idx= startX+j-2;
+			idx=(idx>COLS?COLS:idx);				
+			var cellData= model[y][idx] ;
+			cellData.currentGradients[0] = parseFloat(idCols[j]); 
+			for( var i2=1; i2<cellData.currentGradients.length; i2++)
+				cellData.currentGradients[i2] = 0;
+			updateCellView(cellData);
 		}
 	}
 }
@@ -191,6 +189,7 @@ function toggle() {
 	running = !running;
 	step();
 }
+
 
 function step() {
 
@@ -247,12 +246,7 @@ function step() {
 		for (var i = 0; i < drops; i++) {
 			var x = Math.floor(Math.random() * COLS);
 			var y = Math.floor(Math.random() * ROWS);
-			model[x][y].currentGradients[0] = -0.5;  //TODO: move to ITusk
-			model[x][y].currentGradients[1] = 0;
-			model[x][y].currentGradients[2] = 0;
-			model[x][y].currentGradients[3] = 0;
-			model[x][y].currentGradients[4] = 0;
-			model[x][y].currentGradients[5] = 0;
+			getRainValue(model[x][y], drops, i);		
 		}
 	}  // rainSupport
 	
@@ -452,6 +446,8 @@ function Point(x, y){
 	this.y = y;
 }	
 
+
+// quelle von loadjscssfile(): http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
 function loadjscssfile(filename, filetype){
  if (filetype=="js"){ //if filename is a external JavaScript file
   var fileref=document.createElement('script')

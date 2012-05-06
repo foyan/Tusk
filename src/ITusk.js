@@ -17,6 +17,10 @@ function getDuckImage() => object of Image
 
 function getDucks(rows, cols) => Point[]
 
+// set cell values for the rain drops.
+// Parameter: cell, drops=value on the GUI, i=counter for drops: i=5 => 5th drops
+function getRainValue(cell, drops, i)  => no return
+
 // get Info über die Werte in Cell
 function getCellInfo(cell) => returns string
 
@@ -30,3 +34,5 @@ function mouseMoveShift(cell, initVal) => undef
 function customFirstTime(); 
 
 function calcCell(me, dimensions, dt, damping) => du = float[] wobei du[0]=u
+
+function initCell(cellData) => no return

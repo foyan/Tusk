@@ -34,6 +34,17 @@ function getDucks(rows, cols){
 	return ducks;
 }
 
+// set cell values for the rain drops.
+// Parameter: cell, drops=value on the GUI, i=counter for drops: i=5 => 5th drops
+function getRainValue(cell, drops, i){
+	cell.currentGradients[0] = -0.5;  
+	cell.currentGradients[1] = 0;
+	cell.currentGradients[2] = 0;
+	cell.currentGradients[3] = 0;
+	cell.currentGradients[4] = 0;
+	cell.currentGradients[5] = 0;
+}
+
 function customFirstTime(){ ; }
 
 function getCellInfo(cell){
