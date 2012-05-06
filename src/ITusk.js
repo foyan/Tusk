@@ -21,6 +21,8 @@ function getDucks(rows, cols) => Point[]
 // Parameter: cell, drops=value on the GUI, i=counter for drops: i=5 => 5th drops
 function getRainValue(cell, drops, i)  => no return
 
+function getFountains(intensity, rows, cols) => returns a array of fountains
+
 // get Info über die Werte in Cell
 function getCellInfo(cell) => returns string
 
@@ -33,6 +35,7 @@ function mouseMoveShift(cell, initVal) => undef
 // custom settings. Wird beim ersten Run von Step() aufgerufen.
 function customFirstTime(); 
 
-function calcCell(me, dimensions, dt, damping) => du = float[] wobei du[0]=u
-
 function initCell(cellData) => no return
+
+// Berechnet den neuen Wert einer Zelle.
+function calcCell(me, dimensions, dt, damping, viscosity) => du = float[] wobei du[0]=u

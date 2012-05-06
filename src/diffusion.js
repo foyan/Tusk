@@ -50,7 +50,7 @@ function initCell(cellData) {
 	cellData.currentGradients[0] = 0; 
 }
 
-function calcCell(me, dimensions, dt, damping) {
+function calcCell(me, dimensions, dt, damping, viscosity) {
 	var du = Array();
 	var diff=0;
 	du[0] = 0;

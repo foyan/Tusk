@@ -2,13 +2,13 @@
 	
 	<head>
 		<script type="text/javascript" src="view.js"></script>
-		<script type="text/javascript" src="diffusion.js"></script>
+		<script type="text/javascript" src="wave.js"></script>
 		<link type="text/css" rel="stylesheet" href="style.css" />
 		<title>Tusk</title>
 	</head>
 
 	<body>
-		<table width="100%" border="0" >
+		<table width="100%" >
 			<colgroup>
 				<col width="25%">
 				<col width="25%">
@@ -70,18 +70,30 @@
 			</tr>
 			<tr>
 				<td>
+				 
 					<p id="iterationCount"># Iterations: 0</p>
 					<input type="button" onclick="toggle();" value="Toggle" class="button" />
-					&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
 					<input type="button" onclick="singleStep();" value="single step" class="button"/>
+					
 				</td>
 				<td >
 					<p>Rain Intensity: <input type="textbox" id="rain" value="0"  size="3" maxlength="5" /> drops per iteration</p>
 					<p>Fountain Intensity: <input type="textbox" id="fountain" value="0"  size="3" maxlength="5"/></p>
 				</td>	
 				<td >
-				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"  size="30" /></br>
+				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData"  size="10" maxlength="30000" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"   />
+				  &nbsp;&nbsp;
 				  <input type="button" onclick="initCells();" value="Init" class="button"/>
+				 	 </br>
+				  Viskosität:&nbsp;&nbsp;
+				  <select id="viscosity" name="viscosity" size="1" onchange="changeViscosity()">
+					  <option value="1">Wasser 20°</option>
+					  <option value="10">Blut</option>
+					  <option value="1000">Honig</option>
+					  <option value="0.65">Petroleum</option>
+					  <option value="10^21">Beton</option>
+				  </select>
 				</td>
 				<td >
 				</td>

@@ -1,5 +1,4 @@
 model = Array();
-//cells = Array();
 
 running = false;
 runOnce=false;
@@ -26,14 +25,14 @@ var damping = 0.995;
 
 supportedFunctions= {INIT : 0, DIFFUS : 1, WAFE : 2 } ;
 currentFunction= supportedFunctions.WAFE;
-
 firstTime=true;
 
 canves2Idx=0;
 
+viscosity=1;  // Wasser 20 Grad Celsius
+
 var head = null;
 var diffFunctionality=new DiffFunctionality();
-
 
 function load() {
 	
@@ -185,10 +184,25 @@ function radioCanvesChanged(radioButton) {
 	updateAllCellView();
 }
 
+function changeViscosity(){
+	var ctrl=document.getElementById("viscosity");
+	var idx=ctrl.selectedIndex;
+	var val=ctrl.options[idx].value;
+	
+	viscosity= parseInt(val);
+}
+
+
 function toggle() {
 	running = !running;
 	step();
 }
+
+function singleStep(){
+	runOnce=true;
+	step();
+}
+
 
 
 function step() {
@@ -213,7 +227,6 @@ function step() {
 				updateCellView(cellData);
 			}
 		}
-
 		
 		diffFunctionality.fountainSupport= supportsFountain();
 		diffFunctionality.rainSupport= supportsRain();
@@ -234,7 +247,7 @@ function step() {
 	}
 	
 	
-	if (!running) {
+	if (!runOnce && !running) {
 		return;
 	}
 
@@ -284,7 +297,7 @@ function step() {
 				y.previous = (nord != null ? nord : me).currentGradients;
 				y.next = (south != null ? south : me).currentGradients;
 				
-				var du = calcCell(me.currentGradients, [x,y], dt, damping);
+				var du = calcCell(me.currentGradients, [x,y], dt, damping, viscosity);
 				for (var g = 0; g < du.length; g++) {
 					me.nextGradients[g] = du[g];
 				}
@@ -336,8 +349,12 @@ function step() {
 	
 	iterationLabel.innerHTML = "# Iterations: " + iterations++;
 	
-	window.setTimeout(step, 0);
+	if( runOnce) {
+		runOnce=false;
+		return;
+	}
 	
+	window.setTimeout(step, 0);
 }
 
 
@@ -373,9 +390,6 @@ function updateCellView(cell) {
 
 	ctx[1].fillStyle = getColor(du[canves2Idx], 128, 128, 128);
 	ctx[1].fillRect(x,y,width,height);
-
-	// ctx[2].fillStyle = getColor(du[4], 128, 128, 128);
-	//ctx[2].fillRect(x,y,width,height);
 
 	if (diffFunctionality.duckSupport && cell.hasDuck) {
 		if( duckImage==null) {

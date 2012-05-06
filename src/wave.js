@@ -96,8 +96,9 @@ function getFountains(intensity, rows, cols){
 
 
 
-function calcCell(me, dimensions, dt, damping) {
+function calcCell(me, dimensions, dt, damping, viscosity) {
 	var c = 1.0;
+	c=1/viscosity;
 
 	var uCurrent = me;
 	var u = uCurrent[0];
