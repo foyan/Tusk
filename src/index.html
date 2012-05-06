@@ -2,7 +2,13 @@
 	
 	<head>
 		<script type="text/javascript" src="view.js"></script>
+		<script type="text/javascript" src="game.js"></script>
 		<script type="text/javascript" src="wave.js"></script>
+		<script type="text/javascript" src="diffusion.js"></script>
+
+		<script type="text/javascript" src="ATusk.js"></script>
+		<script type="text/javascript" src="ooTest.js"></script>
+		<script type="text/javascript" src="gameUnitTest.js"></script>
 		<link type="text/css" rel="stylesheet" href="style.css" />
 		<title>Tusk</title>
 	</head>
@@ -16,12 +22,27 @@
 				<col width="25%">
 			</colgroup>
 			<tr class="cellTitle">
-				<td >
-					<img src="pics/u(x,t).png" alt="u(x,t)" height="25px" />
+				<td colspan="2">
+					<table width="100%">
+						<tr>
+							<td>
+								<img src="pics/u(x,t).png" alt="u(x,t)" height="25px" />
+							</td>
+							<td>
+								<h1 id="modelname">-</h1>
+							</td>
+							<td>
+								Formel:&nbsp;&nbsp;
+								<select id="diffFormel" name="diffFormel" size="1" onchange="changeFormel()">
+								  <option value="wave">Wave</option>
+								  <option value="diffusion">Diffusion</option>
+								  <option value="gameoflife">Game of Life</option>
+								</select>
+							</td>
+						</tr>
+					</table>
 				</td>
-				<td>
-					<h1 id="modelname">-</h1>
-				</td>
+				
 				<td colspan="2">
 					<input type="radio" name="canves2" value="2"  onChange="radioCanvesChanged(this);"  checked><img src="pics/udx.png" alt="d/dx u(x, t)" height="40px" /></Input>
 					<input type="radio" name="canves2" value="3"  onChange="radioCanvesChanged(this);" ><img src="pics/udxdx.png" alt="d/dx^2 u(x, t)" height="40px" /></Input>

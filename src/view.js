@@ -32,13 +32,15 @@ canves2Idx=0;
 viscosity=1;  // Wasser 20 Grad Celsius
 
 var head = null;
-var diffFunctionality=new DiffFunctionality();
+
+
+var tusk=null;
 
 function load() {
 	
 	var body = document.body;
 	head=document.getElementsByTagName("head")[0];
-
+	
 	//TODO: loadjscssfile(supportedFunctions[currentFunction] &".js","js");
 	
 	iterationLabel = document.getElementById("iterationCount");
@@ -72,18 +74,21 @@ function load() {
 	statusMap[4]=statusMapMe;
 
 	
+	tusk= tuskStrategy(getFormelCtrl()); 
+	SLICES= tusk.SLICES;	
+	
 	canvas[0].onmousemove = function(e) {
 		if (e.altKey) {	
 		    var cell= getCell(e);
-			mouseMoveAlt(cell, cellDefaultValue);
+			tusk.mouseMoveAlt(cell, cellDefaultValue);
 			updateCellView(cell);
 		}
 		if (e.shiftKey ) {
 			var cell = getCell(e);
-			statusLabel.innerHTML =  getCellInfo(cell);
+			statusLabel.innerHTML =  tusk.getCellInfo(cell);
 			setStatusMap(cell);
 		}
-		if (e.ctrlKey) {
+		if (e.ctrlKey && tusk.supportsDuck ) {
 			var cell = getCell(e);
 			cell.hasDuck = !cell.hasDuck;
 			updateCellView(cell);
@@ -92,7 +97,7 @@ function load() {
 		
 	canvas[1].onmousemove = function(e) {
 		if (e.shiftKey ) {
-			statusLabel.innerHTML = getCellInfo(getCell(e));									  
+			statusLabel.innerHTML = tusk.getCellInfo(getCell(e));									  
 		}
 	};		
 		
@@ -115,6 +120,8 @@ function load() {
 		
 	step();
 }
+
+
 
 function offset(target) {
 	var off = {x: target.offsetLeft, y: target.offsetTop};
@@ -193,6 +200,22 @@ function changeViscosity(){
 }
 
 
+
+function getFormelCtrl(){
+	var ctrl=document.getElementById("diffFormel");
+	var idx=ctrl.selectedIndex;
+	var val=ctrl.options[idx].value;
+	
+	return val;
+}
+// called when DiffFormel has changed
+function changeFormel(){	
+	tusk= tuskStrategy(getFormelCtrl()); 
+	SLICES= tusk.SLICES;
+	firstTime=true;
+	step();	
+}
+
 function toggle() {
 	running = !running;
 	step();
@@ -211,14 +234,16 @@ function step() {
 	//	loadjscssfile("wave.js", "js") //dynamically load and add this .js file	
 
 		firstTime=false;
-		statusLabel.innerHTML= sayHello();
-		modelname.innerHTML=sayHello();
+		statusLabel.innerHTML= tusk.sayHello();
+		modelname.innerHTML=tusk.sayHello();
+		
+		
 		
 		for (var i = 0; i < ROWS; i++) {
 			model[i] = Array();
 			for (var j = 0; j < COLS; j++) {
 				var cellData = new CellData();
-				initCell(cellData);
+				tusk.initCell(cellData);
 				model[i][j] = cellData;
 				
 				cellData.x = j;
@@ -228,12 +253,10 @@ function step() {
 			}
 		}
 		
-		diffFunctionality.fountainSupport= supportsFountain();
-		diffFunctionality.rainSupport= supportsRains();
-		diffFunctionality.duckSupport= supportsDuck();
-		if(diffFunctionality.duckSupport){
-			duckImage=getDuckImage();
-			var ducks= getDucks();
+		
+		if(tusk.supportsDuck){
+			duckImage=tusk.getDuckImage();
+			var ducks= tusk.getDucks();
 			for( var i=0;i<ducks.length;i++) {
 			    var duck=ducks[i];
 				var cell=model[duck.x][duck.y];
@@ -251,7 +274,7 @@ function step() {
 		return;
 	}
 
-	if( diffFunctionality.rainSupport){
+	if( tusk.supportsRains){
 		var drops = rainIntensity.value == 0 ? 0
 			: rainIntensity.value >= 1 ? rainIntensity.value
 			: iterations % (Math.floor(1/rainIntensity.value)) == 0 ? 1 : 0;
@@ -259,13 +282,13 @@ function step() {
 		for (var i = 0; i < drops; i++) {
 			var x = Math.floor(Math.random() * COLS);
 			var y = Math.floor(Math.random() * ROWS);
-			getRainValue(model[x][y], drops, i);		
+			tusk.getRainValue(model[x][y], drops, i);		
 		}
 	}  // rainSupport
 	
-	if( diffFunctionality.fountainSupport) {	
+	if( tusk.supportsFountain) {	
 		if( fountainIntensity.value !=0 && iterations % 20==0) {
-			var fountains=getFountains(fountainIntensity.value, ROWS, COLS);  // returns Fountain[]
+			var fountains=tusk.getFountains(fountainIntensity.value, ROWS, COLS);  // returns Fountain[]
 			if( fountains.length >0){
 				for (var fi = 0; fi < fountains.length; fi++) {
 					var f=fountains[fi];
@@ -297,12 +320,12 @@ function step() {
 				y.previous = (nord != null ? nord : me).currentGradients;
 				y.next = (south != null ? south : me).currentGradients;
 				
-				var du = calcCell(me, [x,y], dt, damping, viscosity);
+				var du = tusk.calcCell(me, [x,y], dt, damping, viscosity);
 				for (var g = 0; g < du.length; g++) {
 					me.nextGradients[g] = du[g];
 				}
 				
-				me.nextVelocities = (diffFunctionality.duckSupport==false? 0: w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
+				me.nextVelocities = (tusk.supportsDuck==false? 0: w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
 			}
 		}
 		
@@ -314,7 +337,7 @@ function step() {
 				}
 				me.currentVelocities = me.nextVelocities;
 				
-				if (diffFunctionality.duckSupport && me.hasDuck) {
+				if (tusk.supportsDuck && me.hasDuck) {
 					var x = me.currentVelocities[0] <= -0.0001 ? -1 : me.currentVelocities[0] >= 0.0001 ? 1 : 0;
 					var y = me.currentVelocities[1] <= -0.0001 ? -1 : me.currentVelocities[1] >= 0.0001 ? 1 : 0;
 					if (i+x < 0 || i+x >= ROWS) {
@@ -391,7 +414,7 @@ function updateCellView(cell) {
 	ctx[1].fillStyle = getColor(du[canves2Idx], 128, 128, 128);
 	ctx[1].fillRect(x,y,width,height);
 
-	if (diffFunctionality.duckSupport && cell.hasDuck) {
+	if (tusk.supportsDuck && cell.hasDuck) {
 		if( duckImage==null) {
 			ctx[0].fillStyle = "rgb(255,255,0)";
 			ctx[0].fillRect(x,y,width,height);
@@ -449,11 +472,6 @@ function Fountain() {
 	this.intensity=0;
 }
 
-function DiffFunctionality(){
-	this.duckSupport=false;
-	this.fountainSupport=false;
-	this.rainSupport=false;
-}
 
 function Point(x, y){
 	this.x = x;
