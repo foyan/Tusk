@@ -68,7 +68,7 @@
 					</ul>
 				</td>
 				<td>
-					set value:&nbsp;&nbsp;<input type="text" id="setValue" defaultValue="1" size="3" maxlength="5" />
+					set value:&nbsp;&nbsp;<input type="text" id="setValue" value="1" defaultValue="1" size="3" maxlength="5" />
 				</td>
 				<td rowspan="3">
 					<table border="1" width="100%" heigth="100%">
@@ -78,7 +78,7 @@
 							<col width="34%">
 						</colgroup>
 						<tr>
-							<td>&nbsp;</td><td><p class="cellvalues" id="u_north">-</p></td><td>&nbsp;</td>
+							<td><p class="cellvalues" id="u_pos">-</p></td><td><p class="cellvalues" id="u_north">-</p></td><td>&nbsp;</td>
 						</tr>
 						<tr>
 							<td><p class="cellvalues" id="u_left">-</p></td><td><p class="cellvalues" id="u_me">-</p></td><td><p class="cellvalues" id="u_right">-</p></td>
@@ -105,7 +105,8 @@
 				<td >
 				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData"  size="10" maxlength="30000" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"   />
 				  &nbsp;&nbsp;
-				  <input type="button" onclick="initCells();" value="Init" class="button"/>
+				  <input type="button" onclick="initCells();" value="Init" class="button"/>&nbsp;&nbsp;
+				  <input type="button" onclick="reset();" value="reset" class="button"/>
 				 	 </br>
 				  Viskosität:&nbsp;&nbsp;
 				  <select id="viscosity" name="viscosity" size="1" onchange="changeViscosity()">

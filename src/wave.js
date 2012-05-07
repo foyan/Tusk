@@ -101,6 +101,8 @@ function Wave() {
 		var up = uCurrent[1] + upp * dt;
 		var ut = (u + up * dt) * damping;
 		
+		if( Math.abs(ut)< 0.000001) ut=0  // runden
+		
 		return [
 			ut,
 			up,

@@ -19,6 +19,7 @@ iterations = 0;
 rainIntensity = null;
 fountainIntensity=null;
 statusMap=Array();
+var statusCell=null;
 
 var duckImage = null; 
 var damping = 0.995;
@@ -27,14 +28,12 @@ supportedFunctions= {INIT : 0, DIFFUS : 1, WAFE : 2 } ;
 currentFunction= supportedFunctions.WAFE;
 firstTime=true;
 
-canves2Idx=0;
+canves2Idx=1;
 
 viscosity=1;  // Wasser 20 Grad Celsius
 
 var head = null;
-
-
-var tusk=null;
+var tusk=null;  // instance of DiffGleichung
 
 function load() {
 	
@@ -69,9 +68,12 @@ function load() {
 	statusMapLeft= document.getElementById("u_left");
 	statusMapRight= document.getElementById("u_right");
 	statusMapMe= document.getElementById("u_me");
+	statusMapPos= document.getElementById("u_pos");
+
 	statusMap[0]=statusMapNorth; statusMap[1]=statusMapSouth;
 	statusMap[2]=statusMapLeft; statusMap[3]=statusMapRight;
-	statusMap[4]=statusMapMe;
+	statusMap[4]=statusMapMe; statusMap[5]=statusMapPos;
+	
 
 	
 	tusk= tuskStrategy(getFormelCtrl()); 
@@ -80,18 +82,25 @@ function load() {
 	canvas[0].onmousemove = function(e) {
 		if (e.altKey) {	
 		    var cell= getCell(e);
-			tusk.mouseMoveAlt(cell, cellDefaultValue);
-			updateCellView(cell);
+			if( cell!=null) {
+				tusk.mouseMoveAlt(cell, cellDefaultValue);
+				updateCellView(cell);
+			}
 		}
 		if (e.shiftKey ) {
 			var cell = getCell(e);
-			statusLabel.innerHTML =  tusk.getCellInfo(cell);
-			setStatusMap(cell);
+			if( cell!=null) {
+				statusLabel.innerHTML = tusk.getCellInfo(cell);
+				statusCell=cell;
+				setStatusMap(cell);
+			}
 		}
 		if (e.ctrlKey && tusk.supportsDuck ) {
 			var cell = getCell(e);
-			cell.hasDuck = !cell.hasDuck;
-			updateCellView(cell);
+			if( cell!=null) {
+				cell.hasDuck = !cell.hasDuck;
+				updateCellView(cell);
+			}
 		}
 	};
 		
@@ -137,6 +146,7 @@ function getCell(e) {
 	var off = offset(e.target);
 	var x = Math.floor((e.clientX - off.x - 2) / (WIDTH / COLS));
 	var y = Math.floor((e.clientY - off.y - 2) / (HEIGHT / ROWS));
+	if( x<0 || y<0 || x>COLS || y>ROWS) return null;
 	var cell = model[y][x];
 	return cell;
 }	
@@ -144,6 +154,11 @@ function getCell(e) {
 function initCells(){
 	var initData=initDataTextbox.value;	
 	setCells(initData);
+}
+
+function reset(){
+	firstTime=true;
+	step();
 }
 
 function setCells(data)	{
@@ -175,7 +190,8 @@ function setStatusMap(cell){
 	statusMapLeft.innerHTML= getStatusMapInfo(y,x-1);  
 	statusMapNorth.innerHTML= getStatusMapInfo(y-1,x); 
 	statusMapSouth.innerHTML= getStatusMapInfo(y+1,x); 
-	statusMapMe.innerHTML=getStatusMapInfo(y,x);
+	statusMapMe.innerHTML= getStatusMapInfo(y,x);
+	statusMapPos.innerHTML= "x/y: " + x +"/"+ y;
 }		
 		
 function getStatusMapInfo(y,x){
@@ -189,6 +205,7 @@ function getStatusMapInfo(y,x){
 function radioCanvesChanged(radioButton) {
 	canves2Idx= radioButton.value;
 	updateAllCellView();
+	setStatusMap(statusCell);
 }
 
 function changeViscosity(){
@@ -265,7 +282,7 @@ function step() {
 			}
 		}
 		
-		customFirstTime();
+		tusk.customFirstTime();
 		firstTime=false;
 	}
 	
@@ -325,7 +342,8 @@ function step() {
 					me.nextGradients[g] = du[g];
 				}
 				
-				me.nextVelocities = (tusk.supportsDuck==false? 0: w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
+				me.nextVelocities = (tusk.supportsDuck==false? 0: 
+									w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
 			}
 		}
 		
