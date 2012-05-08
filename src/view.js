@@ -24,24 +24,16 @@ var statusCell=null;
 var duckImage = null; 
 var damping = 0.995;
 
-supportedFunctions= {INIT : 0, DIFFUS : 1, WAFE : 2 } ;
-currentFunction= supportedFunctions.WAFE;
 firstTime=true;
 
 canves2Idx=1;
 
 viscosity=1;  // Wasser 20 Grad Celsius
 
-var head = null;
 var tusk=null;  // instance of DiffGleichung
 
 function load() {
-	
-	var body = document.body;
-	head=document.getElementsByTagName("head")[0];
-	
-	//TODO: loadjscssfile(supportedFunctions[currentFunction] &".js","js");
-	
+			
 	iterationLabel = document.getElementById("iterationCount");
 	rainIntensity = document.getElementById("rain");
 	fountainIntensity= document.getElementById("fountain");
@@ -55,6 +47,14 @@ function load() {
 	canvas[1].width = WIDTH;
 	canvas[1].height = HEIGHT;
 	ctx[1] = canvas[1].getContext("2d");
+	
+	var select = document.getElementById("diffFormel");
+	for (var strategy in strategies) {
+		var opt = document.createElement("option");
+		opt.text = strategies[strategy].sayHello();
+		opt.value = strategy;
+		select.options.add(opt);
+	}
 
 	
 	cellDefaultValue = document.getElementById("setValue");
@@ -495,27 +495,6 @@ function Point(x, y){
 	this.x = x;
 	this.y = y;
 }	
-
-
-// quelle von loadjscssfile(): http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
-function loadjscssfile(filename, filetype){
- if (filetype=="js"){ //if filename is a external JavaScript file
-  var fileref=document.createElement('script')
-  fileref.setAttribute("type","text/javascript")
-  fileref.setAttribute("src", filename)
- }
- else if (filetype=="css"){ //if filename is an external CSS file
-  var fileref=document.createElement("link")
-  fileref.setAttribute("rel", "stylesheet")
-  fileref.setAttribute("type", "text/css")
-  fileref.setAttribute("href", filename)
- }
- if (typeof fileref!="undefined")
- {   
-  document.getElementsByTagName("head")[0].appendChild(fileref)
-  // head.appendChild(fileref);
-  }
-}
 
 
 window.onload = load;
