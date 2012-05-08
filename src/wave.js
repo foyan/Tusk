@@ -50,7 +50,7 @@ function Wave() {
 	}	
 	
 	Wave.prototype.getDuckImage=function(){
-		return null;
+		//return null;
 		
 		duckImage=new Image(); 
 		duckImage.src = "pics/duck.png";
@@ -101,7 +101,7 @@ function Wave() {
 		var up = uCurrent[1] + upp * dt;
 		var ut = (u + up * dt) * damping;
 		
-		if( Math.abs(ut)< 0.000001) ut=0  // runden
+		if( Math.abs(ut)< 0.00001) ut=0  // runden
 		
 		return [
 			ut,

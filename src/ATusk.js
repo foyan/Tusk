@@ -54,8 +54,26 @@ function ATusk() {
 	this.calcCell=function(me, dimensions, dt, damping, viscosity) {} // => du = float[] wobei du[0]=u
 }
 
+GameOfLife.prototype = new ATusk();
+Wave.prototype = new ATusk();
+Diffusion.prototype = new ATusk();
+
+
+var strategies = [
+	gameoflife: new GameOfLife(),
+	wave: new Wave(),
+	diffusion: new Diffusion()
+	];
+
+
 // get an instance of your formel
 function tuskStrategy(formel){
+
+	return strategies[formel];
+	
+	
+
+
 	if( formel=="gameoflife") {
 		GameOfLife.prototype = new ATusk();
 		return new GameOfLife();

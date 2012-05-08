@@ -96,6 +96,8 @@
 					<input type="button" onclick="toggle();" value="Toggle" class="button" />
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<input type="button" onclick="singleStep();" value="single step" class="button"/>
+					&nbsp;&nbsp;
+					<input type="button" onclick="reset();" value="reset" class="button"/>
 					
 				</td>
 				<td >
@@ -105,8 +107,7 @@
 				<td >
 				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData"  size="10" maxlength="30000" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"   />
 				  &nbsp;&nbsp;
-				  <input type="button" onclick="initCells();" value="Init" class="button"/>&nbsp;&nbsp;
-				  <input type="button" onclick="reset();" value="reset" class="button"/>
+				  <input type="button" onclick="initCells();" value="Init" class="button"/>
 				 	 </br>
 				  Viskosität:&nbsp;&nbsp;
 				  <select id="viscosity" name="viscosity" size="1" onchange="changeViscosity()">
