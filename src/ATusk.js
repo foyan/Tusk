@@ -60,8 +60,8 @@ Diffusion.prototype = new ATusk();
 
 
 var strategies = {
-	gameoflife: new GameOfLife(),
 	wave: new Wave(),
+	gameoflife: new GameOfLife(),
 	diffusion: new Diffusion()
 };
 

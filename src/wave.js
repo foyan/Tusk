@@ -82,8 +82,8 @@ function Wave() {
 	
 	Wave.prototype.getDucks=function(rows, cols){
 		var ducks=Array();
-		ducks[0]= new Point(10,40);
-		ducks[1]= new Point(30,40);
+		ducks[0]= new Point(100,400);
+		ducks[1]= new Point(300,400);
 		return ducks;
 	}
 	
