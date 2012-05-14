@@ -15,7 +15,7 @@ function ATusk() {
 	var tab="\t";
 
 	
-	this.SLICES=10;
+	this.SLICES=4;
 	
 	this.sayHello = function () { return "implement me!"; }
 	this.supportsFountain= function() { return canFountain; }

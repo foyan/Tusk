@@ -3,12 +3,15 @@ model = Array();
 running = false;
 runOnce=false;
 
-ROWS = 50;
-COLS = 50;
+ROWS = 60;
+COLS = 60;
 SLICES= 10;
 
-WIDTH = 500;
-HEIGHT = 500;
+WIDTH = 600;
+HEIGHT = 600;
+scaleWidth = WIDTH / COLS;  		
+scaleHeight = HEIGHT / ROWS;
+
 MAXITEMS=6;  // Gradienten in Cell
 
 iterationLabel = null;
@@ -103,8 +106,9 @@ function load() {
 		if (e.ctrlKey && tusk.supportsDuck ) {
 			var cell = getCell(e);
 			if( cell!=null) {
-				cell.hasDuck = !cell.hasDuck;
-				updateCellView(cell);
+				ducks[ducks.length]= new Point(1+cell.x*WIDTH/COLS, 1+cell.y*HEIGHT/ROWS);
+				// cell.hasDuck = !cell.hasDuck;
+				// updateCellView(cell);
 			}
 		}
 	};
@@ -149,8 +153,8 @@ function offset(target) {
 
 function getCell(e) {
 	var off = offset(e.target);
-	var x = Math.floor((e.clientX - off.x - 2) / (WIDTH / COLS));
-	var y = Math.floor((e.clientY - off.y - 2) / (HEIGHT / ROWS));
+	var x = Math.floor((e.clientX - off.x - 2) / (scaleWidth));
+	var y = Math.floor((e.clientY - off.y - 2) / (scaleHeight));
 	if( x<0 || y<0 || x>COLS || y>ROWS) return null;
 	var cell = model[y][x];
 	return cell;
@@ -353,7 +357,7 @@ function step() {
 		}
 		
 		var getCells = function(pt) {
-			return model[Math.floor(pt.x / (WIDTH / COLS))][Math.floor(pt.y / (HEIGHT / ROWS))];
+			return model[Math.floor(pt.x / (scaleWidth))][Math.floor(pt.y / (scaleHeight))];
 		};
 		
 		for (var i = 0; i < ROWS; i++) {
@@ -453,35 +457,40 @@ function updateAllCellView(){
 	}
 }		
 
+
+function transformDisp2CellCoordinate(x,y){
+	var x1 = Math.floor(x / scaleWidth);
+	var y1 = Math.floor(y / scaleHeight);
+	return new Point(x1,y1);
+}
+
 function updateCellView(cell) {	
 	var du = cell.currentGradients;
 	
-	var width = WIDTH / COLS;  		// TODO: calc this var just once
-	var height = HEIGHT / ROWS;
-	
-	var x = cell.x * width;
-	var y = cell.y * height;
+	var x = cell.x * scaleWidth;
+	var y = cell.y * scaleHeight;
 	
 	ctx[0].fillStyle = getColor(du[0], 128, 128, 255);
-	ctx[0].fillRect(x,y,width,height);
+	ctx[0].fillRect(x,y,scaleWidth,scaleHeight);
 
 	ctx[1].fillStyle = getColor(du[canves2Idx], 128, 128, 128);
-	ctx[1].fillRect(x,y,width,height);
+	ctx[1].fillRect(x,y,scaleWidth,scaleHeight);
 
 }
 
 function drawDuck(duck, cell) {
-	/*if( duckImage==null) {
+function drawDuck(duck, cell) {
+	if( duckImage==null) {
 		ctx[0].fillStyle = "rgb(255,255,0)";
-		ctx[0].fillRect(x,y,width,height);
-	} else {*/
+		ctx[0].fillRect(duck.x,duck.y,scaleWidth,scaleHeight);
+	} else {
 		var phi = calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])
 		ctx[0].translate(duck.x, duck.y);
 		ctx[0].rotate(phi);
 		ctx[0].drawImage(duckImage, -18, -18);
 		ctx[0].rotate(-phi);
 		ctx[0].translate(-duck.x, -duck.y);
-	//}
+	}
 }
 
 function calculateDuckPhi(x, y) {
