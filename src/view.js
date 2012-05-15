@@ -97,7 +97,7 @@ function load() {
 			if( cell!=null) {
 				statusLabel.innerHTML = tusk.getCellInfo(cell);
 				for (var d = 0; d < ducks.length; d++) {
-					statusLabel.innerHTML += "<br/>Duck " + d + ": (" + ducks[d].x + "/" + ducks[d].y + ")";
+					statusLabel.innerHTML +=  "<br/>Duck " + d + ": (" + ducks[d].x + "/" + ducks[d].y + "  Vx/Vy=" + ducks[d].velocityX + "/" + ducks[d].velocityY + ")";
 				}
 				statusCell=cell;
 				setStatusMap(cell);
@@ -398,32 +398,49 @@ function step() {
 			var duck = ducks[d];
 			var duckCell = getCells(duck);
 
-var i = duckCell.x;
-var j = duckCell.y;
+			var i = duckCell.x;
+			var j = duckCell.y;
 
-				var nord = i == 0 ? null : model[i-1][j];
-				var south = i == ROWS-1 ? null : model[i+1][j];
-				var west = j == 0 ? null : model[i][j-1];
-				var east = j == COLS-1 ? null : model[i][j+1];
-								
-				var me = duckCell;
-								
-				xprevious = (west != null ? west : me).currentGradients;
-				xnext = (east != null ? east : me).currentGradients;
-				yprevious = (nord != null ? nord : me).currentGradients;
-				ynext = (south != null ? south : me).currentGradients;
+			var nord = i == 0 ? null : model[i-1][j];
+			var south = i == ROWS-1 ? null : model[i+1][j];
+			var west = j == 0 ? null : model[i][j-1];
+			var east = j == COLS-1 ? null : model[i][j+1];
+							
+			var me = duckCell;
+			var k=100;
+							
+			xprevious = (west != null ? west : me).currentGradients;
+			xnext = (east != null ? east : me).currentGradients;
+			yprevious = (nord != null ? nord : me).currentGradients;
+			ynext = (south != null ? south : me).currentGradients;
 
-			duck.x += (duckCell.currentGradients[0]-xprevious[0])*100;
-			duck.x += (-duckCell.currentGradients[0]+xnext[0])*100;
-			duck.y += (duckCell.currentGradients[0]-yprevious[0])*100;
-			duck.y += (-duckCell.currentGradients[0]+ynext[0])*100;
-			duck.x = Math.max(0, Math.min(WIDTH-1, duck.x));
-			duck.y = Math.max(0, Math.min(HEIGHT-1, duck.y));
+			// duck.velocityX += (duckCell.currentGradients[0]-xprevious[0])*k;
+			// duck.velocityX += (-duckCell.currentGradients[0]+xnext[0])*k;
+			// duck.velocityY += (duckCell.currentGradients[0]-yprevious[0])*k;
+			// duck.velocityY += (-duckCell.currentGradients[0]+ynext[0])*k;
+			
+			var cellxy= new Point(0,0);
+			
+			cellxy.velocityX+=-xprevious[0];
+			cellxy.velocityX+=-xnext[0];
+			cellxy.velocityY+=-yprevious[0];
+			cellxy.velocityY+=-ynext[0];
+			
+			var duckxy= new Point(duck.velocityX,duck.velocityY);
+			duckxy.x+= cellxy.velocityX;
+			duckxy.y+= cellxy.velocityY;
+			
+			duck.x=Math.max(0, Math.min(WIDTH-1,duckxy.x));
+			duck.y=Math.max(0, Math.min(HEIGHT-1,duckxy.y));
+			
+			// duck.x = Math.max(0, Math.min(WIDTH-1, duck.velocityX));
+			// duck.y = Math.max(0, Math.min(HEIGHT-1, duck.velocityY));
 			var newDuckCell = getCells(duck);
 			drawDuck(duck, duckCell);
 			if (duckCell != newDuckCell) {
 				duckCell.currentVelocities[0] = 0;
 				duckCell.currentVelocities[1] = 0;
+				duckCell.currentGradients[0] = 0;
 			}
 		}
 	}
@@ -478,7 +495,6 @@ function updateCellView(cell) {
 
 }
 
-function drawDuck(duck, cell) {
 function drawDuck(duck, cell) {
 	if( duckImage==null) {
 		ctx[0].fillStyle = "rgb(255,255,0)";
@@ -541,5 +557,16 @@ function Point(x, y){
 	this.x = x;
 	this.y = y;
 }	
+
+/*
+	x,y: Point wo sich die Ente befindet
+	ax,ay: beschleunigungs Vektor der Ente
+*/
+function Duck(x,y, ax,ay){
+	this.x=x;
+	this.y=y;
+	this.velocityX=ax;  // TODO: => Geschwindigkeit
+	this.velocityY=ay;
+}
 
 window.onload = load;
