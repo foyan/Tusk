@@ -356,10 +356,6 @@ function step() {
 			}
 		}
 		
-		var getCells = function(pt) {
-			return model[Math.floor(pt.x / (scaleWidth))][Math.floor(pt.y / (scaleHeight))];
-		};
-		
 		for (var i = 0; i < ROWS; i++) {
 			for (var j = 0; j < COLS; j++) {
 				var me = model[i][j];
@@ -407,7 +403,7 @@ function step() {
 			var east = j == COLS-1 ? null : model[i][j+1];
 							
 			var me = duckCell;
-			var k=100;
+			var k=30;
 							
 			xprevious = (west != null ? west : me).currentGradients;
 			xnext = (east != null ? east : me).currentGradients;
@@ -419,7 +415,7 @@ function step() {
 			// duck.velocityY += (duckCell.currentGradients[0]-yprevious[0])*k;
 			// duck.velocityY += (-duckCell.currentGradients[0]+ynext[0])*k;
 			
-			var cellxy= new Point(0,0);
+			var cellxy= new Duck(0,0,0,0);
 			
 			cellxy.velocityX+=-xprevious[0];
 			cellxy.velocityX+=-xnext[0];
@@ -427,11 +423,13 @@ function step() {
 			cellxy.velocityY+=-ynext[0];
 			
 			var duckxy= new Point(duck.velocityX,duck.velocityY);
-			duckxy.x+= cellxy.velocityX;
-			duckxy.y+= cellxy.velocityY;
+			duckxy.x+= cellxy.velocityX*k;
+			duckxy.y+= cellxy.velocityY*k;
+			duckxy.velocityX=cellxy.velocityX;
+			duckxy.velocityY=cellxy.velocityY;
 			
-			duck.x=Math.max(0, Math.min(WIDTH-1,duckxy.x));
-			duck.y=Math.max(0, Math.min(HEIGHT-1,duckxy.y));
+			duck.x=Math.max(0, Math.min(WIDTH-1,duck.x+duckxy.x));
+			duck.y=Math.max(0, Math.min(HEIGHT-1,duck.y+duckxy.y));
 			
 			// duck.x = Math.max(0, Math.min(WIDTH-1, duck.velocityX));
 			// duck.y = Math.max(0, Math.min(HEIGHT-1, duck.velocityY));
@@ -456,6 +454,10 @@ function step() {
 }
 
 
+function getCells(pt) {
+	return model[Math.floor(pt.x / (scaleWidth))][Math.floor(pt.y / (scaleHeight))];
+};
+		
 function w_Duck(u, neighbourUs, currentVs) {
 	var dt = 1/SLICES;
 		
