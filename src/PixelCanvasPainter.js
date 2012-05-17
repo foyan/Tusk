@@ -36,7 +36,7 @@ PixelCanvasPainter = function(ctx) {
 	};
 	
 	this.drawDuck = function(duck, cell) {
-		/*
+		
 		if(duckImage == null) {
 			this.context.fillStyle = "rgb(255,255,0)";
 			this.context.fillRect(duck.x,duck.y,scaleWidth,scaleHeight);
@@ -48,7 +48,7 @@ PixelCanvasPainter = function(ctx) {
 			this.context.rotate(-phi);
 			this.context.translate(-duck.x, -duck.y);
 		}
-		*/
+		
 	};
 	
 	this.begin = function() {

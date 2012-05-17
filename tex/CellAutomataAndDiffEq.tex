@@ -336,7 +336,7 @@ context.putImageData(myImageData, 0, 0);
 
 Es muss allerdings gesagt werden, dass die Methode {\tt putImageData()} in allen verfügbaren Implementationen (Gecko, WebKit usw.) einigermassen langsam ist. Dies wird vor allem damit erklärt, dass das zu manipulierende Pixel-Array ({\tt myImageData.data} in unserem Beispiel) ein Array von Integern ist, das von {\tt putImageData()} jeweils noch durchlaufen und auf Gültigkeit (Werte $\in [0: 255]$) geprüft werden muss.
 
-Andrew J. Baker zeigt nun in \cite{mdn:PixelCanvas} einen Weg, durch den die Pixelmanipulationen drastisch beschleunigt werden können (solange die verwendete Implementation den Typ {\tt Uint8ClampedArray} unterstützt, wie vom HTML5-Standard eigentlich vorgesehen).
+Andrew J. Baker zeigt nun in \cite{mdn:PixelCanvas} einen Weg, durch den die Pixelmanipulationen drastisch beschleunigt werden können (solange die verwendete Implementation den Typ {\tt Uint8ClampedArray} unterstützt, wie vom HTML5-Standard  \cite{wthree:twodcanvas} eigentlich vorgesehen).
 
 Dazu ist es erst einmal nötig, in {\tt begin()} die Pixel-Daten vorzubereiten:
 
