@@ -1,10 +1,7 @@
-model = Array();
+automata = null;
 
-running = false;
-runOnce=false;
-
-ROWS = 120;
-COLS = 120;
+ROWS = 100;
+COLS = 100;
 SLICES= 10;
 
 WIDTH = 600;
@@ -18,7 +15,6 @@ iterationLabel = null;
 canvas = Array();
 ctx = Array();
 
-iterations = 0;
 rainIntensity = null;
 fountainIntensity=null;
 statusMap=Array();
@@ -42,6 +38,8 @@ function createCanvasPainter(context) {
 }
 
 function load() {
+	
+	automata = new CellularAutomata();
 			
 	iterationLabel = document.getElementById("iterationCount");
 	rainIntensity = document.getElementById("rain");
@@ -89,7 +87,8 @@ function load() {
 	
 
 	
-	tusk= tuskStrategy(getFormelCtrl()); 
+	automata.tusk = tuskStrategy(getFormelCtrl()); 
+	tusk = automata.tusk;
 	SLICES= tusk.SLICES;	
 	
 	canvas[0].onmousemove = function(e) {
@@ -97,9 +96,7 @@ function load() {
 		    var cell= getCell(e);
 			if( cell!=null) {
 				tusk.mouseMoveAlt(cell, cellDefaultValue);
-				//beginUpdate();
 				updateAllCellView();
-				//endUpdate();
 			}
 		}
 		if (e.shiftKey ) {
@@ -116,7 +113,7 @@ function load() {
 		if (e.ctrlKey && tusk.supportsDuck ) {
 			var cell = getCell(e);
 			if( cell!=null) {
-				ducks[ducks.length]= new Point(1+cell.x*WIDTH/COLS, 1+cell.y*HEIGHT/ROWS);
+				ducks[ducks.length]= new Point(1+cell.x*WIDTH/automata.cols, 1+cell.y*HEIGHT/automata.rows);
 				// cell.hasDuck = !cell.hasDuck;
 				// updateCellView(cell);
 			}
@@ -129,25 +126,12 @@ function load() {
 		}
 	};		
 		
-		
+	automata.initCells();
+	
 	beginUpdate();
-	for (var i = 0; i < ROWS; i++) {
-		model[i] = Array();
-		for (var j = 0; j < COLS; j++) {
-			var cellData = new CellData();
-			for(var idx=0;idx< MAXITEMS;idx++) {
-				cellData.currentGradients[idx] = 0;
-				cellData.nextGradients[idx] = 0;
-			}
-			model[i][j] = cellData;
-			cellData.x = j;
-			cellData.y = i;
-			updateCellView(cellData);
-		}
-	}
+	automata.forEachCell(updateCellView);
 	endUpdate();
-		
-	step();
+				
 }
 
 
@@ -166,8 +150,8 @@ function getCell(e) {
 	var off = offset(e.target);
 	var x = Math.floor((e.clientX - off.x - 2) / (scaleWidth));
 	var y = Math.floor((e.clientY - off.y - 2) / (scaleHeight));
-	if( x<0 || y<0 || x>COLS || y>ROWS) return null;
-	var cell = model[y][x];
+	if( x<0 || y<0 || x>automata.cols || y>automata.rows) return null;
+	var cell = automata.model[y][x];
 	return cell;
 }	
   
@@ -184,17 +168,17 @@ function reset(){
 function setCells(data)	{
 	var idRows=data.split(";");	
 	var idx=0;
-	var maxRows=(idRows.length < ROWS? idRows.length: ROWS);
+	var maxRows=(idRows.length < automata.rows ? idRows.length: automata.rows);
 	beginUpdate();
 	for (var i = 0; i < maxRows; i++) {
 		var idCols=idRows[i].split(",");
 		var y=parseFloat(idCols[0]);
 		var startX=parseFloat(idCols[1]);
-		var maxCols=(idCols.length < COLS? idCols.length: COLS);
+		var maxCols=(idCols.length < automata.cols ? idCols.length: automata.cols);
 		for (var j = 2; j < maxCols; j++) {	
 			idx= startX+j-2;
-			idx=(idx>COLS?COLS:idx);				
-			var cellData= model[y][idx] ;
+			idx=(idx>automata.cols?automata.cols:idx);				
+			var cellData= automata.model[y][idx] ;
 			cellData.currentGradients[0] = parseFloat(idCols[j]); 
 			for( var i2=1; i2<cellData.currentGradients.length; i2++) {
 				cellData.currentGradients[i2] = 0;
@@ -218,7 +202,7 @@ function setStatusMap(cell){
 }		
 		
 function getStatusMapInfo(y,x){
-	var m=model[y][x]
+	var m=automata.model[y][x]
 	var u=m.currentGradients[canves2Idx];
 	var s=formatNum(u);
 	return s;
@@ -250,19 +234,21 @@ function getFormelCtrl(){
 }
 // called when DiffFormel has changed
 function changeFormel(){	
-	tusk= tuskStrategy(getFormelCtrl()); 
-	SLICES= tusk.SLICES;
-	firstTime=true;
-	step();	
+	automata.tusk = tuskStrategy(getFormelCtrl());
+	automata.initCells();
+	updateAllCellView();
+	//SLICES= tusk.SLICES;
+	//firstTime=true;
+	//step();	
 }
 
 function toggle() {
-	running = !running;
+	automata.running = !automata.running;
 	step();
 }
 
 function singleStep(){
-	runOnce=true;
+	automata.runOnce = true;
 	step();
 }
 
@@ -270,209 +256,16 @@ function singleStep(){
 
 function step() {
 
-	if( firstTime){
-	//	loadjscssfile("wave.js", "js") //dynamically load and add this .js file	
-
-		firstTime=false;
-		statusLabel.innerHTML= tusk.sayHello();
-		modelname.innerHTML=tusk.sayHello();
-		
-		
-		beginUpdate();
-		for (var i = 0; i < ROWS; i++) {
-			model[i] = Array();
-			for (var j = 0; j < COLS; j++) {
-				var cellData = new CellData();
-				tusk.initCell(cellData);
-				model[i][j] = cellData;
-				
-				cellData.x = j;
-				cellData.y = i;
-				
-				updateCellView(cellData);
-			}
-		}
-		endUpdate();
-		
-		
-		if(tusk.supportsDuck){
-			duckImage=tusk.getDuckImage();
-			ducks= tusk.getDucks();
-/*			for( var i=0;i<ducks.length;i++) {
-			    var duck=ducks[i];
-				//var cell=model[duck.y][duck.y];
-				cell.hasDuck = true;   // TODO: to wave.js
-				updateCellView(cell);
-			}*/
-		}
-		
-		tusk.customFirstTime();
-		firstTime=false;
-	}
-	
-	
-	if (!runOnce && !running) {
-		return;
-	}
-
-	if( tusk.supportsRains){
-		var drops = rainIntensity.value == 0 ? 0
-			: rainIntensity.value >= 1 ? rainIntensity.value
-			: iterations % (Math.floor(1/rainIntensity.value)) == 0 ? 1 : 0;
-		
-		for (var i = 0; i < drops; i++) {
-			var x = Math.floor(Math.random() * COLS);
-			var y = Math.floor(Math.random() * ROWS);
-			tusk.getRainValue(model[x][y], drops, i);		
-		}
-	}  // rainSupport
-	
-	if( tusk.supportsFountain) {	
-		if( fountainIntensity.value !=0 && iterations % 20==0) {
-			var fountains=tusk.getFountains(fountainIntensity.value, ROWS, COLS);  // returns Fountain[]
-			if( fountains.length >0){
-				for (var fi = 0; fi < fountains.length; fi++) {
-					var f=fountains[fi];
-					var g=model[f.x][f.y];
-					g.currentGradients[0] = f.intensity;
-					var b=g.hasDuck;
-					for (var i= 1;i<= 5;i++) 
-						g.currentGradients[i]=0;
-				}
-			}
-		}
-	}  // fountainSupport	
-	
-	var dt = 1/SLICES;
-	for (var t = 0; t < SLICES; t++) {
-		for (var i = 0; i < ROWS; i++) {
-			for (var j = 0; j < COLS; j++) {
-				var nord = i == 0 ? null : model[i-1][j];
-				var south = i == ROWS-1 ? null : model[i+1][j];
-				var west = j == 0 ? null : model[i][j-1];
-				var east = j == COLS-1 ? null : model[i][j+1];
-				
-				var x = new Dimension();
-				var y = new Dimension();
-				var me = model[i][j];
-				
-				x.previous = (west != null ? west : me).currentGradients;
-				x.next = (east != null ? east : me).currentGradients;
-				y.previous = (nord != null ? nord : me).currentGradients;
-				y.next = (south != null ? south : me).currentGradients;
-				
-				var du = tusk.calcCell(me, [x,y], dt, damping, viscosity);
-				for (var g = 0; g < du.length; g++) {
-					me.nextGradients[g] = du[g];
-				}
-				
-				me.nextVelocities = (tusk.supportsDuck==false? 0: 
-									w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
-			}
-		}
-		
-		for (var i = 0; i < ROWS; i++) {
-			for (var j = 0; j < COLS; j++) {
-				var me = model[i][j];
-				for (var g = 0; g < me.nextGradients.length; g++) {
-					me.currentGradients[g] = me.nextGradients[g];
-				}
-				me.currentVelocities = me.nextVelocities;
-				
-				/*
-				if (tusk.supportsDuck && me.hasDuck) {
-					var x = me.currentVelocities[0] <= -0.0001 ? -1 : me.currentVelocities[0] >= 0.0001 ? 1 : 0;
-					var y = me.currentVelocities[1] <= -0.0001 ? -1 : me.currentVelocities[1] >= 0.0001 ? 1 : 0;
-					if (i+x < 0 || i+x >= ROWS) {
-						x = -x;
-					}
-					if (j+y < 0 || j+y >= COLS) {
-						y = -y;
-					}
-					me.hasDuck = false;
-					model[i+x][j+y].hasDuck = true;
-				} // duckSupport */
-			}
-		}
-		
-	}
-	
-	beginUpdate();
-	for (var i = 0; i < ROWS; i++) {
-		for (var j = 0; j < COLS; j++) {
-			var me = model[i][j];
-			updateCellView(me);
-		}
-	}
-	endUpdate();
-		
-	if (tusk.supportsDuck) {
-		for (var d = 0; d < ducks.length; d++) {
-			var duck = ducks[d];
-			var duckCell = getCells(duck);
-
-			var i = duckCell.x;
-			var j = duckCell.y;
-
-			var nord = i == 0 ? null : model[i-1][j];
-			var south = i == ROWS-1 ? null : model[i+1][j];
-			var west = j == 0 ? null : model[i][j-1];
-			var east = j == COLS-1 ? null : model[i][j+1];
-							
-			var me = duckCell;
-			var k=30;
-							
-			xprevious = (west != null ? west : me).currentGradients;
-			xnext = (east != null ? east : me).currentGradients;
-			yprevious = (nord != null ? nord : me).currentGradients;
-			ynext = (south != null ? south : me).currentGradients;
-
-			// duck.velocityX += (duckCell.currentGradients[0]-xprevious[0])*k;
-			// duck.velocityX += (-duckCell.currentGradients[0]+xnext[0])*k;
-			// duck.velocityY += (duckCell.currentGradients[0]-yprevious[0])*k;
-			// duck.velocityY += (-duckCell.currentGradients[0]+ynext[0])*k;
-			
-			var cellxy= new Duck(0,0,0,0);
-			
-			cellxy.velocityX+=-xprevious[0];
-			cellxy.velocityX+=-xnext[0];
-			cellxy.velocityY+=-yprevious[0];
-			cellxy.velocityY+=-ynext[0];
-			
-			var duckxy= new Point(duck.velocityX,duck.velocityY);
-			duckxy.x+= cellxy.velocityX*k;
-			duckxy.y+= cellxy.velocityY*k;
-			duckxy.velocityX=cellxy.velocityX;
-			duckxy.velocityY=cellxy.velocityY;
-			
-			duck.x=Math.max(0, Math.min(WIDTH-1,duck.x+duckxy.x));
-			duck.y=Math.max(0, Math.min(HEIGHT-1,duck.y+duckxy.y));
-			
-			// duck.x = Math.max(0, Math.min(WIDTH-1, duck.velocityX));
-			// duck.y = Math.max(0, Math.min(HEIGHT-1, duck.velocityY));
-			var newDuckCell = getCells(duck);
-			drawDuck(duck, duckCell);
-			if (duckCell != newDuckCell) {
-				duckCell.currentVelocities[0] = 0;
-				duckCell.currentVelocities[1] = 0;
-				duckCell.currentGradients[0] = 0;
-			}
-		}
-	}
-
-	iterationLabel.innerHTML = "# Iterations: " + iterations++;
-	
-	if( runOnce) {
-		runOnce=false;
-		return;
-	}
+	automata.step();
+	updateAllCellView();
+	iterationLabel.innerHTML = "# Iterations: " + automata.iterations++;
 	
 	window.setTimeout(step, 0);
 }
 
 
 function getCells(pt) {
-	return model[Math.floor(pt.x / (scaleWidth))][Math.floor(pt.y / (scaleHeight))];
+	return automata.model[Math.floor(pt.x / (scaleWidth))][Math.floor(pt.y / (scaleHeight))];
 };
 		
 function w_Duck(u, neighbourUs, currentVs) {
@@ -487,11 +280,7 @@ function w_Duck(u, neighbourUs, currentVs) {
 
 function updateAllCellView(){
 	beginUpdate();
-	for (var i = 0; i < ROWS; i++) {
-		for (var j = 0; j < COLS; j++) {
-			updateCellView(model[i][j]);
-		}
-	}
+	automata.forEachCell(updateCellView);
 	endUpdate();
 }		
 
@@ -548,18 +337,6 @@ function getFormattedColor(du, r0, g0, b0) {
 
 function formatNum(num){
   return num.toPrecision(4);
-}
-
-function CellData() {
-	this.currentGradients = Array();
-	this.nextGradients = Array();
-	this.cell = null;
-	this.x = 0;
-	this.y = 0;
-	this.hasDuck = false;
-	this.currentVelocities = [0, 0];
-	this.nextVelocities = [0, 0];
-	this.custom=null;  // content depends on function
 }
 
 function Dimension() {

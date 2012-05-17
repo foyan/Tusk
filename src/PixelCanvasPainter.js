@@ -12,13 +12,12 @@ PixelCanvasPainter = function(ctx) {
 	var PIXEL_DEPTH = 4;
 	
 	this.updateCellView = function(cell) {
-		var du = cell.currentGradients;
 		
 		var x = cell.x * scaleWidth;
 		var y = cell.y * scaleHeight;
 		
 		var baseColor = this.getBaseColor();
-		var color = getColor(du[this.getUIndex()], baseColor.r, baseColor.g, baseColor.b);
+		var color = getColor(cell.currentData.displayValue(), baseColor.r, baseColor.g, baseColor.b);
 		
 		for (var ix = x; ix < x + scaleWidth; ix++) {
 			for (var iy = y; iy < y + scaleHeight; iy++) {
@@ -31,8 +30,6 @@ PixelCanvasPainter = function(ctx) {
              		color.r;
 			}
 		}
-		//this.context.fillStyle = getColor(du[this.getUIndex()], baseColor.r, baseColor.g, baseColor.b);
-		//this.context.fillRect(x,y,scaleWidth,scaleHeight);
 	};
 	
 	this.drawDuck = function(duck, cell) {

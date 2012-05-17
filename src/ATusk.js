@@ -15,7 +15,11 @@ function ATusk() {
 	var tab="\t";
 
 	
-	this.SLICES=4;
+	this.slices = 5;
+	
+	this.getNeighbours = function(cell, cells) {
+		return null;
+	}
 	
 	this.sayHello = function () { return "implement me!"; }
 	this.supportsFountain= function() { return canFountain; }
@@ -29,7 +33,11 @@ function ATusk() {
 		canFountain=supportsFountains;
 		canDuck=supportsDucks;
 	}
-
+	
+	this.createCellData = function() {
+		return null;
+	}
+	
 	// set cell values for the rain drops.
 	// Parameter: cell, drops=value on the GUI, i=counter for drops: i=5 => 5th drops
 	this.getRainValue=function(cell, drops, i) {}  //  => no return
@@ -51,7 +59,7 @@ function ATusk() {
 	this.initCell=function(cellData) {} // => no return modify cellData
 
 	// Berechnet den neuen Wert einer Zelle.	
-	this.calcCell=function(me, dimensions, dt, damping, viscosity) {} // => du = float[] wobei du[0]=u
+	this.calcCell=function(me, dt, damping, viscosity) {} // => du = float[] wobei du[0]=u
 }
 
 GameOfLife.prototype = new ATusk();
