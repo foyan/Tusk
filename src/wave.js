@@ -50,7 +50,7 @@ function Wave() {
 	}	
 	
 	Wave.prototype.getDuckImage=function(){
-		return null;
+		//return null;
 		
 		duckImage=new Image(); 
 		duckImage.src = "pics/duck.png";
