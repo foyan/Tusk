@@ -1,14 +1,15 @@
 <html>
 	
 	<head>
+		<script type="text/javascript" src="commonTypes.js"></script>
 		<script type="text/javascript" src="view.js"></script>
+		<script type="text/javascript" src="calcDuck.js"></script>
 		<script type="text/javascript" src="game.js"></script>
 		<script type="text/javascript" src="wave.js"></script>
 		<script type="text/javascript" src="diffusion.js"></script>
 
 		<script type="text/javascript" src="ATusk.js"></script>
 		<script type="text/javascript" src="ooTest.js"></script>
-		<script type="text/javascript" src="gameUnitTest.js"></script>
 		<link type="text/css" rel="stylesheet" href="style.css" />
 		<title>Tusk</title>
 	</head>
@@ -105,7 +106,7 @@
 					<p>Fountain Intensity: <input type="textbox" id="fountain" value="0"  size="3" maxlength="5"/></p>
 				</td>	
 				<td >
-				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData"  size="10" maxlength="30000" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"   />
+				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData"  size="10" maxlength="30000" value="39,9,1,1;40,9,1"   />
 				  &nbsp;&nbsp;
 				  <input type="button" onclick="initCells();" value="Init" class="button"/>
 				 	 </br>

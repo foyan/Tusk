@@ -7,6 +7,16 @@ body {
 	heigth:1000px;
 }
 
+.ut_body {
+	background-color: white;
+	color: black;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	width:1200px;
+	heigth:1000px;
+}
+
+
 table {
 	bborder-collapse: collapse;
 	border-style: none;

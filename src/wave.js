@@ -50,10 +50,12 @@ function Wave() {
 	}	
 	
 	Wave.prototype.getDuckImage=function(){
-		return null;
+		// return null;
 		
 		duckImage=new Image(); 
-		duckImage.src = "pics/duck.png";
+		duckImage.src ="pics/soccer_ball.png"; // bullet_ball_glass_yellow.png";
+		
+		// duckImage.src = "pics/duck.png";
 	
 		return duckImage;
 	}	
@@ -82,8 +84,8 @@ function Wave() {
 	
 	Wave.prototype.getDucks=function(rows, cols){
 		var ducks=Array();
-		ducks[0]= new Duck(100,400,0,0);
-		ducks[1]= new Duck(300,400,0,0);
+		ducks[0]= new Duck(50,200,0,0);
+		//ducks[1]= new Duck(300,400,0,0);
 		return ducks;
 	}
 	

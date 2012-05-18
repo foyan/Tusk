@@ -7,8 +7,8 @@ ROWS = 60;
 COLS = 60;
 SLICES= 10;
 
-WIDTH = 600;
-HEIGHT = 600;
+WIDTH = 300;
+HEIGHT = 300;
 scaleWidth = WIDTH / COLS;  		
 scaleHeight = HEIGHT / ROWS;
 
@@ -415,25 +415,26 @@ function step() {
 			// duck.velocityY += (duckCell.currentGradients[0]-yprevious[0])*k;
 			// duck.velocityY += (-duckCell.currentGradients[0]+ynext[0])*k;
 			
-			var cellxy= new Duck(0,0,0,0);
+var newDuck=  calcDuck(duck, duckCell, yprevious, xnext, ynext, xprevious);
+			// var cellxy= new Duck(0,0,0,0);
 			
-			cellxy.velocityX+=-xprevious[0];
-			cellxy.velocityX+=-xnext[0];
-			cellxy.velocityY+=-yprevious[0];
-			cellxy.velocityY+=-ynext[0];
+			// cellxy.velocityX+=-xprevious[0];
+			// cellxy.velocityX+=xnext[0];
+			// cellxy.velocityY+=-yprevious[0];
+			// cellxy.velocityY+=ynext[0];
 			
-			var duckxy= new Point(duck.velocityX,duck.velocityY);
-			duckxy.x+= cellxy.velocityX*k;
-			duckxy.y+= cellxy.velocityY*k;
-			duckxy.velocityX=cellxy.velocityX;
-			duckxy.velocityY=cellxy.velocityY;
+			// var duckxy= new Point(duck.velocityX,duck.velocityY);
+			// duckxy.x+= cellxy.velocityX*k;
+			// duckxy.y+= cellxy.velocityY*k;
+			// duckxy.velocityX=cellxy.velocityX;
+			// duckxy.velocityY=cellxy.velocityY;
 			
-			duck.x=Math.max(0, Math.min(WIDTH-1,duck.x+duckxy.x));
-			duck.y=Math.max(0, Math.min(HEIGHT-1,duck.y+duckxy.y));
+			// duck.x=Math.max(0, Math.min(WIDTH-1,duck.x+duckxy.x));
+			// duck.y=Math.max(0, Math.min(HEIGHT-1,duck.y+duckxy.y));
 			
 			// duck.x = Math.max(0, Math.min(WIDTH-1, duck.velocityX));
 			// duck.y = Math.max(0, Math.min(HEIGHT-1, duck.velocityY));
-			var newDuckCell = getCells(duck);
+			var newDuckCell = getCells(newDuck);
 			drawDuck(duck, duckCell);
 			if (duckCell != newDuckCell) {
 				duckCell.currentVelocities[0] = 0;
@@ -505,7 +506,8 @@ function drawDuck(duck, cell) {
 		var phi = calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])
 		ctx[0].translate(duck.x, duck.y);
 		ctx[0].rotate(phi);
-		ctx[0].drawImage(duckImage, -18, -18);
+		// ctx[0].drawImage(duckImage, -18, -18);
+		ctx[0].drawImage(duckImage, -6, -6);
 		ctx[0].rotate(-phi);
 		ctx[0].translate(-duck.x, -duck.y);
 	}
@@ -531,18 +533,6 @@ function formatNum(num){
   return num.toPrecision(4);
 }
 
-function CellData() {
-	this.currentGradients = Array();
-	this.nextGradients = Array();
-	this.cell = null;
-	this.x = 0;
-	this.y = 0;
-	this.hasDuck = false;
-	this.currentVelocities = [0, 0];
-	this.nextVelocities = [0, 0];
-	this.custom=null;  // content depends on function
-}
-
 function Dimension() {
 	this.previous = Array();
 	this.next = Array();
@@ -554,21 +544,5 @@ function Fountain() {
 	this.intensity=0;
 }
 
-
-function Point(x, y){
-	this.x = x;
-	this.y = y;
-}	
-
-/*
-	x,y: Point wo sich die Ente befindet
-	ax,ay: beschleunigungs Vektor der Ente
-*/
-function Duck(x,y, ax,ay){
-	this.x=x;
-	this.y=y;
-	this.velocityX=ax;  // TODO: => Geschwindigkeit
-	this.velocityY=ay;
-}
 
 window.onload = load;
