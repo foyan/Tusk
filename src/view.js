@@ -3,8 +3,8 @@ model = Array();
 running = false;
 runOnce=false;
 
-ROWS = 60;
-COLS = 60;
+ROWS = 120;
+COLS = 120;
 SLICES= 10;
 
 WIDTH = 300;
@@ -37,6 +37,10 @@ var ducks;
 
 var tusk=null;  // instance of DiffGleichung
 
+function createCanvasPainter(context) {
+	return new PixelCanvasPainter(context);
+}
+
 function load() {
 			
 	iterationLabel = document.getElementById("iterationCount");
@@ -46,12 +50,16 @@ function load() {
 	
 	canvas[0].width = WIDTH;
 	canvas[0].height = HEIGHT;
-	ctx[0] = canvas[0].getContext("2d");
+	
+	ctx[0] = createCanvasPainter(canvas[0].getContext("2d"));
 	
 	canvas[1] = document.getElementById("pool1");
 	canvas[1].width = WIDTH;
 	canvas[1].height = HEIGHT;
-	ctx[1] = canvas[1].getContext("2d");
+	
+	ctx[1] = createCanvasPainter(canvas[1].getContext("2d"));
+	ctx[1].getColor = function() {return {r: 128, g: 128, b: 128}; };
+	ctx[1].getUIndex = function() { return canves2Idx; };
 	
 	var select = document.getElementById("diffFormel");
 	for (var strategy in strategies) {
@@ -89,7 +97,9 @@ function load() {
 		    var cell= getCell(e);
 			if( cell!=null) {
 				tusk.mouseMoveAlt(cell, cellDefaultValue);
-				updateCellView(cell);
+				//beginUpdate();
+				updateAllCellView();
+				//endUpdate();
 			}
 		}
 		if (e.shiftKey ) {
@@ -120,7 +130,7 @@ function load() {
 	};		
 		
 		
-		
+	beginUpdate();
 	for (var i = 0; i < ROWS; i++) {
 		model[i] = Array();
 		for (var j = 0; j < COLS; j++) {
@@ -135,6 +145,7 @@ function load() {
 			updateCellView(cellData);
 		}
 	}
+	endUpdate();
 		
 	step();
 }
@@ -174,6 +185,7 @@ function setCells(data)	{
 	var idRows=data.split(";");	
 	var idx=0;
 	var maxRows=(idRows.length < ROWS? idRows.length: ROWS);
+	beginUpdate();
 	for (var i = 0; i < maxRows; i++) {
 		var idCols=idRows[i].split(",");
 		var y=parseFloat(idCols[0]);
@@ -184,11 +196,13 @@ function setCells(data)	{
 			idx=(idx>COLS?COLS:idx);				
 			var cellData= model[y][idx] ;
 			cellData.currentGradients[0] = parseFloat(idCols[j]); 
-			for( var i2=1; i2<cellData.currentGradients.length; i2++)
+			for( var i2=1; i2<cellData.currentGradients.length; i2++) {
 				cellData.currentGradients[i2] = 0;
+			}
 			updateCellView(cellData);
 		}
 	}
+	endUpdate();
 }
 		
 function setStatusMap(cell){
@@ -264,7 +278,7 @@ function step() {
 		modelname.innerHTML=tusk.sayHello();
 		
 		
-		
+		beginUpdate();
 		for (var i = 0; i < ROWS; i++) {
 			model[i] = Array();
 			for (var j = 0; j < COLS; j++) {
@@ -278,6 +292,7 @@ function step() {
 				updateCellView(cellData);
 			}
 		}
+		endUpdate();
 		
 		
 		if(tusk.supportsDuck){
@@ -382,12 +397,14 @@ function step() {
 		
 	}
 	
+	beginUpdate();
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
 			var me = model[i][j];
 			updateCellView(me);
 		}
 	}
+	endUpdate();
 		
 	if (tusk.supportsDuck) {
 		for (var d = 0; d < ducks.length; d++) {
@@ -470,11 +487,13 @@ function w_Duck(u, neighbourUs, currentVs) {
 
 
 function updateAllCellView(){
+	beginUpdate();
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
 			updateCellView(model[i][j]);
 		}
 	}
+	endUpdate();
 }		
 
 
@@ -484,18 +503,18 @@ function transformDisp2CellCoordinate(x,y){
 	return new Point(x1,y1);
 }
 
-function updateCellView(cell) {	
-	var du = cell.currentGradients;
-	
-	var x = cell.x * scaleWidth;
-	var y = cell.y * scaleHeight;
-	
-	ctx[0].fillStyle = getColor(du[0], 128, 128, 255);
-	ctx[0].fillRect(x,y,scaleWidth,scaleHeight);
+function updateCellView(cell) {
+	ctx[0].updateCellView(cell);
+	ctx[1].updateCellView(cell);
+}
 
-	ctx[1].fillStyle = getColor(du[canves2Idx], 128, 128, 128);
-	ctx[1].fillRect(x,y,scaleWidth,scaleHeight);
+function drawDuck(duck, cell) {
+	ctx[0].drawDuck(duck, cell);
+}
 
+function beginUpdate() {
+	ctx[0].begin();
+	ctx[1].begin();
 }
 
 function drawDuck(duck, cell) {
@@ -511,6 +530,9 @@ function drawDuck(duck, cell) {
 		ctx[0].rotate(-phi);
 		ctx[0].translate(-duck.x, -duck.y);
 	}
+function endUpdate() {
+	ctx[0].end();
+	ctx[1].end();
 }
 
 function calculateDuckPhi(x, y) {
@@ -526,7 +548,16 @@ function getColor(du, r0, g0, b0) {
 	var g = Math.min(255, Math.max(0, Math.floor(g0 * (1+du))));
 	var b = Math.min(255, Math.max(0, Math.floor(b0 * (1+du))));
 	
-	return "rgb(" + r + "," + g + "," + b + ")";
+	return {
+		r: r,
+		g: g,
+		b: b
+	};
+}
+
+function getFormattedColor(du, r0, g0, b0) {
+	var color = getColor(du, r0, g0, b0);
+	return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
 }
 
 function formatNum(num){

@@ -35,7 +35,45 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{listings}
 % These packages are all incorporated in the memoir class to one degree or another...
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=JavaScript,
+   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}
 
 %%% HEADERS & FOOTERS
 \usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
@@ -71,6 +109,8 @@
 
 \begin{document}
 \maketitle
+
+\tableofcontents
 
 \section{Einleitung}
 
@@ -250,6 +290,92 @@ Die Wahl des Umfelds fiel auf eine Kombination aus JavaScript und dem HTML5-{\tt
 Bedenken wurden vorgängig und während der ersten Implementierungsphase vor allem in Bezug auf die Perfomance geäussert, konnten aber im Laufe des Projekts zerstreut werden, auch weil gezeigt werden konnte, dass Optimierungen möglich sind (paralleles Berechnen, Umstellung von Vektorgrafik-Operationen auf Bitmap-Manipulationen).
 
 Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in der Haupthalle des Zürcher Hauptbahnhofs in Betracht gezogen worden.
+
+\subsection{Grafische Ausgabe}
+
+Die grafische Ausgabe des zellulären Automaten findet in einem {\tt canvas}-Element statt, in das mittels JavaScript-Code gezeichnet wird. Die dafür zuständigen Klassen heissen {\tt ...CanvasPainter}, wovon verschiedene Implementationen verfügbar sind. Es wird davon ausgegangen, dass jeder {\tt ...CanvasPainter} folgende Methoden anbietet:
+
+\begin{description}
+\item[\tt begin()] Beginnt den Zeichnungszyklus.
+\item[\tt updateCellView(cell)] Zeichnet eine einzelne Zelle ({\tt cell}) neu.
+\item[\tt drawDuck(duck, cell)] Zeichnet eine Ente ({\tt duck}) in eine einzelne Zelle ({\tt cell}).
+\item[\tt end()] Beendet den Zeichnungszyklus.
+\end{description}
+
+Die Methoden {\tt begin()} und {\tt end()} sind für Implementationen gedacht, die sich nur sinnvoll verhalten wenn sie den gesamten {\tt canvas} neu bezeichnen können und deswegen nach einem atomaren Aufruf von {\tt updateCellView()} einen inkonsistenten Zustand aufweisen.
+
+In den folgenden Abschnitten sind die verfügbaren Implementationen grob erklärt. Es existiert ausserdem eine {\tt Noop}-Implementation, die aber trivial ist und verwendet werden kann, um die grafische Ausgabe komplett abzuschalten.
+
+\subsubsection{{\tt VectorCanvasPainter}}
+
+Diese Klasse bezeichnet den {\tt canvas} durch Vektorgrafik-Operationen:
+
+\begin{lstlisting}
+this.updateCellView = function(cell) {
+	var du = cell.currentGradients; // get values
+	var x = cell.x * scaleWidth; // calculate x position in pixels
+	var y = cell.y * scaleHeight; //  calculate y position in pixels
+	var baseColor = this.getBaseColor(); // get base painter color
+	// let Tusk calculate actual cell color, and format it as 'rgb(r,g,b)'
+	var color = getFormattedColor(du[this.getUIndex()], baseColor.r, baseColor.g, baseColor.b);
+	this.context.fillStyle = color;
+	// draw and fill a rectangle.
+	this.context.fillRect(x, y, scaleWidth, scaleHeight);
+};
+\end{lstlisting}
+
+\subsubsection{{\tt PixelCanvasPainter}}
+
+Diese Klasse bezeichnet den {\tt canvas} durch direkte Pixel-Manipulationen. Grundsätzlich funktionert das folgendermassen \cite{mdn:PixelCanvasDoku}:
+
+\begin{lstlisting}
+var myImageData = context.createImageData(cssWidth, cssHeight);
+// ... do manipulation here ...
+context.putImageData(myImageData, 0, 0);
+\end{lstlisting}
+
+Es muss allerdings gesagt werden, dass die Methode {\tt putImageData()} in allen verfügbaren Implementationen (Gecko, WebKit usw.) einigermassen langsam ist. Dies wird vor allem damit erklärt, dass das zu manipulierende Pixel-Array ({\tt myImageData.data} in unserem Beispiel) ein Array von Integern ist, das von {\tt putImageData()} jeweils noch durchlaufen und auf Gültigkeit (Werte $\in [0: 255]$) geprüft werden muss.
+
+Andrew J. Baker zeigt nun in \cite{mdn:PixelCanvas} einen Weg, durch den die Pixelmanipulationen drastisch beschleunigt werden können (solange die verwendete Implementation den Typ {\tt Uint8ClampedArray} unterstützt, wie vom HTML5-Standard  \cite{wthree:twodcanvas} eigentlich vorgesehen).
+
+Dazu ist es erst einmal nötig, in {\tt begin()} die Pixel-Daten vorzubereiten:
+
+\begin{lstlisting}
+this.begin = function() {
+	this.imageData = this.context.createImageData(WIDTH, HEIGHT);
+	this.buf = new ArrayBuffer(this.imageData.data.length);
+	this.buf8 = new Uint8ClampedArray(this.buf);
+	this.data = new Uint32Array(this.buf);
+};
+\end{lstlisting}
+
+Dadurch ist es möglich, die in {\tt this.data} enthaltenen Daten als ganze Pixel zu bearbeiten (und nicht den Alpha-, Rot-, Grün- und Blau-Kanal einzeln):
+
+\begin{lstlisting}
+this.updateCellView = function(cell) {
+	/* [...] */
+	for (var ix = x; ix < x + scaleWidth; ix++) {
+		for (var iy = y; iy < y + scaleHeight; iy++) {
+			var p = (iy * WIDTH + ix);		
+			this.data[p] =
+				(255   << 24) | // alpha
+				(color.b << 16) |
+				(color.g <<  8) |
+				color.r;
+		}
+	}
+	/* [...] */
+}
+\end{lstlisting}
+
+Abschliessend werden dann die manipulierten Pixel wieder zurückgeschrieben:
+
+\begin{lstlisting}
+this.end = function() {
+	this.imageData.data.set(this.buf8);
+	this.context.putImageData(this.imageData, 0, 0);
+};
+\end{lstlisting}
 
 \section{Schlussfolgerung}
 
