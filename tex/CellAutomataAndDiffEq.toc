@@ -6,8 +6,11 @@
 \contentsline {section}{\numberline {6}Numerische Verfahren}{6}{section.6}
 \contentsline {section}{\numberline {7}Bemerkungen zur Implementation}{6}{section.7}
 \contentsline {subsection}{\numberline {7.1}Wahl des Umfelds}{6}{subsection.7.1}
-\contentsline {subsection}{\numberline {7.2}Grafische Ausgabe}{6}{subsection.7.2}
-\contentsline {subsubsection}{\numberline {7.2.1}{\tt VectorCanvasPainter}}{6}{subsubsection.7.2.1}
-\contentsline {subsubsection}{\numberline {7.2.2}{\tt PixelCanvasPainter}}{7}{subsubsection.7.2.2}
+\contentsline {subsection}{\numberline {7.2}Architektur}{6}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}\tt CellularAutomata}{6}{subsection.7.3}
+\contentsline {subsubsection}{\numberline {7.3.1}Initialisierung der Zellen}{6}{subsubsection.7.3.1}
+\contentsline {subsection}{\numberline {7.4}Grafische Ausgabe}{6}{subsection.7.4}
+\contentsline {subsubsection}{\numberline {7.4.1}{\tt VectorCanvasPainter}}{7}{subsubsection.7.4.1}
+\contentsline {subsubsection}{\numberline {7.4.2}{\tt PixelCanvasPainter}}{7}{subsubsection.7.4.2}
 \contentsline {section}{\numberline {8}Schlussfolgerung}{8}{section.8}
 \contentsline {section}{Literaturverzeichnis}{8}{section*.4}

@@ -20,6 +20,11 @@ function CellularAutomata() {
 	};
 	
 	this.initCells = function() {
+		this.createCells();
+		this.wireNeighbourCells();
+	};
+	
+	this.createCells = function() {
 		for (var i = 0; i < this.rows; i++) {
 			this.model[i] = [];
 			for (var j = 0; j < this.cols; j++) {
@@ -32,6 +37,9 @@ function CellularAutomata() {
 				this.model[i][j] = cell;
 			}
 		}
+	}
+	
+	this.wireNeighbourCells = function() {
 		if (tusk != null) {
 			this.forEachCell(
 				(function(automata) {
@@ -41,7 +49,7 @@ function CellularAutomata() {
 				})(this)
 			);
 		}
-	};
+	}
 	
 	this.step = function() {
 				

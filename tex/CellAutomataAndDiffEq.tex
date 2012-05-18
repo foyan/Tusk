@@ -66,7 +66,7 @@
    basicstyle=\footnotesize\ttfamily,
    showstringspaces=false,
    showspaces=false,
-   numbers=left,
+   %numbers=left,
    numberstyle=\footnotesize,
    numbersep=9pt,
    tabsize=2,
@@ -290,6 +290,29 @@ Die Wahl des Umfelds fiel auf eine Kombination aus JavaScript und dem HTML5-{\tt
 Bedenken wurden vorgängig und während der ersten Implementierungsphase vor allem in Bezug auf die Perfomance geäussert, konnten aber im Laufe des Projekts zerstreut werden, auch weil gezeigt werden konnte, dass Optimierungen möglich sind (paralleles Berechnen, Umstellung von Vektorgrafik-Operationen auf Bitmap-Manipulationen).
 
 Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in der Haupthalle des Zürcher Hauptbahnhofs in Betracht gezogen worden.
+
+\subsection{Architektur}
+
+\subsection{\tt CellularAutomata}
+
+Die Klasse {\tt CellularAutomata} hält die einzelnen Zellen, kontrolliert den Ablauf der Time-Slices und verarbeitet die Rückgabewerte der Gleichungsimplementation.
+
+Sie besitzt eine sehr nützliche Hilfsmethode, die sowohl von ihr selber wie auch beispielsweise von der {\tt View}-Klasse benutzt wird:
+
+\begin{lstlisting}
+this.forEachCell = function(fn) {
+	for (var x = 0; x < this.cols; x++) {
+		for (var y = 0; y < this.rows; y++) {
+			var cell = this.model[x][y];
+			fn(cell);
+		}
+	}
+};
+\end{lstlisting}
+
+\subsubsection{Initialisierung der Zellen}
+
+
 
 \subsection{Grafische Ausgabe}
 
