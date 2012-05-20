@@ -1,3 +1,7 @@
+if (typeof(module) != "undefined") {
+	module.exports = Cell;
+}
+
 function Cell() {
 	
 	this.x = 0;

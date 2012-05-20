@@ -1,3 +1,8 @@
+if (typeof(module) != "undefined") {
+	module.exports = CellularAutomata;
+	var Cell = require('../src/Cell.js');
+}
+
 function CellularAutomata() {
 
 	this.tusk = null;
@@ -35,8 +40,8 @@ function CellularAutomata() {
 				var cell = new Cell();
 				cell.x = j;
 				cell.y = i;
-				if (tusk != null) {
-					cell.currentData = tusk.createCellData();
+				if (this.tusk != null) {
+					cell.currentData = this.tusk.createCellData();
 				}
 				this.model[i][j] = cell;
 			}
@@ -44,11 +49,11 @@ function CellularAutomata() {
 	}
 	
 	this.wireNeighbourCells = function() {
-		if (tusk != null) {
+		if (this.tusk != null) {
 			this.forEachCell(
 				(function(automata) {
 					return function(cell) {
-						cell.neighbours = this.tusk.getNeighbours(cell, automata.model);
+						cell.neighbours = automata.tusk.getNeighbours(cell, automata.model);
 					};
 				})(this)
 			);
@@ -58,29 +63,34 @@ function CellularAutomata() {
 	this.step = function() {
 				
 		//this.additionalSupportSteps();
+		if (this.tusk != null) {
+			var dt = 1 / this.tusk.slices;
+			for (var t = 0; t < this.tusk.slices; t++) {
 				
-		var dt = 1/tusk.slices;
-		for (var t = 0; t < tusk.slices; t++) {
-			
-			this.forEachCell(
-				function(cell) {
-					var nextData = tusk.calcCell(cell, dt, this.damping, this.viscosity);
-					cell.nextData = nextData;
-					
-					//me.nextVelocities = (tusk.supportsDuck==false? 0: 
-					//					w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
-				}
-			);
-			
-			automata.forEachCell(
-				function(cell) {
-					cell.currentData = cell.nextData;
-				}
-			);
-			
+				this.forEachCell(
+					(function(automata) {
+						return function(cell) {
+							var nextData = automata.tusk.calcCell(cell, dt, automata.damping, automata.viscosity);
+							cell.nextData = nextData;
+							
+							//me.nextVelocities = (tusk.supportsDuck==false? 0: 
+							//					w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
+						};
+					})(this)
+				);
+				
+				this.forEachCell(
+					function(cell) {
+						cell.currentData = cell.nextData;
+					}
+				);
+				
+			}
 		}
 		
 		//this.doTheDuck();
+		
+		this.iterations++;
 			
 	}
 	
