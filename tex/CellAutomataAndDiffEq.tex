@@ -312,7 +312,49 @@ this.forEachCell = function(fn) {
 
 \subsubsection{Initialisierung der Zellen}
 
+Zu Anfang werden alle Zellen des Automaten hergestellt und initialisiert:
+\begin{lstlisting}
+this.initCells = function() {
+	this.createCells();
+	this.wireNeighbourCells();
+};
+\end{lstlisting}
 
+Die Daten jeder Zelle sind abhängig von der gewählten {\tt Tusk}-Implementation und werden entsprechend von ihr selber initialisiert:
+
+\begin{lstlisting}
+this.createCells = function() {
+	// [...]
+	if (tusk != null) {
+		cell.currentData = tusk.createCellData();
+	}
+	// [...]
+}
+\end{lstlisting}
+
+Danach werden noch alle Zellen mit ihren Nachbarn verknüpft. Da die Art der Nachbarschaft (Von-Neumann, Moore...) wiederum von der gewählten {\tt Tusk}-Implementation abhängig ist, wird die entsprechende Implementation herangezogen\footnote{Ein Wort zu der auf den ersten Blick unnötig komplizierten Definition der von {\tt this.forEachCell()} auszuführenden anonymen Funktion: In JavaScript wird der Scope von Variablen durch die Funktion und nicht den Block begrenzt, darum gilt als Best Practice zur expliziten Scope-Gebung im Allgemeinen das Wrappen in einer anonymen Funktion und unmittelbarer Ausführung derselben \cite{UnderstandingClosures}.}:
+
+\begin{lstlisting}
+this.wireNeighbourCells = function() {
+	if (tusk != null) {
+		this.forEachCell(
+			(function(automata) {
+				return function(cell) {
+					cell.neighbours = this.tusk.getNeighbours(cell, automata.model);
+				};
+			})(this)
+		);
+	}
+}
+\end{lstlisting}
+
+Es macht sehr viel Sinn, die Zell-Nachbarschaften während der Initialisierung des Automaten vorzunehmen; zum einen, weil sie sich während der Iterierung nicht mehr ändern werden, zum anderen, weil die Zellen im Automaten in einem $n$-dimensionalen Array abgelegt sind, auf das dann bei jedem Iterationsschritt mindestens
+\[
+	z_{\textrm{min}} = |R| \cdot |N|
+\]
+zugegriffen werden müsste (wobei $R$ der ganze Zellraum und $N$ die Menge der Nachbarzellen einer Zelle sei).
+
+\subsubsection{Ein Iterationsschritt}
 
 \subsection{Grafische Ausgabe}
 

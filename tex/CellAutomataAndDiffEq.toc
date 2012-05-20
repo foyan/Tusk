@@ -9,8 +9,9 @@
 \contentsline {subsection}{\numberline {7.2}Architektur}{6}{subsection.7.2}
 \contentsline {subsection}{\numberline {7.3}\tt CellularAutomata}{6}{subsection.7.3}
 \contentsline {subsubsection}{\numberline {7.3.1}Initialisierung der Zellen}{6}{subsubsection.7.3.1}
-\contentsline {subsection}{\numberline {7.4}Grafische Ausgabe}{6}{subsection.7.4}
-\contentsline {subsubsection}{\numberline {7.4.1}{\tt VectorCanvasPainter}}{7}{subsubsection.7.4.1}
-\contentsline {subsubsection}{\numberline {7.4.2}{\tt PixelCanvasPainter}}{7}{subsubsection.7.4.2}
-\contentsline {section}{\numberline {8}Schlussfolgerung}{8}{section.8}
-\contentsline {section}{Literaturverzeichnis}{8}{section*.4}
+\contentsline {subsubsection}{\numberline {7.3.2}Ein Iterationsschritt}{7}{subsubsection.7.3.2}
+\contentsline {subsection}{\numberline {7.4}Grafische Ausgabe}{7}{subsection.7.4}
+\contentsline {subsubsection}{\numberline {7.4.1}{\tt VectorCanvasPainter}}{8}{subsubsection.7.4.1}
+\contentsline {subsubsection}{\numberline {7.4.2}{\tt PixelCanvasPainter}}{8}{subsubsection.7.4.2}
+\contentsline {section}{\numberline {8}Schlussfolgerung}{9}{section.8}
+\contentsline {section}{Literaturverzeichnis}{9}{section*.4}

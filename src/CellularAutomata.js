@@ -10,6 +10,10 @@ function CellularAutomata() {
 	
 	this.cols = 100;
 	
+	this.damping = .995;
+	
+	this.viscosity = 1.0;
+	
 	this.forEachCell = function(fn) {
 		for (var x = 0; x < this.cols; x++) {
 			for (var y = 0; y < this.rows; y++) {
@@ -44,7 +48,7 @@ function CellularAutomata() {
 			this.forEachCell(
 				(function(automata) {
 					return function(cell) {
-						cell.neighbours = tusk.getNeighbours(cell, automata.model);
+						cell.neighbours = this.tusk.getNeighbours(cell, automata.model);
 					};
 				})(this)
 			);
@@ -60,7 +64,7 @@ function CellularAutomata() {
 			
 			this.forEachCell(
 				function(cell) {
-					var nextData = tusk.calcCell(cell, dt, damping, viscosity);
+					var nextData = tusk.calcCell(cell, dt, this.damping, this.viscosity);
 					cell.nextData = nextData;
 					
 					//me.nextVelocities = (tusk.supportsDuck==false? 0: 
