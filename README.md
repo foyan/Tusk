@@ -2,8 +2,8 @@
 
 ## Synopsis
 
-Zellul�rer Automat zur Simulation von Wasser, Bier oder �hnlichen Fl�ssigkeiten sowie ebenderen Verhalten
-bei Bewegung derselben respektive Beworfenwerden mit Gegenst�nden wie W�rfeln, Elefanten oder Mauszeigern.
+Zellulärer Automat zur Simulation von Wasser, Bier oder ähnlichen Flüssigkeiten sowie ebenderen Verhalten
+bei Bewegung derselben respektive Beworfenwerden mit Gegenständen wie Würfeln, Elefanten oder Mauszeigern.
 
 ## Ausführung der Tests
 
