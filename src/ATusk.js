@@ -1,11 +1,6 @@
-/*
-	ATusk : abstract Tusk  angelehnt an ITusk
-	
-	by Detlev Ziereisen, Florian L�thi
-	
-	Jede Formel sollte von ATusk abgeleitet werden.
-	ReferenzImpl game.js  (game of life)
-*/	
+if (typeof(module) != "undefined") {
+	module.exports = ATusk;
+}
 
 function ATusk() {
 
@@ -61,21 +56,3 @@ function ATusk() {
 	// Berechnet den neuen Wert einer Zelle.	
 	this.calcCell=function(me, dt, damping, viscosity) {} // => du = float[] wobei du[0]=u
 }
-
-GameOfLife.prototype = new ATusk();
-Wave.prototype = new ATusk();
-Diffusion.prototype = new ATusk();
-
-
-var strategies = {
-	wave: new Wave(),
-	gameoflife: new GameOfLife(),
-	diffusion: new Diffusion()
-};
-
-
-// get an instance of your formel
-function tuskStrategy(formel){
-	return strategies[formel];
-}
-

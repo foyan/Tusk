@@ -87,7 +87,7 @@ function load() {
 	
 
 	
-	automata.tusk = tuskStrategy(getFormelCtrl()); 
+	automata.tusk = TuskRegistry[getFormelCtrl()]; 
 	tusk = automata.tusk;
 	SLICES= tusk.SLICES;	
 	

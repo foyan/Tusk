@@ -1,12 +1,11 @@
-/*
+if (typeof(module) != "undefined") {
+	module.exports = DiffusionEquation;
+	var ATusk = require('../src/ATusk.js');
+}
 
-	- Diffusion -
-	
-	implementiert Diffusion von Wärme im kalten Wasser
-	implementiert Interface ITusk
+DiffusionEquation.prototype = new ATusk();
 
-*/
-function Diffusion() {
+function DiffusionEquation() {
 
 	this.setSupportedFunction(false,true,false);
 	
@@ -22,7 +21,7 @@ function Diffusion() {
 		return fountains;
 	}
 
-	// get Info über die Werte in Cell
+	// get Info ï¿½ber die Werte in Cell
 	Diffusion.prototype.getCellInfo=function(cell){
 		var lf="\t";
 		var info= "u="+formatNum(cell.currentGradients[0]); 

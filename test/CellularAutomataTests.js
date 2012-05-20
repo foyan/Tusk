@@ -64,4 +64,61 @@ describe('CellularAutomata', function() {
 		auto.model[0][0].currentData.should.equal("Boing.");
 	});
 
+	it('should triple-step with mocked Tusk and three slices', function() {
+
+		var tusk = {
+			slices: 3,
+			createCellData: function() {
+				return "Boing";
+			},
+			getNeighbours: function(cell, cells) {
+				return cell;
+			},
+			calcCell: function(cell, dt, damping, viscosity) {
+				return cell.currentData + ".";
+			}
+		};
+
+		var auto = new CellularAutomata();
+		auto.rows = 1;
+		auto.cols = 1;	
+		auto.tusk = tusk;
+		auto.initCells();
+
+		var iterations = auto.iterations;
+		auto.step();
+		auto.model[0][0].currentData.should.equal("Boing...");
+		auto.iterations.should.equal(iterations+1);
+	});
+
+	it('should six-step with mocked Tusk and three slices and step() two times', function() {
+
+		var tusk = {
+			slices: 3,
+			createCellData: function() {
+				return "Boing";
+			},
+			getNeighbours: function(cell, cells) {
+				return cell;
+			},
+			calcCell: function(cell, dt, damping, viscosity) {
+				return cell.currentData + ".";
+			}
+		};
+
+		var auto = new CellularAutomata();
+		auto.rows = 1;
+		auto.cols = 1;	
+		auto.tusk = tusk;
+		auto.initCells();
+
+		var iterations = auto.iterations;
+		auto.step();
+		auto.model[0][0].currentData.should.equal("Boing...");
+		auto.iterations.should.equal(iterations+1);
+		auto.step();
+		auto.model[0][0].currentData.should.equal("Boing......");
+		auto.iterations.should.equal(iterations+2);
+	});
+
 });

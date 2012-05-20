@@ -1,18 +1,16 @@
-/*
+if (typeof(module) != "undefined") {
+	module.exports = WaveEquation;
+	var ATusk = require('../src/ATusk.js');
+	var VonNeumannNeighbourhood = require('../src/VonNeumannNeighbourhood.js');
+}
 
-	- Wave -
-	
-	implementiert die Welle.
-	implementiert Interface ITusk
+WaveEquation.prototype = new ATusk();
 
-*/
-
-
-function Wave() {
+function WaveEquation() {
 
 	this.setSupportedFunction(true,true,true);
 	
-	Wave.prototype.createCellData = function() {
+	this.createCellData = function() {
 		return {
 			ut: 0,
 			up: 0,
@@ -23,14 +21,14 @@ function Wave() {
 			
 			displayValue: function() { return this.ut; }
 		};
-	}
+	};
 	
-	Wave.prototype.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
+	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
 	//Override the parent's method
-	Wave.prototype.sayHello = function() { return "Wave"; }
+	WaveEquation.prototype.sayHello = function() { return "Wave Equation"; }
 
-	Wave.prototype.getCellInfo=function(cell){		 
+	WaveEquation.prototype.getCellInfo=function(cell){		 
 		var lf="\t";
 		var info= 
 		"u="+formatNum(cell.currentGradients[0]) + lf+
@@ -44,13 +42,13 @@ function Wave() {
 		return info;
 	}
 	
-	Wave.prototype.mouseMoveAlt=function(cell, cellDefaultValue) {
+	WaveEquation.prototype.mouseMoveAlt=function(cell, cellDefaultValue) {
 		var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
 				
 		cell.currentData.ut = initVal;
 	}
 	
-	Wave.prototype.getDuckImage=function(){
+	WaveEquation.prototype.getDuckImage=function(){
 		//return null;
 		
 		duckImage=new Image(); 
@@ -61,7 +59,7 @@ function Wave() {
 	
 	// set cell values for the rain drops.
 	// Parameter: cell, drops=value on the GUI, i=counter for drops: i=5 => 5th drops
-	Wave.prototype.getRainValue=function(cell, drops, i){
+	WaveEquation.prototype.getRainValue=function(cell, drops, i){
 		cell.currentGradients[0] = -0.5;  
 		cell.currentGradients[1] = 0;
 		cell.currentGradients[2] = 0;
@@ -70,7 +68,7 @@ function Wave() {
 		cell.currentGradients[5] = 0;
 	}
 	
-	Wave.prototype.getFountains=function(intensity, rows, cols){
+	WaveEquation.prototype.getFountains=function(intensity, rows, cols){
 		var fountains= Array(); 
 		var i=0;
 		var f=new Fountain(); f.x=cols/2; f.y=rows/2; f.intensity=(parseFloat(intensity)); fountains[i++]=f; 
@@ -81,16 +79,15 @@ function Wave() {
 		return fountains;
 	}
 	
-	Wave.prototype.getDucks=function(rows, cols){
+	WaveEquation.prototype.getDucks=function(rows, cols){
 		var ducks=Array();
 		ducks[0]= new Duck(100,400,0,0);
 		ducks[1]= new Duck(300,400,0,0);
 		return ducks;
 	}
 	
-	Wave.prototype.calcCell=function(me, dt, damping, viscosity) {
-		var c = 1.0;
-		c=1/viscosity;
+	WaveEquation.prototype.calcCell = function(me, dt, damping, viscosity) {
+		var c = 1.0 / viscosity;
 
 		var u = me.currentData.ut;
 		

@@ -1,3 +1,7 @@
+if (typeof(module) != "undefined") {
+	module.exports = VonNeumannNeighbourhood;
+}
+
 function VonNeumannNeighbourhood() {
 	
 	this.getNeighbours = function(cell, cells) {

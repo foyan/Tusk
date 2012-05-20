@@ -1,10 +1,9 @@
-/*  
-  Game of Life
-   für den Zellulären Automaten
-   by Detlev und Florian ZHAW i10b, 4S/2012
-   
-   extends ATusk .js
-*/
+if (typeof(module) != "undefined") {
+	module.exports = GameOfLife;
+	var ATusk = require('../src/ATusk.js');
+}
+
+GameOfLife.prototype = new ATusk();
 
 function GameOfLife() {
 
@@ -90,7 +89,7 @@ function GameOfLife() {
 // function getFountains(intensity, rows, cols) {}
 
 
-// // get Info über die Werte in Cell
+// // get Info ï¿½ber die Werte in Cell
 // function getCellInfo(cell){
 	// var lf="\t";
 	// var info= "u="+formatNum(cell.currentGradients[0]); 
