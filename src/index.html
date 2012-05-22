@@ -38,10 +38,10 @@
 					<table width="100%">
 						<tr>
 							<td>
-								<img src="pics/u(x,t).png" alt="u(x,t)" height="25px" />
+								<img src="pics/u(x,t).png" alt="u(x,t)" />
 							</td>
 							<td>
-								<h1 id="modelname">-</h1>
+								<p id="iterationCount"># Iterations: 0</h1>
 							</td>
 							<td>
 								Differential Equation:&nbsp;&nbsp;
@@ -68,8 +68,7 @@
 					<canvas style="border: 1px solid green;" id="pool1"></canvas>
 				</td>
 			</tr>
-			<tr><td colspan="4"><hr /></td></tr>
-			<tr>
+			<!--<tr>
 				<td colspan="2">
 					<ul class="keyShortHelp">
 						<li>Set Value with ALT</li>
@@ -98,11 +97,10 @@
 						</tr>
 					</table>
 				</td>
-			</tr>
-			<tr>
+			</tr>//-->
+			<tr><!--
 				<td>
 				 
-					<p id="iterationCount"># Iterations: 0</p>
 					<input type="button" onclick="toggle();" value="Toggle" class="button" />
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<input type="button" onclick="singleStep();" value="single step" class="button"/>
@@ -129,8 +127,35 @@
 				  </select>
 				</td>
 				<td >
-				</td>
-			</tr>  
+				</td>//-->
+			<td colspan="4">
+				<div class="ctrlSection">
+					<h1>Control</h1>
+					<input type="button" onclick="toggle();" value="Toggle" class="button" /><br/>
+					<input type="button" onclick="singleStep();" value="single step" class="button"/><br/>
+					<input type="button" onclick="reset();" value="reset" class="button"/><br/>
+				</div>
+				<div class="ctrlSection">
+					<h1>Automata</h1>
+					<table>
+						<tr>
+							<td>Time Slices</td>
+							<td><input type="text" id="timeSlices" value="4" /></td>
+						</tr>
+						<tr>
+							<td>Viscosity</td>
+							<td><select id="viscosity" name="viscosity" size="1" onchange="changeViscosity()">
+							  <option value="1">Water @ 20° C</option>
+							  <option value="10">Blood</option>
+							  <option value="1000">Honey</option>
+							  <option value="0.65">Petroleum</option>
+							  <option value="10000000000000">Concrete</option>
+				  			</select></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			</tr>
 			<tr>
 				<td colspan="3">
 					<p id="statusLabel">-</p>

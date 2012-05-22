@@ -4,11 +4,11 @@ body {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: 8pt;
 	width:1200px;
-	heigth:1000px;
+	height:1000px;
 }
 
 table {
-	bborder-collapse: collapse;
+	border-collapse: collapse;
 	border-style: none;
 	border-width: 2px;
 }
@@ -19,7 +19,7 @@ td {
 }
 
 table td {
-	border: solide;
+	/*border: solid;*/
 	width: 7px;
 	height: 7px;
 	font-size: 8pt;
@@ -32,7 +32,7 @@ p.cellvalues { font-size: 14pt; }
 	height: 50px;
 }
 
-.button { height:30px; width:80px; }
+.button { width:80px; margin-bottom: 2px; }
 
 p.iterationCount { font-size: 20pt; }
 
@@ -40,5 +40,26 @@ p.iterationCount { font-size: 20pt; }
 
 #poolList * {
 	vertical-align: middle;
+}
+
+.ctrlSection {
+	margin-top: 4px;
+	float: left;
+	border: 1px solid orange;
+	margin-right: 4px;
+}
+
+.ctrlSection h1 {
+	display: block;
+	background-color: orange;
+	margin: 0px;
+	font-size: 12px;
+	padding: 4px;
+}
+
+.ctrlSection * {
+	margin-left: 2px;
+	margin-right: 2px;	
+}
 }
 
