@@ -50,7 +50,8 @@ function DiffusionEquation() {
 	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
 	this.events = [
-		new RainEvent(function(cell, value) { cell.currentData.u = value; })
+		new RainEvent(function(cell, value) { cell.currentData.u = value; }),
+		new VortexEvent(function(cell, value) { cell.currentData.u = value; })
 	];
 
 	DiffusionEquation.prototype.calcCell = function(cell, dt, damping, viscosity) {

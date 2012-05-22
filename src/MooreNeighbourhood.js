@@ -12,7 +12,7 @@ function MooreNeighbourhood() {
 			for (var oy = -1; oy <= 1; oy++) {
 				var x = (cells.length + cell.x + ox) % cells.length;
 				var y = (cells[0].length + cell.y + oy) % cells[0].length;
-				if (!(ox == 0 && oy == 0)) {
+				if (!(x == cell.x && y == cell.y)) {
 					neighbours.push(cells[y][x]);
 				}
 			}

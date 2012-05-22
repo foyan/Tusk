@@ -2,6 +2,8 @@ if (typeof(module) != "undefined") {
 	module.exports = WaveEquation;
 	var ATusk = require('../src/ATusk.js');
 	var VonNeumannNeighbourhood = require('../src/VonNeumannNeighbourhood.js');
+	var RainEvent = require('../src/RainEvent.js');
+	var VortexEvent = require('../src/VortexEvent.js');
 }
 
 WaveEquation.prototype = new ATusk();
@@ -25,9 +27,21 @@ function WaveEquation() {
 	
 	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
-	this.events = [
-		new RainEvent(function(cell, value) { cell.currentData.ut = value; })
-	];
+	if (typeof(module) == "undefined") {
+		this.events = [
+			new RainEvent(
+				function(cell, value) {
+					cell.currentData.ut = value;
+				}
+			),
+			new VortexEvent(
+				function(cell, value) {
+					cell.currentData.up = value - cell.currentData.ut;
+					cell.currentData.ut = value;
+				}
+			)
+		];
+	}
 	
 	//Override the parent's method
 	WaveEquation.prototype.sayHello = function() { return "Wave Equation"; }
@@ -35,14 +49,15 @@ function WaveEquation() {
 	WaveEquation.prototype.getCellInfo=function(cell){		 
 		var lf="\t";
 		var info= 
-		"u="+formatNum(cell.currentGradients[0]) + lf+
-		"u'="+formatNum(cell.currentGradients[2]) + lf+
-		"u''="+formatNum(cell.currentGradients[3])+lf+
-		"u.="+formatNum(cell.currentGradients[1]) + lf+
-		"u..="+formatNum(cell.currentGradients[4]) + lf+
-		"v_x="+formatNum(cell.currentVelocities[0]) + lf+
-		"v_y="+formatNum(cell.currentVelocities[1]) + lf+
-		"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1]))*360/6.28 + "<br/>"
+		"u="+formatNum(cell.currentData.ut) + lf+
+		"u'="+formatNum(cell.currentData.udx) + lf+
+		"u''="+formatNum(cell.currentData.udxdx)+lf+
+		"u.="+formatNum(cell.currentData.up) + lf+
+		"u..="+formatNum(cell.currentData.upp) + lf+
+		//"v_x="+formatNum(cell.currentVelocities[0]) + lf+
+		//"v_y="+formatNum(cell.currentVelocities[1]) + lf+
+		//"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1]))*360/6.28 +
+		 "<br/>"
 		return info;
 	}
 	
@@ -50,6 +65,7 @@ function WaveEquation() {
 		var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
 				
 		cell.currentData.ut = initVal;
+		cell.currentData.up = this.calculateUp(cell, 1, 1);
 	}
 	
 	WaveEquation.prototype.getDuckImage=function(){
@@ -90,16 +106,24 @@ function WaveEquation() {
 		return ducks;
 	}
 	
-	WaveEquation.prototype.calcCell = function(me, dt, damping, viscosity) {
+	this.calculateUp = function(cell, dt, c) {
+		var udxdx = -2 * cell.currentData.ut
+			+ (cell.neighbours.w.currentData.ut + cell.neighbours.n.currentData.ut) / 2
+			+ (cell.neighbours.e.currentData.ut + cell.neighbours.s.currentData.ut) / 2;
+		var upp = udxdx * c;
+		return cell.currentData.up + upp * dt;
+	}
+		
+	WaveEquation.prototype.calcCell = function(cell, dt, damping, viscosity) {
 		var c = 1.0 / viscosity;
 
-		var u = me.currentData.ut;
+		var u = cell.currentData.ut;
 		
-		var udx = u - (me.neighbours.w.currentData.ut + me.neighbours.n.currentData.ut) / 2;
-		var udxdx = -2 * u + (me.neighbours.w.currentData.ut + me.neighbours.n.currentData.ut) / 2 + (me.neighbours.e.currentData.ut + me.neighbours.s.currentData.ut) / 2;
+		var udx = u - (cell.neighbours.w.currentData.ut + cell.neighbours.n.currentData.ut) / 2;
+		var udxdx = -2 * u + (cell.neighbours.w.currentData.ut + cell.neighbours.n.currentData.ut) / 2 + (cell.neighbours.e.currentData.ut + cell.neighbours.s.currentData.ut) / 2;
 		
 		var upp = udxdx * c;
-		var up = me.currentData.up + upp * dt;
+		var up = cell.currentData.up + upp * dt;
 		var ut = (u + up * dt) * damping;
 		
 		return {
@@ -113,4 +137,5 @@ function WaveEquation() {
 			displayValue: function() { return this.ut; }
 		};
 	}
+	
 }

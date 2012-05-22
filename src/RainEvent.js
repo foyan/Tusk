@@ -1,6 +1,6 @@
 function RainEvent(applyCell) {
 	
-	this.dropsPerIteration = 1;
+	this.dropsPerIteration = 0;
 	
 	this.apply = function(automata) {
 		var drops = this.dropsPerIteration == 0 ? 0
