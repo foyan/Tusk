@@ -1,7 +1,8 @@
 PixelCanvasPainter = function(ctx) {
 	this.context = ctx;
 	
-	this.getUIndex = function() { return 0; };
+	this.pool = null;
+
 	this.getBaseColor = function() { return {r: 128, g: 128, b: 255 }; };
 	
 	this.imageData = null;
@@ -17,7 +18,7 @@ PixelCanvasPainter = function(ctx) {
 		var y = cell.y * scaleHeight;
 		
 		var baseColor = this.getBaseColor();
-		var color = getColor(cell.currentData.displayValue(), baseColor.r, baseColor.g, baseColor.b);
+		var color = getColor(this.pool != null ? this.pool.getValue(cell) : cell.currentData.displayValue(), baseColor.r, baseColor.g, baseColor.b);
 		
 		for (var ix = x; ix < x + scaleWidth; ix++) {
 			for (var iy = y; iy < y + scaleHeight; iy++) {

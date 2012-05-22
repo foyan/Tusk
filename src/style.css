@@ -37,3 +37,8 @@ p.cellvalues { font-size: 14pt; }
 p.iterationCount { font-size: 20pt; }
 
 .keyShortHelp li { float:left; width:140px;}
+
+#poolList * {
+	vertical-align: middle;
+}
+

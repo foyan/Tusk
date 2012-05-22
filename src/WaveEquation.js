@@ -48,6 +48,15 @@ function WaveEquation() {
 		)*/
 	];
 	
+	this.pools = [
+		new Pool("du/dx", "pics/udx.png", function(cell) { return cell.currentData.udx; }),
+		new Pool("d2u/dx2", "pics/udxdx.png", function(cell) { return cell.currentData.udxdx;}),
+		new Pool("upp", "pics/udt.png", function(cell) {return cell.currentData.upp;}),
+		new Pool("up", "pics/u(x,t+dt).png", function(cell) {return cell.currentData.up;}),
+		new Pool("vx", "", function(cell) {return cell.currentData.vx;}),
+		new Pool("vy", "", function(cell) {return cell.currentData.vy;})
+	];
+	
 	WaveEquation.prototype.sayHello = function() { return "Wave Equation"; }
 
 	WaveEquation.prototype.getCellInfo = function(cell){		 

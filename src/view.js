@@ -2,7 +2,6 @@ automata = null;
 
 ROWS = 100;
 COLS = 100;
-SLICES= 10;
 
 WIDTH = 600;
 HEIGHT = 600;
@@ -56,7 +55,6 @@ function load() {
 	
 	ctx[1] = createCanvasPainter(canvas[1].getContext("2d"));
 	ctx[1].getColor = function() {return {r: 128, g: 128, b: 128}; };
-	ctx[1].getUIndex = function() { return canves2Idx; };
 	
 	var select = document.getElementById("diffFormel");
 	for (var strategy in TuskRegistry) {
@@ -88,7 +86,7 @@ function load() {
 	
 	automata.tusk = TuskRegistry[getFormelCtrl()]; 
 	tusk = automata.tusk;
-	SLICES= tusk.SLICES;	
+	initTuskControls();
 	
 	canvas[0].onmousemove = function(e) {
 		if (e.altKey) {	
@@ -251,7 +249,45 @@ function getFormelCtrl(){
 function tuskChanged(){	
 	automata.tusk = TuskRegistry[getFormelCtrl()];
 	automata.initCells();
+	initTuskControls();
 	updateAllCellView();
+}
+
+function initTuskControls() {
+	ctx[1].pool = null;
+	var poolList = document.getElementById("poolList");
+	poolList.innerHTML = "";
+	for (var i in automata.tusk.pools) {
+		var pool = automata.tusk.pools[i];
+		
+		if (ctx[1].pool == null) {
+			selectedPoolChanged(pool);
+		}
+		
+		var radio = document.createElement("input");
+		radio.setAttribute("type", "radio");
+		radio.setAttribute("name", "pools");
+		radio.setAttribute("value", pool.name);
+		
+		var img = document.createElement("img");
+		img.setAttribute("src", pool.imageSource);
+		img.setAttribute("alt", pool.name);
+		
+		radio.onchange = (function(p) {return function() {selectedPoolChanged(p);}})(pool);
+		
+		poolList.appendChild(radio);
+		poolList.appendChild(img);
+	}
+	if (ctx[1].pool != null) {
+		poolList.style.display = "block";
+		poolList.getElementsByTagName("input")[0].checked = true;
+	} else {
+		poolList.style.display = "none";
+	}
+}
+
+function selectedPoolChanged(pool) {
+	ctx[1].pool = pool;
 }
 
 var running = false;
