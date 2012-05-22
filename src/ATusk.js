@@ -4,55 +4,19 @@ if (typeof(module) != "undefined") {
 
 function ATusk() {
 
-	var canRain = false;
-	var canFountain=false;
-	var canDuck = false;
 	var tab="\t";
 
-	
 	this.slices = 5;
 	
-	this.getNeighbours = function(cell, cells) {
-		return null;
-	}
-	
 	this.sayHello = function () { return "implement me!"; }
-	this.supportsFountain= function() { return canFountain; }
-	this.supportsRains= function() { return canRain; }
-
-	this.supportsDuck = function() { return canDuck;}
-	this.getDuckImage=function() { return null; }  // => object of Image
-	this.getDucks= function(rows, cols) { return  Array(); } // => Point[]
-	this.setSupportedFunction=function(supportsRains, supportsFountains, supportsDucks){
-		canRain=supportsRains;
-		canFountain=supportsFountains;
-		canDuck=supportsDucks;
-	}
-	
-	this.createCellData = function() {
-		return null;
-	}
-	
-	// set cell values for the rain drops.
-	// Parameter: cell, drops=value on the GUI, i=counter for drops: i=5 => 5th drops
-	this.getRainValue=function(cell, drops, i) {}  //  => no return
-
-	this.getFountains=function(intensity, rows, cols) { return  Array(); }  //	=> returns a array of fountains
-
-	// get Info �ber die Werte in Cell
+		
+	// get Info über die Werte in Cell
 	this.getCellInfo=function(cell) { return "implement me"; } // => returns string
 
 
 	// Aktion bei MouseMove mit Alt
 	this.mouseMoveAlt=function(cell, cellDefaultValue) {} // modify cell
 
-
-	// custom settings. Wird beim ersten Run von Step() aufgerufen.
-	this.customFirstTime=function(tuskObject) {} 
-
-	// init CallData with usefull values
-	this.initCell=function(cellData) {} // => no return modify cellData
-
 	// Berechnet den neuen Wert einer Zelle.	
-	this.calcCell=function(me, dt, damping, viscosity) {} // => du = float[] wobei du[0]=u
+	this.calcCell = function(me, dt, damping, viscosity) {} // => du = float[] wobei du[0]=u
 }

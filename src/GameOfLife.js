@@ -8,7 +8,6 @@ GameOfLife.prototype = new ATusk();
 
 function GameOfLife() {
 
-	this.setSupportedFunction(false,false,false);
 	this.slices = 1;
 	
 	//Override the parent's method
@@ -23,10 +22,6 @@ function GameOfLife() {
 		cell.currentData.status = 1;
 	}
 
-	GameOfLife.prototype.initCell=function(cellData) {
-		cellData.currentGradients[0] = 0; 
-	}
-	
 	this.events = [];
 	
 	this.createDeadCell = function() {
