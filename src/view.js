@@ -1,21 +1,12 @@
 automata = null;
 
-ROWS = 100;
-COLS = 100;
-
-WIDTH = 600;
-HEIGHT = 600;
-scaleWidth = WIDTH / COLS;  		
-scaleHeight = HEIGHT / ROWS;
-
-MAXITEMS=6;  // Gradienten in Cell
+WIDTH = 500;
+HEIGHT = 500;
 
 iterationLabel = null;
 canvas = Array();
 ctx = Array();
 
-rainIntensity = null;
-fountainIntensity=null;
 statusMap=Array();
 var statusCell=null;
 
@@ -24,10 +15,6 @@ duckImage.src = "pics/duck.png";
 var ballImage = null;
 
 var damping = 0.995;
-
-firstTime=true;
-
-canves2Idx=1;
 
 viscosity=1;  // Wasser 20 Grad Celsius
 
@@ -85,9 +72,9 @@ function load() {
 
 	
 	automata.tusk = TuskRegistry[getFormelCtrl()]; 
-	tusk = automata.tusk;
+
 	initTuskControls();
-	
+		
 	canvas[0].onmousemove = function(e) {
 		if (e.altKey) {	
 		    var cell= getCell(e);
@@ -117,9 +104,7 @@ function load() {
 			statusLabel.innerHTML = automata.tusk.getCellInfo(getCell(e));									  
 		}
 	};		
-		
-	automata.initCells();
-		
+				
 	automata.swimmers.push(new Swimmer());
 	automata.swimmers[0].image = duckImage;
 	automata.swimmers[0].location.x = 10;
@@ -140,11 +125,24 @@ function load() {
 	automata.swimmers[3].location.x = 40;
 	automata.swimmers[3].location.y = 40;
 
+
+	initAutomata();
+}
+
+function initAutomata() {
+	automata.rows = document.getElementById("rows").value;
+	automata.cols = document.getElementById("cols").value;
+	automata.initCells();
+	
+	for (var i = 0; i < ctx.length; i++) {
+		ctx[i].scaling.x = WIDTH / automata.cols;
+		ctx[i].scaling.y = HEIGHT / automata.rows;
+	}
+	
 	beginUpdate();
 	automata.forEachCell(updateCellView);
 	endUpdate();
 	automata.forEachSwimmer(drawSwimmer);
-				
 }
 
 
@@ -161,8 +159,8 @@ function offset(target) {
 
 function getCell(e) {
 	var off = offset(e.target);
-	var x = Math.floor((e.clientX - off.x - 2) / (scaleWidth));
-	var y = Math.floor((e.clientY - off.y - 2) / (scaleHeight));
+	var x = Math.floor((e.clientX - off.x - 2) / (WIDTH/automata.rows));
+	var y = Math.floor((e.clientY - off.y - 2) / (HEIGHT/automata.cols));
 	if( x<0 || y<0 || x>automata.cols || y>automata.rows) return null;
 	var cell = automata.model[y][x];
 	return cell;
@@ -286,6 +284,14 @@ function initTuskControls() {
 	}
 }
 
+function sizeChanged() {
+	initAutomata();
+}
+
+function slicesChanged() {
+	automata.tusk.slices = document.getElementById("slices").value;
+}
+
 function selectedPoolChanged(pool) {
 	ctx[1].pool = pool;
 }
@@ -309,7 +315,7 @@ function step() {
 	automata.step();
 	updateAllCellView();
 	automata.forEachSwimmer(drawSwimmer);
-	iterationLabel.innerHTML = "# Iterations: " + automata.iterations;
+	iterationLabel.innerHTML = automata.iterations;
 	if (running) {
 		window.setTimeout(step, 00);
 	}
@@ -317,7 +323,7 @@ function step() {
 
 
 function getCells(pt) {
-	return automata.model[Math.floor(pt.x / (scaleWidth))][Math.floor(pt.y / (scaleHeight))];
+	return automata.model[Math.floor(pt.x / (WIDTH/automata.cols))][Math.floor(pt.y / (HEIGHT/automata.rows))];
 };
 		
 function updateAllCellView(){
@@ -328,8 +334,8 @@ function updateAllCellView(){
 
 
 function transformDisp2CellCoordinate(x,y){
-	var x1 = Math.floor(x / scaleWidth);
-	var y1 = Math.floor(y / scaleHeight);
+	var x1 = Math.floor(x / WIDTH/automata.cols);
+	var y1 = Math.floor(y / HEIGHT/automata.rows);
 	return new Point(x1,y1);
 }
 

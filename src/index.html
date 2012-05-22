@@ -26,48 +26,57 @@
 	</head>
 
 	<body>
-		<table width="100%" >
-			<colgroup>
-				<col width="25%">
-				<col width="25%">
-				<col width="25%">
-				<col width="25%">
-			</colgroup>
+		<div class="title">
+			The Tusk @ <span id="iterationCount">0</span> Iterations.
+		</div>
+		<div class="ctrlSection" style="padding:0">
+			<h1 style="margin-bottom:0px;height:37px;">
+				<!--<img src="pics/u(x,t).png" alt="u(x,t)" style="vertical-align:middle;" />-->
+				<div style="float:right;vertical-align:middle;">Differential Equation:
+					<select id="diffFormel" name="diffFormel" size="1" onchange="tuskChanged()">
+					</select>
+				</div>
+			</h1>
+			<canvas id="pool"></canvas>
+		</div>
+		<div class="ctrlSection" style="padding:0">
+			<h1 style="margin-bottom:0px;"><div id="poolList"></div></h1>
+			<canvas id="pool1"></canvas>
+		</div>
+		
+		<div style="clear:both;" />
+		<!--<table width="100%" >
 			<tr class="cellTitle">
 				<td colspan="2">
-					<table width="100%">
-						<tr>
-							<td>
+					<table>
+						<tr>//-->
+							<!--<td>
 								<img src="pics/u(x,t).png" alt="u(x,t)" />
-							</td>
-							<td>
+							</td>//-->
+							<!--<td>
 								<p id="iterationCount"># Iterations: 0</h1>
-							</td>
-							<td>
+							</td>//-->
+							<!--<td>
 								Differential Equation:&nbsp;&nbsp;
 								<select id="diffFormel" name="diffFormel" size="1" onchange="tuskChanged()">
 								</select>
-							</td>
-						</tr>
+							</td>-->
+						<!--</tr>
 					</table>
-				</td>
+				</td>-->
 				
-				<td colspan="2">
+				<!--<td colspan="2">
 					<div id="poolList"></div>
-					<!--<input type="radio" name="canves2" value="2"  onChange="radioCanvesChanged(this);"  checked><img src="pics/udx.png" alt="d/dx u(x, t)" height="40" />
-					<input type="radio" name="canves2" value="3"  onChange="radioCanvesChanged(this);" ><img src="pics/udxdx.png" alt="d/dx^2 u(x, t)" height="40" />
-					<input type="radio" name="canves2" value="1"  onChange="radioCanvesChanged(this);" ><img src="pics/udt.png" alt="d/dt u(x, t)" height="40" />
-					<input type="radio" name="canves2" value="0"  onChange="radioCanvesChanged(this);" ><img src="pics/u(x,t+dt).png" alt="u(x, t+dt)" height="40" />//-->
-				</td>
-			</tr>
-			<tr style="height=80%">
+				</td>//-->
+			<!--</tr>-->
+			<!--<tr style="height=80%">
 				<td width="50%" colspan="2">
 					<canvas style="border: 1px solid green;" id="pool"></canvas>
 				</td>
 				<td  colspan="2">
 					<canvas style="border: 1px solid green;" id="pool1"></canvas>
 				</td>
-			</tr>
+			</tr>//-->
 			<!--<tr>
 				<td colspan="2">
 					<ul class="keyShortHelp">
@@ -128,7 +137,7 @@
 				</td>
 				<td >
 				</td>//-->
-			<td colspan="4">
+			<!--<td colspan="4">-->
 				<div class="ctrlSection">
 					<h1>Control</h1>
 					<input type="button" onclick="toggle();" value="Toggle" class="button" /><br/>
@@ -139,8 +148,12 @@
 					<h1>Automata</h1>
 					<table>
 						<tr>
-							<td>Time Slices</td>
-							<td><input type="text" id="timeSlices" value="4" /></td>
+							<td>Size</td>
+							<td><input type="text" id="rows" value="100" style="width:50px;" onchange="sizeChanged();" />x<input type="text" id="cols" value="100" style="width:50px;" onchange="sizeChanged();" /></td>
+						</tr>
+						<tr>
+							<td>Time&nbsp;Slices</td>
+							<td><input type="text" id="slices" value="4" style="width:50px;" onchange="slicesChanged();" /></td>
 						</tr>
 						<tr>
 							<td>Viscosity</td>
@@ -154,13 +167,13 @@
 						</tr>
 					</table>
 				</div>
-			</td>
+			<!--</td>
 			</tr>
 			<tr>
 				<td colspan="3">
 					<p id="statusLabel">-</p>
 				</td>
 			</tr>  
-		</table>
+		</table>//-->
 	</body>	
 </html>

@@ -3,8 +3,6 @@ body {
 	color: white;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: 8pt;
-	width:1200px;
-	height:1000px;
 }
 
 table {
@@ -47,19 +45,31 @@ p.iterationCount { font-size: 20pt; }
 	float: left;
 	border: 1px solid orange;
 	margin-right: 4px;
+	padding-bottom: 2px;
 }
 
 .ctrlSection h1 {
 	display: block;
 	background-color: orange;
 	margin: 0px;
-	font-size: 12px;
+	font-size: 11px;
 	padding: 4px;
+	padding-top:2px;
+	margin-bottom:2px;
 }
 
 .ctrlSection * {
 	margin-left: 2px;
 	margin-right: 2px;	
 }
+
+.title {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.ctrlSection canvas {
+	margin:0;
+	border: 1px solid black;
 }
 

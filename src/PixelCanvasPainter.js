@@ -2,6 +2,8 @@ PixelCanvasPainter = function(ctx) {
 	this.context = ctx;
 	
 	this.pool = null;
+	
+	this.scaling = new Vector();
 
 	this.getBaseColor = function() { return {r: 128, g: 128, b: 255 }; };
 	
@@ -14,14 +16,14 @@ PixelCanvasPainter = function(ctx) {
 	
 	this.updateCellView = function(cell) {
 		
-		var x = cell.x * scaleWidth;
-		var y = cell.y * scaleHeight;
+		var x = cell.x * this.scaling.x;
+		var y = cell.y * this.scaling.y;
 		
 		var baseColor = this.getBaseColor();
 		var color = getColor(this.pool != null ? this.pool.getValue(cell) : cell.currentData.displayValue(), baseColor.r, baseColor.g, baseColor.b);
 		
-		for (var ix = x; ix < x + scaleWidth; ix++) {
-			for (var iy = y; iy < y + scaleHeight; iy++) {
+		for (var ix = x; ix < x + this.scaling.x; ix++) {
+			for (var iy = y; iy < y + this.scaling.y; iy++) {
 				var p = (iy * WIDTH + ix);
 				
 				this.data[p] =
@@ -36,8 +38,8 @@ PixelCanvasPainter = function(ctx) {
 	this.drawSwimmer = function(swimmer) {
 		
 		if (swimmer.image != null) {
-			var x = swimmer.location.x * scaleWidth;
-			var y = swimmer.location.y * scaleHeight;
+			var x = swimmer.location.x * this.scaling.x;
+			var y = swimmer.location.y * this.scaling.y;
 			var width = swimmer.image.width * swimmer.scale;
 			var height = swimmer.image.height * swimmer.scale;
 			this.context.translate(x, y);
@@ -47,7 +49,7 @@ PixelCanvasPainter = function(ctx) {
 			this.context.translate(-x, -y);
 		} else {
 			this.context.fillStyle = "rgb(255,255,0)";
-			this.context.fillRect(duck.x,duck.y,scaleWidth,scaleHeight);
+			this.context.fillRect(swimmer.x, swimmer.y, this.scaling.x, this.scaling.y);
 		}
 				
 	};
