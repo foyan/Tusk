@@ -60,9 +60,9 @@ function load() {
 	ctx[1].getUIndex = function() { return canves2Idx; };
 	
 	var select = document.getElementById("diffFormel");
-	for (var strategy in strategies) {
+	for (var strategy in TuskRegistry) {
 		var opt = document.createElement("option");
-		opt.text = strategies[strategy].sayHello();
+		opt.text = TuskRegistry[strategy].sayHello();
 		opt.value = strategy;
 		select.options.add(opt);
 	}
@@ -233,8 +233,8 @@ function getFormelCtrl(){
 	return val;
 }
 // called when DiffFormel has changed
-function changeFormel(){	
-	automata.tusk = tuskStrategy(getFormelCtrl());
+function tuskChanged(){	
+	automata.tusk = TuskRegistry[getFormelCtrl()];
 	automata.initCells();
 	updateAllCellView();
 	//SLICES= tusk.SLICES;
@@ -242,25 +242,28 @@ function changeFormel(){
 	//step();	
 }
 
+var running = false;
+
 function toggle() {
-	automata.running = !automata.running;
-	step();
+	running = !running;
+	if (running) {
+		step();
+	}
 }
 
 function singleStep(){
-	automata.runOnce = true;
 	step();
 }
 
 
 
 function step() {
-
 	automata.step();
 	updateAllCellView();
 	iterationLabel.innerHTML = "# Iterations: " + automata.iterations++;
-	
-	window.setTimeout(step, 0);
+	if (running) {
+		window.setTimeout(step, 0);
+	}
 }
 
 

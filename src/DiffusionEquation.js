@@ -10,10 +10,10 @@ function DiffusionEquation() {
 	this.setSupportedFunction(false,true,false);
 	
 	//Override the parent's method
-	Diffusion.prototype.sayHello = function() { return "Diffusion"; }
+	DiffusionEquation.prototype.sayHello = function() { return "Diffusion"; }
 
 	
-	Diffusion.prototype.getFountains=function(intensity, rows, cols){
+	DiffusionEquation.prototype.getFountains=function(intensity, rows, cols){
 		var fountains= Array(); 
 		var i=0;
 		var f=new Fountain(); f.x=10; f.y=10; f.intensity=(parseFloat(intensity)); fountains[i++]=f; 
@@ -22,23 +22,23 @@ function DiffusionEquation() {
 	}
 
 	// get Info �ber die Werte in Cell
-	Diffusion.prototype.getCellInfo=function(cell){
+	DiffusionEquation.prototype.getCellInfo=function(cell){
 		var lf="\t";
 		var info= "u="+formatNum(cell.currentGradients[0]); 
 		return info;
 	}
 
 	// Aktion bei MouseMove mit Alt
-	Diffusion.prototype.mouseMoveAlt=function(cell, cellDefaultValue){
+	DiffusionEquation.prototype.mouseMoveAlt=function(cell, cellDefaultValue){
 		var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
 		cell.currentGradients[0] = initVal;
 	}
 	
-	Diffusion.prototype.initCell=function(cellData) {
+	DiffusionEquation.prototype.initCell=function(cellData) {
 		cellData.currentGradients[0] = 0; 
 	}
 
-	Diffusion.prototype.calcCell=function(me, dimensions, dt, damping, viscosity) {
+	DiffusionEquation.prototype.calcCell=function(me, dimensions, dt, damping, viscosity) {
 		var du = Array();
 		var diff=0;
 		du[0] = 0;

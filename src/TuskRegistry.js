@@ -8,5 +8,5 @@ if (typeof(module) != "undefined") {
 var TuskRegistry = {
 	wave: new WaveEquation(),
 	gameoflife: new GameOfLife(),
-	diffusion: new Diffusion()
+	diffusion: new DiffusionEquation()
 };
