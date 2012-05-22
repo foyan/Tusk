@@ -76,10 +76,10 @@ function WaveEquation() {
 	}
 	
 	this.getVelocity = function(cell) {
-		return {
-			x: cell.currentData.vx,
-			y: cell.currentData.vy
-		};
+		var v = new Vector();
+		v.x = cell.currentData.vx;
+		v.y = cell.currentData.vy;
+		return v;
 	}
 	
 	WaveEquation.prototype.getDuckImage=function(){

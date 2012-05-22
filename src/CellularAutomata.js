@@ -109,13 +109,14 @@ function CellularAutomata() {
 						return function(swimmer) {
 							var cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
 							var velocity = automata.tusk.getVelocity(cell);
-							swimmer.scale = 1.2 + Math.min(1, Math.max(-1, cell.currentData.displayValue()));
 							swimmer.move(velocity);
 							// swimmer collides with boundary => weggespickt!
 							if (swimmer.location.x < 0 || swimmer.location.x >= automata.cols || swimmer.location.y < 0 || swimmer.location.y >= automata.rows) {
-								velocity = velocity.scale(-10);
+								velocity = velocity.scale(-1);
 								swimmer.move(velocity);
 							}
+							cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
+							swimmer.scale = 1.2 + Math.min(1, Math.max(-1, cell.currentData.displayValue()));
 						};
 					})(this)
 				);
