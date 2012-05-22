@@ -102,12 +102,12 @@ function load() {
 		if (e.shiftKey) {
 			var cell = getCell(e);
 			if( cell!=null) {
-				statusLabel.innerHTML = tusk.getCellInfo(cell);
-				for (var d = 0; d < ducks.length; d++) {
+				statusLabel.innerHTML = automata.tusk.getCellInfo(cell);
+				/*for (var d = 0; d < ducks.length; d++) {
 					statusLabel.innerHTML +=  "<br/>Duck " + d + ": (" + ducks[d].x + "/" + ducks[d].y + "  Vx/Vy=" + ducks[d].velocityX + "/" + ducks[d].velocityY + ")";
-				}
-				statusCell=cell;
-				setStatusMap(cell);
+				}*/
+				//statusCell=cell;
+				//setStatusMap(cell);
 			}
 		}
 		if (e.ctrlKey && tusk.supportsDuck ) {
@@ -237,9 +237,6 @@ function tuskChanged(){
 	automata.tusk = TuskRegistry[getFormelCtrl()];
 	automata.initCells();
 	updateAllCellView();
-	//SLICES= tusk.SLICES;
-	//firstTime=true;
-	//step();	
 }
 
 var running = false;

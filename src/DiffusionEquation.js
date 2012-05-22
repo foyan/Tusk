@@ -25,7 +25,7 @@ function DiffusionEquation() {
 	// get Info �ber die Werte in Cell
 	DiffusionEquation.prototype.getCellInfo=function(cell){
 		var lf="\t";
-		var info= "u="+formatNum(cell.currentGradients[0]); 
+		var info= "u="+formatNum(cell.currentData.u); 
 		return info;
 	}
 
@@ -51,7 +51,7 @@ function DiffusionEquation() {
 
 	DiffusionEquation.prototype.calcCell = function(cell, dt, damping, viscosity) {
 		
-		var c = 1;
+		var c = 1.0/viscosity;
 		
 		var nextData = this.createCellData();
 		nextData.dudx = (4 * cell.currentData.u
@@ -60,7 +60,7 @@ function DiffusionEquation() {
 			- cell.neighbours.e.currentData.u
 			- cell.neighbours.s.currentData.u
 		) / 4 * c;
-		nextData.u = cell.currentData.u + nextData.dudx * dt;
+		nextData.u = cell.currentData.u - nextData.dudx * dt;
 
 		return nextData;
 	}
