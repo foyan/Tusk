@@ -40,13 +40,13 @@ function WaveEquation() {
 				cell.currentData.up = value - cell.currentData.ut;
 				cell.currentData.ut = value;
 			}
-		)
-		/*new FountainEvent(
+		),
+		new FountainEvent(
 			function(cell, value) {
 				cell.currentData.up = value - cell.currentData.ut;
 				cell.currentData.ut = value;
 			}
-		)*/
+		)
 	];
 	
 	this.pools = [

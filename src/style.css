@@ -63,6 +63,14 @@ p.iterationCount { font-size: 20pt; }
 	margin-right: 2px;	
 }
 
+.disabled {
+	border: 1px solid gray !important;
+}
+
+.disabled h1 {
+	background-color: gray !important;
+}
+
 
 .title {
 	font-weight: bold;

@@ -131,6 +131,7 @@ function initAutomata() {
 	automata.forEachCell(updateCellView);
 	endUpdate();
 	automata.forEachSwimmer(drawSwimmer);
+
 }
 
 
@@ -270,7 +271,57 @@ function initTuskControls() {
 	} else {
 		poolList.style.display = "none";
 	}
+	
+	// events
+	for (var i = 0; i < eventBoxes.length; i++) {
+		eventBoxes[i].parentNode.removeChild(eventBoxes[i]);
+	}
+	eventBoxes = [];
+	if (automata.tusk.events) {
+		for (var i = 0; i < automata.tusk.events.length; i++) {
+			var event = automata.tusk.events[i];
+			
+			var div = document.createElement("div");
+			div.className = "ctrlSection disabled";
+			
+			var h = document.createElement("h1");
+			
+			var checkbox = document.createElement("input");
+			checkbox.type = "checkbox";
+			checkbox.style.margin = "0px";
+			checkbox.onchange = (function(ev, div) {
+				return function() {
+					ev.enabled = !ev.enabled;
+					if (!ev.enabled) {
+						div.classList.add("disabled");
+					} else {
+						div.classList.remove("disabled");
+					}
+				};	
+			})(event, div);
+			
+			var span = document.createElement("span");
+			span.innerHTML = event.name;
+			
+			h.appendChild(checkbox);
+			h.appendChild(span);
+			
+			div.appendChild(h);
+			if (event.createView) {
+				div.appendChild(event.createView(document));
+			} else {
+				var span = document.createElement("span");
+				span.innerHTML = ":-)";
+				div.appendChild(span);
+			}
+			document.getElementById("lastBeforeCustom").parentNode.appendChild(div);
+			
+			eventBoxes.push(div);
+		}
+	}
 }
+
+var eventBoxes = [];
 
 function sizeChanged() {
 	initAutomata();

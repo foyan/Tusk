@@ -28,6 +28,8 @@ function FountainEvent(applyCell) {
 		}
 	}
 	
+	this.name = "Pulse Fountain";
+	
 	this.applyCell = applyCell;
 
 }

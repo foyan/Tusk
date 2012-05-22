@@ -77,7 +77,9 @@ function CellularAutomata() {
 			// fire events, such as rain, vorteces etc.
 			if (this.tusk.events) {
 				for (var i = 0; i < this.tusk.events.length; i++) {
-					this.tusk.events[i].apply(this);
+					if (this.tusk.events[i].enabled) {
+						this.tusk.events[i].apply(this);
+					}
 				}
 			}
 			
