@@ -62,8 +62,12 @@ function CellularAutomata() {
 	
 	this.step = function() {
 				
-		//this.additionalSupportSteps();
 		if (this.tusk != null) {
+			
+			for (var i = 0; i < this.tusk.events.length; i++) {
+				this.tusk.events[i].apply(this);
+			}
+						
 			var dt = 1 / this.tusk.slices;
 			for (var t = 0; t < this.tusk.slices; t++) {
 				

@@ -27,6 +27,8 @@ function GameOfLife() {
 		cellData.currentGradients[0] = 0; 
 	}
 	
+	this.events = [];
+	
 	this.createDeadCell = function() {
 		return {status: 0, displayValue: function() { return this.status; }}
 	}

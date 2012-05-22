@@ -25,6 +25,10 @@ function WaveEquation() {
 	
 	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
+	this.events = [
+		new RainEvent(function(cell, value) { cell.currentData.ut = value; })
+	];
+	
 	//Override the parent's method
 	WaveEquation.prototype.sayHello = function() { return "Wave Equation"; }
 
