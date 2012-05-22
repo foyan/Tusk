@@ -5,6 +5,16 @@ body {
 	font-size: 8pt;
 }
 
+.ut_body {
+	background-color: white;
+	color: black;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	width:1200px;
+	height:1000px;
+}
+
+
 table {
 	border-collapse: collapse;
 	border-style: none;

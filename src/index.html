@@ -20,6 +20,7 @@
 		<script type="text/javascript" src="VectorCanvasPainter.js"></script>
 		<script type="text/javascript" src="PixelCanvasPainter.js"></script>
 		<script type="text/javascript" src="NoopCanvasPainter.js"></script>
+		<script type="text/javascript" src="ATusk.js"></script>
 
 		<link type="text/css" rel="stylesheet" href="style.css" />
 		<title>Tusk</title>
@@ -31,7 +32,6 @@
 		</div>
 		<div class="ctrlSection" style="padding:0">
 			<h1 style="margin-bottom:0px;height:37px;">
-				<!--<img src="pics/u(x,t).png" alt="u(x,t)" style="vertical-align:middle;" />-->
 				<div style="float:right;vertical-align:middle;">Differential Equation:
 					<select id="diffFormel" name="diffFormel" size="1" onchange="tuskChanged()">
 					</select>
@@ -45,163 +45,62 @@
 		</div>
 		
 		<div style="clear:both;" />
-		<!--<table width="100%" >
-			<tr class="cellTitle">
-				<td colspan="2">
-					<table>
-						<tr>//-->
-							<!--<td>
-								<img src="pics/u(x,t).png" alt="u(x,t)" />
-							</td>//-->
-							<!--<td>
-								<p id="iterationCount"># Iterations: 0</h1>
-							</td>//-->
-							<!--<td>
-								Differential Equation:&nbsp;&nbsp;
-								<select id="diffFormel" name="diffFormel" size="1" onchange="tuskChanged()">
-								</select>
-							</td>-->
-						<!--</tr>
-					</table>
-				</td>-->
-				
-				<!--<td colspan="2">
-					<div id="poolList"></div>
-				</td>//-->
-			<!--</tr>-->
-			<!--<tr style="height=80%">
-				<td width="50%" colspan="2">
-					<canvas style="border: 1px solid green;" id="pool"></canvas>
-				</td>
-				<td  colspan="2">
-					<canvas style="border: 1px solid green;" id="pool1"></canvas>
-				</td>
-			</tr>//-->
-			<!--<tr>
-				<td colspan="2">
-					<ul class="keyShortHelp">
-						<li>Set Value with ALT</li>
-						<li>Get Value with Shift</li>
-						<li>Add/Kill Duck with Ctrl</li>
-					</ul>
-				</td>
-				<td>
-					set value:&nbsp;&nbsp;<input type="text" id="setValue" value="1" defaultValue="1" size="3" maxlength="5" />
-				</td>
-				<td rowspan="3">
-					<table border="1" width="100%" heigth="100%">
-						<colgroup>
-							<col width="33%">
-							<col width="33%">
-							<col width="34%">
-						</colgroup>
-						<tr>
-							<td><p class="cellvalues" id="u_pos">-</p></td><td><p class="cellvalues" id="u_north">-</p></td><td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td><p class="cellvalues" id="u_left">-</p></td><td><p class="cellvalues" id="u_me">-</p></td><td><p class="cellvalues" id="u_right">-</p></td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td><td><p class="cellvalues" id="u_south">-</p></td><td>&nbsp;</td>
-						</tr>
-					</table>
-				</td>
-			</tr>//-->
-			<tr><!--
-				<td>
-				 
-					<input type="button" onclick="toggle();" value="Toggle" class="button" />
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="button" onclick="singleStep();" value="single step" class="button"/>
-					&nbsp;&nbsp;
-					<input type="button" onclick="reset();" value="reset" class="button"/>
-					
-				</td>
-				<td >
-					<p>Rain Intensity: <input type="textbox" id="rain" value="0"  size="3" maxlength="5" /> drops per iteration</p>
-					<p>Fountain Intensity: <input type="textbox" id="fountain" value="0"  size="3" maxlength="5"/></p>
-				</td>	
-				<td >
-				  Init Cells with:&nbsp;&nbsp;<input type="textbox" id="InitData"  size="10" maxlength="30000" value="1,0,0;14,0,0,1,0,0,1,0,0;15,0,0,0,1,1,1,0,0;10,38,1,1,1,1,1,1,1;11,39,1,1,1,1,1;9,39,1,1,1,1,1"   />
-				  &nbsp;&nbsp;
-				  <input type="button" onclick="initCells();" value="Init" class="button"/>
-				 	 </br>
-				  Viscosity:&nbsp;&nbsp;
-				  <select id="viscosity" name="viscosity" size="1" onchange="changeViscosity()">
-					  <option value="1">Wasser 20° C</option>
-					  <option value="10">Blut</option>
-					  <option value="1000">Honig</option>
+		<div class="ctrlSection">
+			<h1>Control</h1>
+			<input type="button" onclick="toggle();" value="Toggle" class="button" /><br/>
+			<input type="button" onclick="singleStep();" value="single step" class="button"/><br/>
+			<input type="button" onclick="reset();" value="reset" class="button"/><br/>
+		</div>
+		<div class="ctrlSection">
+			<h1>Automata</h1>
+			<table>
+				<tr>
+					<td>Size</td>
+					<td><input type="text" id="rows" value="100" style="width:50px;" onchange="sizeChanged();" />x<input type="text" id="cols" value="100" style="width:50px;" onchange="sizeChanged();" /></td>
+				</tr>
+				<tr>
+					<td>Time&nbsp;Slices</td>
+					<td><input type="text" id="slices" value="4" style="width:50px;" onchange="slicesChanged();" /></td>
+				</tr>
+				<tr>
+					<td>Viscosity</td>
+					<td><select id="viscosity" name="viscosity" size="1" onchange="changeViscosity()">
+					  <option value="1">Water @ 20° C</option>
+					  <option value="10">Blood</option>
+					  <option value="1000">Honey</option>
 					  <option value="0.65">Petroleum</option>
-					  <option value="10^21">Beton</option>
-				  </select>
-				</td>
-				<td >
-				</td>//-->
-			<!--<td colspan="4">-->
-				<div class="ctrlSection">
-					<h1>Control</h1>
-					<input type="button" onclick="toggle();" value="Toggle" class="button" /><br/>
-					<input type="button" onclick="singleStep();" value="single step" class="button"/><br/>
-					<input type="button" onclick="reset();" value="reset" class="button"/><br/>
-				</div>
-				<div class="ctrlSection">
-					<h1>Automata</h1>
-					<table>
-						<tr>
-							<td>Size</td>
-							<td><input type="text" id="rows" value="100" style="width:50px;" onchange="sizeChanged();" />x<input type="text" id="cols" value="100" style="width:50px;" onchange="sizeChanged();" /></td>
-						</tr>
-						<tr>
-							<td>Time&nbsp;Slices</td>
-							<td><input type="text" id="slices" value="4" style="width:50px;" onchange="slicesChanged();" /></td>
-						</tr>
-						<tr>
-							<td>Viscosity</td>
-							<td><select id="viscosity" name="viscosity" size="1" onchange="changeViscosity()">
-							  <option value="1">Water @ 20° C</option>
-							  <option value="10">Blood</option>
-							  <option value="1000">Honey</option>
-							  <option value="0.65">Petroleum</option>
-							  <option value="10000000000000">Concrete</option>
-				  			</select></td>
-						</tr>
-					</table>
-				</div>
-				<div class="ctrlSection">
-					<h1>God's Panel</h1>
-					<div style="padding: 2px;">
-						SHIFT will...<br/>
-						<input type="radio" name="shiftGodMode" value="1" />set cell to: <input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
-						<input type="radio" name="shiftGodMode" value="2" />inspect cell<br/>
-					</div>
-				</div>
-				<div class="ctrlSection" id="lastBeforeCustom">
-					<h1>Cell Inspector</h1>
-					<table id="cellInspector">
-						<tr>
-							<td id="cellInspector_NW"></td>
-							<td id="cellInspector_N"></td>
-							<td id="cellInspector_NE"></td>
-						</tr>
-						<tr>
-							<td id="cellInspector_W"></td>
-							<td id="cellInspector_C"></td>
-							<td id="cellInspector_E"></td>
-						</tr>
-						<tr>
-							<td id="cellInspector_SW"></td>
-							<td id="cellInspector_S"></td>
-							<td id="cellInspector_SE"></td>
-						</tr>
-					</table>
-				</div>
-			<!--</td>
-			</tr>
-			<tr>
-				<td colspan="3">
-					<p id="statusLabel">-</p>
-				</td>
-			</tr>  
-		</table>//-->
+					  <option value="10000000000000">Concrete</option>
+		  			</select></td>
+				</tr>
+			</table>
+		</div>
+		<div class="ctrlSection">
+			<h1>God's Panel</h1>
+			<div style="padding: 2px;">
+				SHIFT will...<br/>
+				<input type="radio" name="shiftGodMode" value="1" />set cell to: <input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
+				<input type="radio" name="shiftGodMode" value="2" />inspect cell<br/>
+			</div>
+		</div>
+		<div class="ctrlSection" id="lastBeforeCustom">
+			<h1>Cell Inspector</h1>
+			<table id="cellInspector">
+				<tr>
+					<td id="cellInspector_NW"></td>
+					<td id="cellInspector_N"></td>
+					<td id="cellInspector_NE"></td>
+				</tr>
+				<tr>
+					<td id="cellInspector_W"></td>
+					<td id="cellInspector_C"></td>
+					<td id="cellInspector_E"></td>
+				</tr>
+				<tr>
+					<td id="cellInspector_SW"></td>
+					<td id="cellInspector_S"></td>
+					<td id="cellInspector_SE"></td>
+				</tr>
+			</table>
+		</div>
 	</body>	
 </html>

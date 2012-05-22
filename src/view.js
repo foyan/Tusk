@@ -12,7 +12,8 @@ var statusCell=null;
 
 var duckImage = new Image();
 duckImage.src = "pics/duck.png";
-var ballImage = null;
+var ballImage = new Image();
+ballImage.src = "pics/soccer_ball.png";
 
 var damping = 0.995;
 
@@ -99,7 +100,7 @@ function load() {
 	automata.swimmers[0].location.y = 10;
 	
 	automata.swimmers.push(new Swimmer());
-	automata.swimmers[1].image = duckImage;
+	automata.swimmers[1].image = ballImage;
 	automata.swimmers[1].location.x = 20;
 	automata.swimmers[1].location.y = 30;
 
@@ -109,7 +110,7 @@ function load() {
 	automata.swimmers[2].location.y = 60;
 
 	automata.swimmers.push(new Swimmer());
-	automata.swimmers[3].image = duckImage;
+	automata.swimmers[3].image = ballImage;
 	automata.swimmers[3].location.x = 40;
 	automata.swimmers[3].location.y = 40;
 
@@ -313,6 +314,7 @@ function initTuskControls() {
 				var span = document.createElement("span");
 				span.innerHTML = ":-)";
 				div.appendChild(span);
+
 			}
 			document.getElementById("lastBeforeCustom").parentNode.appendChild(div);
 			
@@ -450,6 +452,6 @@ function updateCellInspector(cell) {
 
 function updateCellInspectorCell(id, cell) {
 	document.getElementById("cellInspector_" + id).innerHTML = formatNum(cell.currentData.displayValue());
-} 
+}
 
 window.onload = load;
