@@ -78,9 +78,6 @@ function CellularAutomata() {
 						return function(cell) {
 							var nextData = automata.tusk.calcCell(cell, dt, automata.damping, automata.viscosity);
 							cell.nextData = nextData;
-							
-							//me.nextVelocities = (tusk.supportsDuck==false? 0: 
-							//					w_Duck(me.currentGradients[0], [x.previous[0], y.previous[0]], me.currentVelocities));
 						};
 					})(this)
 				);
@@ -99,36 +96,7 @@ function CellularAutomata() {
 		this.iterations++;
 			
 	}
-	
-	this.additionalSupportSteps = function() {
-		if(this.tusk.supportsRains){
-			var drops = rainIntensity.value == 0 ? 0
-				: rainIntensity.value >= 1 ? rainIntensity.value
-				: automata.iterations % (Math.floor(1/rainIntensity.value)) == 0 ? 1 : 0;
-			
-			for (var i = 0; i < drops; i++) {
-				var x = Math.floor(Math.random() * automata.cols);
-				var y = Math.floor(Math.random() * automata.rows);
-				tusk.getRainValue(automata.model[x][y], drops, i);		
-			}
-		}  // rainSupport
 		
-		if(this.tusk.supportsFountain) {	
-			if( fountainIntensity.value !=0 && automata.iterations % 20==0) {
-				var fountains=tusk.getFountains(fountainIntensity.value, automata.rows, automata.cols);  // returns Fountain[]
-				if( fountains.length >0){
-					for (var fi = 0; fi < fountains.length; fi++) {
-						var f=fountains[fi];
-						var g=automata.model[f.x][f.y];
-						g.currentGradients[0] = f.intensity;
-						for (var i= 1;i<= 5;i++) 
-							g.currentGradients[i]=0;
-					}
-				}
-			}
-		}  // fountainSupport	
-	}
-	
 	this.doTheDuck = function() {
 		if (tusk.supportsDuck) {
 			for (var d = 0; d < ducks.length; d++) {

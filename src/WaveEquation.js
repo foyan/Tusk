@@ -4,6 +4,7 @@ if (typeof(module) != "undefined") {
 	var VonNeumannNeighbourhood = require('../src/VonNeumannNeighbourhood.js');
 	var RainEvent = require('../src/RainEvent.js');
 	var VortexEvent = require('../src/VortexEvent.js');
+	var FountainEvent = require('../src/FountainEvent.js');
 }
 
 WaveEquation.prototype = new ATusk();
@@ -34,7 +35,13 @@ function WaveEquation() {
 					cell.currentData.ut = value;
 				}
 			),
-			new VortexEvent(
+			/*new VortexEvent(
+				function(cell, value) {
+					cell.currentData.up = value - cell.currentData.ut;
+					cell.currentData.ut = value;
+				}
+			),*/
+			new FountainEvent(
 				function(cell, value) {
 					cell.currentData.up = value - cell.currentData.ut;
 					cell.currentData.ut = value;

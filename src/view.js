@@ -344,13 +344,6 @@ function Dimension() {
 	this.next = Array();
 }
 
-function Fountain() {
-	this.x=-1;
-	this.y=-1;
-	this.intensity=0;
-}
-
-
 function Point(x, y){
 	this.x = x;
 	this.y = y;
