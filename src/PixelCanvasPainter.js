@@ -32,20 +32,23 @@ PixelCanvasPainter = function(ctx) {
 		}
 	};
 	
-	this.drawDuck = function(duck, cell) {
+	this.drawSwimmer = function(swimmer) {
 		
-		if(duckImage == null) {
+		if (swimmer.image != null) {
+			var x = swimmer.location.x * scaleWidth;
+			var y = swimmer.location.y * scaleHeight;
+			var width = swimmer.image.width * swimmer.scale;
+			var height = swimmer.image.height * swimmer.scale;
+			this.context.translate(x, y);
+			this.context.rotate(swimmer.phi());
+			this.context.drawImage(swimmer.image, -width / 2, -height / 2, width, height);
+			this.context.rotate(-swimmer.phi());
+			this.context.translate(-x, -y);
+		} else {
 			this.context.fillStyle = "rgb(255,255,0)";
 			this.context.fillRect(duck.x,duck.y,scaleWidth,scaleHeight);
-		} else {
-			var phi = calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1])
-			this.context.translate(duck.x, duck.y);
-			this.context.rotate(phi);
-			this.context.drawImage(duckImage, -18, -18);
-			this.context.rotate(-phi);
-			this.context.translate(-duck.x, -duck.y);
 		}
-		
+				
 	};
 	
 	this.begin = function() {

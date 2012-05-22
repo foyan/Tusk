@@ -21,6 +21,8 @@ function WaveEquation() {
 			udxdx: 0,
 			upp: 0,
 			ut: 0,
+			vx: 0,
+			vy: 0,
 			
 			displayValue: function() { return this.ut; }
 		};
@@ -28,27 +30,25 @@ function WaveEquation() {
 	
 	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
-	if (typeof(module) == "undefined") {
-		this.events = [
-			new RainEvent(
-				function(cell, value) {
-					cell.currentData.ut = value;
-				}
-			),
-			/*new VortexEvent(
-				function(cell, value) {
-					cell.currentData.up = value - cell.currentData.ut;
-					cell.currentData.ut = value;
-				}
-			),*/
-			new FountainEvent(
-				function(cell, value) {
-					cell.currentData.up = value - cell.currentData.ut;
-					cell.currentData.ut = value;
-				}
-			)
-		];
-	}
+	this.events = [
+		new RainEvent(
+			function(cell, value) {
+				cell.currentData.ut = value;
+			}
+		),
+		new VortexEvent(
+			function(cell, value) {
+				cell.currentData.up = value - cell.currentData.ut;
+				cell.currentData.ut = value;
+			}
+		)
+		/*new FountainEvent(
+			function(cell, value) {
+				cell.currentData.up = value - cell.currentData.ut;
+				cell.currentData.ut = value;
+			}
+		)*/
+	];
 	
 	//Override the parent's method
 	WaveEquation.prototype.sayHello = function() { return "Wave Equation"; }
@@ -73,6 +73,13 @@ function WaveEquation() {
 				
 		cell.currentData.ut = initVal;
 		cell.currentData.up = this.calculateUp(cell, 1, 1);
+	}
+	
+	this.getVelocity = function(cell) {
+		return {
+			x: cell.currentData.vx,
+			y: cell.currentData.vy
+		};
 	}
 	
 	WaveEquation.prototype.getDuckImage=function(){
@@ -140,6 +147,8 @@ function WaveEquation() {
 			udxdx: udxdx,
 			upp: upp,
 			ut: ut,
+			vx: (-u + cell.neighbours.w.currentData.ut) * 10,
+			vy: (-u + cell.neighbours.n.currentData.ut) * 10,
 			
 			displayValue: function() { return this.ut; }
 		};

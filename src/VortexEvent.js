@@ -1,9 +1,14 @@
+if (typeof(module) != "undefined") {
+	module.exports = VortexEvent;
+}
+
 function VortexEvent(applyCell) {
 	
 	this.borderCells = 20;
 	
 	this.offset = 0;
 	this.apply = function(automata) {
+		return;
 		// vortex borders
 		var cellValue = 4 / this.borderCells;
 		for (var i = 0; i < this.borderCells; i++) {

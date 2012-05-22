@@ -1,6 +1,7 @@
 if (typeof(module) != "undefined") {
 	module.exports = CellularAutomata;
 	var Cell = require('../src/Cell.js');
+	var Swimmer = require('../src/Swimmer.js');
 }
 
 function CellularAutomata() {
@@ -19,6 +20,8 @@ function CellularAutomata() {
 	
 	this.viscosity = 1.0;
 	
+	this.swimmers = [];
+	
 	this.forEachCell = function(fn) {
 		for (var x = 0; x < this.cols; x++) {
 			for (var y = 0; y < this.rows; y++) {
@@ -27,6 +30,13 @@ function CellularAutomata() {
 			}
 		}
 	};
+	
+	this.forEachSwimmer = function(fn) {
+		for (var i = 0; i < this.swimmers.length; i++) {
+			var swimmer = this.swimmers[i];
+			fn(swimmer);
+		}
+	}
 	
 	this.initCells = function() {
 		this.createCells();
@@ -64,12 +74,14 @@ function CellularAutomata() {
 				
 		if (this.tusk != null) {
 			
+			// fire events, such as rain, vorteces etc.
 			if (this.tusk.events) {
 				for (var i = 0; i < this.tusk.events.length; i++) {
 					this.tusk.events[i].apply(this);
 				}
 			}
-						
+			
+			// do transitions		
 			var dt = 1 / this.tusk.slices;
 			for (var t = 0; t < this.tusk.slices; t++) {
 				
@@ -89,69 +101,29 @@ function CellularAutomata() {
 				);
 				
 			}
-		}
-		
-		//this.doTheDuck();
-		
-		this.iterations++;
 			
-	}
-		
-	this.doTheDuck = function() {
-		if (tusk.supportsDuck) {
-			for (var d = 0; d < ducks.length; d++) {
-				var duck = ducks[d];
-				var duckCell = getCells(duck);
-	
-				var i = duckCell.x;
-				var j = duckCell.y;
-	
-				var nord = i == 0 ? null : automata.model[i-1][j];
-				var south = i == automata.rows -1 ? null : automata.model[i+1][j];
-				var west = j == 0 ? null : automata.model[i][j-1];
-				var east = j == automata.cols-1 ? null : automata.model[i][j+1];
-								
-				var me = duckCell;
-				var k=30;
-								
-				xprevious = (west != null ? west : me).currentGradients;
-				xnext = (east != null ? east : me).currentGradients;
-				yprevious = (nord != null ? nord : me).currentGradients;
-				ynext = (south != null ? south : me).currentGradients;
-	
-				// duck.velocityX += (duckCell.currentGradients[0]-xprevious[0])*k;
-				// duck.velocityX += (-duckCell.currentGradients[0]+xnext[0])*k;
-				// duck.velocityY += (duckCell.currentGradients[0]-yprevious[0])*k;
-				// duck.velocityY += (-duckCell.currentGradients[0]+ynext[0])*k;
-				
-				var cellxy= new Duck(0,0,0,0);
-				
-				cellxy.velocityX+=-xprevious[0];
-				cellxy.velocityX+=-xnext[0];
-				cellxy.velocityY+=-yprevious[0];
-				cellxy.velocityY+=-ynext[0];
-				
-				var duckxy= new Point(duck.velocityX,duck.velocityY);
-				duckxy.x+= cellxy.velocityX*k;
-				duckxy.y+= cellxy.velocityY*k;
-				duckxy.velocityX=cellxy.velocityX;
-				duckxy.velocityY=cellxy.velocityY;
-				
-				duck.x=Math.max(0, Math.min(WIDTH-1,duck.x+duckxy.x));
-				duck.y=Math.max(0, Math.min(HEIGHT-1,duck.y+duckxy.y));
-				
-				// duck.x = Math.max(0, Math.min(WIDTH-1, duck.velocityX));
-				// duck.y = Math.max(0, Math.min(HEIGHT-1, duck.velocityY));
-				var newDuckCell = getCells(duck);
-				drawDuck(duck, duckCell);
-				if (duckCell != newDuckCell) {
-					duckCell.currentVelocities[0] = 0;
-					duckCell.currentVelocities[1] = 0;
-					duckCell.currentGradients[0] = 0;
-				}
+			// let swimmers travel
+			if (this.tusk.getVelocity) {
+				this.forEachSwimmer(
+					(function(automata) {
+						return function(swimmer) {
+							var cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
+							var velocity = automata.tusk.getVelocity(cell);
+							swimmer.scale = 1.2 + Math.min(1, Math.max(-1, cell.currentData.displayValue()));
+							swimmer.move(velocity);
+							// swimmer collides with boundary => weggespickt!
+							if (swimmer.location.x < 0 || swimmer.location.x >= automata.cols || swimmer.location.y < 0 || swimmer.location.y >= automata.rows) {
+								velocity = velocity.scale(-10);
+								swimmer.move(velocity);
+							}
+						};
+					})(this)
+				);
 			}
 		}
-		
+				
+		this.iterations++;
+			
 	}
 		
 }

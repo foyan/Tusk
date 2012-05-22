@@ -20,7 +20,10 @@ fountainIntensity=null;
 statusMap=Array();
 var statusCell=null;
 
-var duckImage = null; 
+var duckImage = new Image();
+duckImage.src = "pics/duck.png";
+var ballImage = null;
+
 var damping = 0.995;
 
 firstTime=true;
@@ -28,10 +31,6 @@ firstTime=true;
 canves2Idx=1;
 
 viscosity=1;  // Wasser 20 Grad Celsius
-
-var ducks;
-
-var tusk=null;  // instance of DiffGleichung
 
 function createCanvasPainter(context) {
 	return new PixelCanvasPainter(context);
@@ -103,11 +102,6 @@ function load() {
 			var cell = getCell(e);
 			if( cell!=null) {
 				statusLabel.innerHTML = automata.tusk.getCellInfo(cell);
-				/*for (var d = 0; d < ducks.length; d++) {
-					statusLabel.innerHTML +=  "<br/>Duck " + d + ": (" + ducks[d].x + "/" + ducks[d].y + "  Vx/Vy=" + ducks[d].velocityX + "/" + ducks[d].velocityY + ")";
-				}*/
-				//statusCell=cell;
-				//setStatusMap(cell);
 			}
 		}
 		if (e.ctrlKey && tusk.supportsDuck ) {
@@ -122,15 +116,36 @@ function load() {
 		
 	canvas[1].onmousemove = function(e) {
 		if (e.shiftKey ) {
-			statusLabel.innerHTML = tusk.getCellInfo(getCell(e));									  
+			statusLabel.innerHTML = automata.tusk.getCellInfo(getCell(e));									  
 		}
 	};		
 		
 	automata.initCells();
+		
+	automata.swimmers.push(new Swimmer());
+	automata.swimmers[0].image = duckImage;
+	automata.swimmers[0].location.x = 10;
+	automata.swimmers[0].location.y = 10;
 	
+	automata.swimmers.push(new Swimmer());
+	automata.swimmers[1].image = duckImage;
+	automata.swimmers[1].location.x = 20;
+	automata.swimmers[1].location.y = 30;
+
+	automata.swimmers.push(new Swimmer());
+	automata.swimmers[2].image = duckImage;
+	automata.swimmers[2].location.x = 80;
+	automata.swimmers[2].location.y = 60;
+
+	automata.swimmers.push(new Swimmer());
+	automata.swimmers[3].image = duckImage;
+	automata.swimmers[3].location.x = 40;
+	automata.swimmers[3].location.y = 40;
+
 	beginUpdate();
 	automata.forEachCell(updateCellView);
 	endUpdate();
+	automata.forEachSwimmer(drawSwimmer);
 				
 }
 
@@ -257,6 +272,7 @@ function singleStep(){
 function step() {
 	automata.step();
 	updateAllCellView();
+	automata.forEachSwimmer(drawSwimmer);
 	iterationLabel.innerHTML = "# Iterations: " + automata.iterations;
 	if (running) {
 		window.setTimeout(step, 00);
@@ -268,16 +284,6 @@ function getCells(pt) {
 	return automata.model[Math.floor(pt.x / (scaleWidth))][Math.floor(pt.y / (scaleHeight))];
 };
 		
-function w_Duck(u, neighbourUs, currentVs) {
-	var dt = 1/SLICES;
-		
-	return [
-		/*currentVs[0] +*/ (-u + neighbourUs[0]) * 1000,
-		/*currentVs[1] +*/ (-u + neighbourUs[1]) * 1000
-	]
-}
-
-
 function updateAllCellView(){
 	beginUpdate();
 	automata.forEachCell(updateCellView);
@@ -296,8 +302,8 @@ function updateCellView(cell) {
 	ctx[1].updateCellView(cell);
 }
 
-function drawDuck(duck, cell) {
-	ctx[0].drawDuck(duck, cell);
+function drawSwimmer(swimmer) {
+	ctx[0].drawSwimmer(swimmer);
 }
 
 function beginUpdate() {
@@ -308,14 +314,6 @@ function beginUpdate() {
 function endUpdate() {
 	ctx[0].end();
 	ctx[1].end();
-}
-
-function calculateDuckPhi(x, y) {
-	return x >= 0 && y < 0 ? Math.atan(x/-y)
-		: x > 0 && y >= 0 ? Math.PI/2 + Math.atan(-y/x)
-		: x <= 0 && y > 0 ? Math.PI + Math.atan(x/-y)
-		: x < 0 && y <= 0 ? Math.PI * 3/2 + Math.atan(-y/x)
-		: 0;
 }
 
 function getColor(du, r0, g0, b0) {
@@ -337,27 +335,6 @@ function getFormattedColor(du, r0, g0, b0) {
 
 function formatNum(num){
   return num.toPrecision(4);
-}
-
-function Dimension() {
-	this.previous = Array();
-	this.next = Array();
-}
-
-function Point(x, y){
-	this.x = x;
-	this.y = y;
-}	
-
-/*
-	x,y: Point wo sich die Ente befindet
-	ax,ay: beschleunigungs Vektor der Ente
-*/
-function Duck(x,y, ax,ay){
-	this.x=x;
-	this.y=y;
-	this.velocityX=ax;  // TODO: => Geschwindigkeit
-	this.velocityY=ay;
 }
 
 window.onload = load;

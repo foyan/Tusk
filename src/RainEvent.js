@@ -1,6 +1,10 @@
+if (typeof(module) != "undefined") {
+	module.exports = RainEvent;
+}
+
 function RainEvent(applyCell) {
 	
-	this.dropsPerIteration = 0;
+	this.dropsPerIteration = 4;
 	
 	this.apply = function(automata) {
 		var drops = this.dropsPerIteration == 0 ? 0

@@ -1,3 +1,7 @@
+if (typeof(module) != "undefined") {
+	module.exports = FountainEvent;
+}
+
 function FountainEvent(applyCell) {
 	
 	this.intensity = 1;
