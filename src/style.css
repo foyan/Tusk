@@ -63,6 +63,7 @@ p.iterationCount { font-size: 20pt; }
 	margin-right: 2px;	
 }
 
+
 .title {
 	font-weight: bold;
 	font-size: 20px;
@@ -72,4 +73,12 @@ p.iterationCount { font-size: 20pt; }
 	margin:0;
 	border: 1px solid black;
 }
+
+#cellInspector td {
+	border: 1px solid #111111;
+	width: 70px;
+	height: 20px;
+	text-align: center;
+}
+
 

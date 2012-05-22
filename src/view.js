@@ -57,19 +57,6 @@ function load() {
 	statusLabel = document.getElementById("statusLabel");
 	initDataTextbox = document.getElementById("InitData");
 	modelname=document.getElementById("modelname");
-
-	statusMapNorth= document.getElementById("u_north");
-	statusMapSouth= document.getElementById("u_south");
-	statusMapLeft= document.getElementById("u_left");
-	statusMapRight= document.getElementById("u_right");
-	statusMapMe= document.getElementById("u_me");
-	statusMapPos= document.getElementById("u_pos");
-
-	statusMap[0]=statusMapNorth; statusMap[1]=statusMapSouth;
-	statusMap[2]=statusMapLeft; statusMap[3]=statusMapRight;
-	statusMap[4]=statusMapMe; statusMap[5]=statusMapPos;
-	
-
 	
 	automata.tusk = TuskRegistry[getFormelCtrl()]; 
 
@@ -86,7 +73,8 @@ function load() {
 		if (e.shiftKey) {
 			var cell = getCell(e);
 			if( cell!=null) {
-				statusLabel.innerHTML = automata.tusk.getCellInfo(cell);
+				updateCellInspector(cell);
+				//statusLabel.innerHTML = automata.tusk.getCellInfo(cell);
 			}
 		}
 		if (e.ctrlKey && tusk.supportsDuck ) {
@@ -376,7 +364,41 @@ function getFormattedColor(du, r0, g0, b0) {
 }
 
 function formatNum(num){
-  return num.toPrecision(4);
+  return num.toPrecision(6);
 }
+
+function updateCellInspector(cell) {
+	updateCellInspectorCell("C", cell);
+	var x = cell.x;
+	var y = cell.y;
+	if (x-1 >= 0 && y-1 >= 0) {
+		updateCellInspectorCell("NW", automata.model[y-1][x-1]);
+	}
+	if (x-1 >= 0 && y+1 < automata.rows) {
+		updateCellInspectorCell("SW", automata.model[y+1][x-1]);
+	}
+	if (x+1 < automata.cols && y+1 < automata.rows) {
+		updateCellInspectorCell("SE", automata.model[y+1][x+1]);
+	}
+	if (y-1 >= 0 && x+1 < automata.cols) {
+		updateCellInspectorCell("NE", automata.model[y-1][x+1]);
+	}
+	if (y-1 >= 0) {
+		updateCellInspectorCell("N", automata.model[y-1][x]);
+	}
+	if (x-1 >= 0) {
+		updateCellInspectorCell("W", automata.model[y][x-1]);
+	}
+	if (y+1 < automata.rows) {
+		updateCellInspectorCell("S", automata.model[y+1][x]);
+	}
+	if (x+1 < automata.cols) {
+		updateCellInspectorCell("E", automata.model[y][x+1]);
+	}
+}
+
+function updateCellInspectorCell(id, cell) {
+	document.getElementById("cellInspector_" + id).innerHTML = formatNum(cell.currentData.displayValue());
+} 
 
 window.onload = load;
