@@ -1,6 +1,7 @@
 if (typeof(module) != "undefined") {
 	module.exports = DiffusionEquation;
 	var ATusk = require('../src/ATusk.js');
+	var VonNeumannNeighbourhood = require('../src/VonNeumannNeighbourhood.js');
 }
 
 DiffusionEquation.prototype = new ATusk();
@@ -31,24 +32,37 @@ function DiffusionEquation() {
 	// Aktion bei MouseMove mit Alt
 	DiffusionEquation.prototype.mouseMoveAlt=function(cell, cellDefaultValue){
 		var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
-		cell.currentGradients[0] = initVal;
+		cell.currentData.u = 0.9;
 	}
 	
 	DiffusionEquation.prototype.initCell=function(cellData) {
 		cellData.currentGradients[0] = 0; 
 	}
+	
+	this.createCellData = function() {
+		return {
+			u: 0,
+			dudx: 0,
+			displayValue: function() { return this.u; }
+		};
+	};
+	
+	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 
-	DiffusionEquation.prototype.calcCell=function(me, dimensions, dt, damping, viscosity) {
-		var du = Array();
-		var diff=0;
-		du[0] = 0;
-		for (n = 0; n < dimensions.length; n++) {
-			dn = dimensions[n];
-			diff= (-dn.previous[0] + me.currentGradients[0])*0.01;
-			du[0]-=diff;
-		}
-		du[0]+=me.currentGradients[0];
-		return du;
+	DiffusionEquation.prototype.calcCell = function(cell, dt, damping, viscosity) {
+		
+		var c = 1;
+		
+		var nextData = this.createCellData();
+		nextData.dudx = (4 * cell.currentData.u
+			- cell.neighbours.n.currentData.u 
+			- cell.neighbours.w.currentData.u
+			- cell.neighbours.e.currentData.u
+			- cell.neighbours.s.currentData.u
+		) / 4 * c;
+		nextData.u = cell.currentData.u + nextData.dudx * dt;
+
+		return nextData;
 	}
 
 }

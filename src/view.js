@@ -94,12 +94,12 @@ function load() {
 	canvas[0].onmousemove = function(e) {
 		if (e.altKey) {	
 		    var cell= getCell(e);
-			if( cell!=null) {
-				tusk.mouseMoveAlt(cell, cellDefaultValue);
+			if(cell!=null) {
+				automata.tusk.mouseMoveAlt(cell, cellDefaultValue);
 				updateAllCellView();
 			}
 		}
-		if (e.shiftKey ) {
+		if (e.shiftKey) {
 			var cell = getCell(e);
 			if( cell!=null) {
 				statusLabel.innerHTML = tusk.getCellInfo(cell);
@@ -260,9 +260,9 @@ function singleStep(){
 function step() {
 	automata.step();
 	updateAllCellView();
-	iterationLabel.innerHTML = "# Iterations: " + automata.iterations++;
+	iterationLabel.innerHTML = "# Iterations: " + automata.iterations;
 	if (running) {
-		window.setTimeout(step, 0);
+		window.setTimeout(step, 00);
 	}
 }
 

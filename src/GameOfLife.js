@@ -1,6 +1,7 @@
 if (typeof(module) != "undefined") {
 	module.exports = GameOfLife;
 	var ATusk = require('../src/ATusk.js');
+	var MooreNeighbourhood = require('../src/MooreNeighbourhood.js');
 }
 
 GameOfLife.prototype = new ATusk();
@@ -18,7 +19,7 @@ function GameOfLife() {
 		return info;
 	}
 	
-	GameOfLife.prototype.mouseMoveAlt=function(cell, cellDefaultValue) {
+	GameOfLife.prototype.mouseMoveAlt = function(cell, cellDefaultValue) {
 		cell.currentData.status = 1;
 	}
 
@@ -26,13 +27,14 @@ function GameOfLife() {
 		cellData.currentGradients[0] = 0; 
 	}
 	
-	this.createCellData = function() {
-		return {
-			status: 0,
-			
-			displayValue: function() { return this.status; }
-		};
-	};
+	this.createDeadCell = function() {
+		return {status: 0, displayValue: function() { return this.status; }}
+	}
+	this.createLivingCell = function() {
+		return {status: 1, displayValue: function() { return this.status; }}
+	}
+	
+	this.createCellData = this.createDeadCell;
 
 	this.getNeighbours = new MooreNeighbourhood().getNeighbours;
 
@@ -45,22 +47,26 @@ function GameOfLife() {
 				hat eine Zelle genau 3 lebende Nachbarn so wird sie geboren
 				ansonsten stirbt sie.
 		*/
-		
-		
-		var cells = cell.neighbours;
-
-		var lifeCounter = 0;
-		for (var idx = 0; idx < cells.length; idx++) {
-			lifeCounter += cells[idx].currentData.status;
+				
+		var livingNeighours = 0;
+		for (var idx = 0; idx < cell.neighbours.length; idx++) {
+			livingNeighours += cell.neighbours[idx].currentData.status;
 		}
 
-		if (lifeCounter == 3) {
-			return {status: 1, displayValue: function() { return this.status; }};
+		if (cell.currentData.status == 1) {
+			if (livingNeighours == 3) {
+				return this.createLivingCell();
+			}
+			if (livingNeighours == 2) {
+				return this.createLivingCell();
+			}
 		}
-		if (lifeCounter == 2) {
-			return {status: 0, displayValue: function() { return this.status; }};
+		if (cell.currentData.status == 0) {
+			if (livingNeighours == 3) {
+				return this.createLivingCell();
+			}
 		}
-		return {status: 0, displayValue: function() { return this.status; }};
+		return this.createDeadCell();
 		
 	}
 }
