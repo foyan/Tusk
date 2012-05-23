@@ -97,8 +97,8 @@ function WaveEquation() {
 		return cell.currentData.up + upp * dt;
 	}
 		
-	WaveEquation.prototype.calcCell = function(cell, dt, damping, viscosity) {
-		var c = 1.0 / viscosity;
+	WaveEquation.prototype.calcCell = function(cell, dt) {
+		var c = 1.0 / this.viscosity;
 
 		var u = cell.currentData.ut;
 		
@@ -107,7 +107,7 @@ function WaveEquation() {
 		
 		var upp = udxdx * c;
 		var up = cell.currentData.up + upp * dt;
-		var ut = (u + up * dt) * damping;
+		var ut = (u + up * dt) * this.damping;
 		
 		return {
 			ut: ut,

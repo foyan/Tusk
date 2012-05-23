@@ -18,5 +18,10 @@ function ATusk() {
 	this.mouseMoveAlt=function(cell, cellDefaultValue) {} // modify cell
 
 	// Berechnet den neuen Wert einer Zelle.	
-	this.calcCell = function(me, dt, damping, viscosity) {} // => du = float[] wobei du[0]=u
+	this.calcCell = function(me, dt) {} // => du = float[] wobei du[0]=u
+	
+	this.viscosity = 1.0;
+	
+	this.damping = 0.995;
+	
 }

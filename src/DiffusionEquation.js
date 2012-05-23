@@ -36,9 +36,9 @@ function DiffusionEquation() {
 		new VortexEvent(function(cell, value) { cell.currentData.u = value; })
 	];
 
-	DiffusionEquation.prototype.calcCell = function(cell, dt, damping, viscosity) {
+	DiffusionEquation.prototype.calcCell = function(cell, dt) {
 		
-		var c = 1.0/viscosity;
+		var c = 1.0/this.viscosity;
 		
 		var nextData = this.createCellData();
 		nextData.dudx = (4 * cell.currentData.u

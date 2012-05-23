@@ -16,10 +16,6 @@ function CellularAutomata() {
 	
 	this.cols = 100;
 	
-	this.damping = .995;
-	
-	this.viscosity = 1.0;
-	
 	this.swimmers = [];
 	
 	this.forEachCell = function(fn) {

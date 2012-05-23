@@ -15,10 +15,6 @@ duckImage.src = "pics/duck.png";
 var ballImage = new Image();
 ballImage.src = "pics/soccer_ball.png";
 
-var damping = 0.995;
-
-viscosity=1;  // Wasser 20 Grad Celsius
-
 function createCanvasPainter(context) {
 	return new PixelCanvasPainter(context);
 }
@@ -209,22 +205,13 @@ function getStatusMapInfo(y,x){
 	return s;
 }		
 
-
-function radioCanvesChanged(radioButton) {
-	canves2Idx= radioButton.value;
-	updateAllCellView();
-	setStatusMap(statusCell);
-}
-
-function changeViscosity(){
+function viscosityChanged(){
 	var ctrl=document.getElementById("viscosity");
 	var idx=ctrl.selectedIndex;
 	var val=ctrl.options[idx].value;
 	
-	viscosity= parseInt(val);
+	automata.tusk.viscosity = parseInt(val);
 }
-
-
 
 function getFormelCtrl(){
 	var ctrl=document.getElementById("diffFormel");
