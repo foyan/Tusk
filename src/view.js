@@ -186,31 +186,8 @@ function setCells(data)	{
 	endUpdate();
 }
 		
-function setStatusMap(cell){
-	var x=cell.x;
-	var y=cell.y;
-	
-	statusMapRight.innerHTML= getStatusMapInfo(y,x+1);  
-	statusMapLeft.innerHTML= getStatusMapInfo(y,x-1);  
-	statusMapNorth.innerHTML= getStatusMapInfo(y-1,x); 
-	statusMapSouth.innerHTML= getStatusMapInfo(y+1,x); 
-	statusMapMe.innerHTML= getStatusMapInfo(y,x);
-	statusMapPos.innerHTML= "x/y: " + x +"/"+ y;
-}		
-		
-function getStatusMapInfo(y,x){
-	var m=automata.model[y][x]
-	var u=m.currentGradients[canves2Idx];
-	var s=formatNum(u);
-	return s;
-}		
-
 function viscosityChanged(){
-	var ctrl=document.getElementById("viscosity");
-	var idx=ctrl.selectedIndex;
-	var val=ctrl.options[idx].value;
-	
-	automata.tusk.viscosity = parseInt(val);
+	automata.tusk.viscosity = document.getElementById("viscosity").value;
 }
 
 function getFormelCtrl(){
