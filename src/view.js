@@ -368,7 +368,7 @@ function formatNum(num){
 }
 
 function updateCellInspector(cell) {
-	updateCellInspectorCell("C", cell);
+	updateCellInspectorCell("c", cell);
 	var x = cell.x;
 	var y = cell.y;
 	if (x-1 >= 0 && y-1 >= 0) {
