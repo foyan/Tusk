@@ -5,7 +5,7 @@ PixelCanvasPainter = function(ctx) {
 	
 	this.scaling = new Vector();
 
-	this.getBaseColor = function() { return {r: 128, g: 128, b: 255 }; };
+	this.baseColor = {r: 128, g: 128, b: 128};
 	
 	this.imageData = null;
 	this.buf = null;
@@ -19,8 +19,8 @@ PixelCanvasPainter = function(ctx) {
 		var x = cell.x * this.scaling.x;
 		var y = cell.y * this.scaling.y;
 		
-		var baseColor = this.getBaseColor();
-		var color = getColor(this.pool != null ? this.pool.getValue(cell) : cell.currentData.displayValue(), baseColor.r, baseColor.g, baseColor.b);
+		var baseColor = this.baseColor;
+		var color = ViewUtils.getColor(this.pool != null ? this.pool.getValue(cell) : cell.currentData.displayValue(), baseColor.r, baseColor.g, baseColor.b);
 		
 		for (var ix = x; ix < x + this.scaling.x; ix++) {
 			for (var iy = y; iy < y + this.scaling.y; iy++) {

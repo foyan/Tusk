@@ -32,13 +32,13 @@ function load() {
 	canvas[0].height = HEIGHT;
 	
 	ctx[0] = createCanvasPainter(canvas[0].getContext("2d"));
+	ctx[0].baseColor = {r: 128, g: 128, b: 255};
 	
 	canvas[1] = document.getElementById("pool1");
 	canvas[1].width = WIDTH;
 	canvas[1].height = HEIGHT;
 	
 	ctx[1] = createCanvasPainter(canvas[1].getContext("2d"));
-	ctx[1].getColor = function() {return {r: 128, g: 128, b: 128}; };
 	
 	var select = document.getElementById("diffFormel");
 	for (var strategy in TuskRegistry) {
@@ -46,6 +46,14 @@ function load() {
 		opt.text = TuskRegistry[strategy].sayHello();
 		opt.value = strategy;
 		select.options.add(opt);
+	}
+	
+	var sl = document.getElementById("viscosity");
+	for (var visc in Viscosities) {
+		var opt = document.createElement("option");
+		opt.text = Viscosities[visc].name;
+		opt.value = visc;
+		sl.options.add(opt);
 	}
 
 	
@@ -124,14 +132,11 @@ function initAutomata() {
 		ctx[i].scaling.y = HEIGHT / automata.rows;
 	}
 	
-	beginUpdate();
-	automata.forEachCell(updateCellView);
-	endUpdate();
-	automata.forEachSwimmer(drawSwimmer);
-
+	updateAllCellView();
+	automataInitialized = true;
 }
 
-
+var automataInitialized = false;
 
 function offset(target) {
 	var off = {x: target.offsetLeft, y: target.offsetTop};
@@ -187,7 +192,10 @@ function setCells(data)	{
 }
 		
 function viscosityChanged(){
-	automata.tusk.viscosity = document.getElementById("viscosity").value;
+	var viscosity = Viscosities[document.getElementById("viscosity").value];
+	automata.tusk.viscosity = viscosity.viscosity;
+	ctx[0].baseColor = viscosity.baseColor;
+	updateAllCellView();
 }
 
 function getFormelCtrl(){
@@ -299,6 +307,9 @@ function slicesChanged() {
 
 function selectedPoolChanged(pool) {
 	ctx[1].pool = pool;
+	if (automataInitialized) {
+		updateAllCellView();
+	}
 }
 
 var running = false;
@@ -319,7 +330,6 @@ function singleStep(){
 function step() {
 	automata.step();
 	updateAllCellView();
-	automata.forEachSwimmer(drawSwimmer);
 	iterationLabel.innerHTML = automata.iterations;
 	if (running) {
 		window.setTimeout(step, 00);
@@ -335,6 +345,7 @@ function updateAllCellView(){
 	beginUpdate();
 	automata.forEachCell(updateCellView);
 	endUpdate();
+	automata.forEachSwimmer(drawSwimmer);
 }		
 
 
@@ -361,18 +372,6 @@ function beginUpdate() {
 function endUpdate() {
 	ctx[0].end();
 	ctx[1].end();
-}
-
-function getColor(du, r0, g0, b0) {
-	var r = Math.min(255, Math.max(0, Math.floor(r0 * (1+du))));
-	var g = Math.min(255, Math.max(0, Math.floor(g0 * (1+du))));
-	var b = Math.min(255, Math.max(0, Math.floor(b0 * (1+du))));
-	
-	return {
-		r: r,
-		g: g,
-		b: b
-	};
 }
 
 function getFormattedColor(du, r0, g0, b0) {

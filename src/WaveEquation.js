@@ -116,8 +116,8 @@ function WaveEquation() {
 			udxdx: udxdx,
 			upp: upp,
 			ut: ut,
-			vx: (-u + cell.neighbours.w.currentData.ut) * 10,
-			vy: (-u + cell.neighbours.n.currentData.ut) * 10,
+			vx: (-u + cell.neighbours.w.currentData.ut) * 10 / this.viscosity,
+			vy: (-u + cell.neighbours.n.currentData.ut) * 10 / this.viscosity,
 			
 			displayValue: function() { return this.ut; }
 		};
