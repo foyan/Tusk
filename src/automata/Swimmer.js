@@ -1,6 +1,6 @@
 if (typeof(module) != "undefined") {
 	module.exports = Swimmer;
-	var Vector = require('../../src/Vector.js');
+	var Vector = require('../../src/utils/Vector.js');
 }
 
 function Swimmer() {

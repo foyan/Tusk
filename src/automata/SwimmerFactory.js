@@ -15,7 +15,7 @@ var SwimmerFactory = {
 			name: "Duck",
 			creator: function(x, y) {
 				var swimmer = SwimmerFactory.internalCreator(x, y);
-				swimmer.image = duckImage;
+				swimmer.image = SwimmerFactory.duckImage;
 				return swimmer;
 			}
 		},
@@ -23,7 +23,7 @@ var SwimmerFactory = {
 			name: "Ball",
 			creator: function(x, y) {
 				var swimmer = SwimmerFactory.internalCreator(x, y);
-				swimmer.image = ballImage;
+				swimmer.image = SwimmerFactory.ballImage;
 				return swimmer;
 			}
 		}
@@ -31,5 +31,5 @@ var SwimmerFactory = {
 	
 };
 
-SwimmerFactory.duckImage.src = "pics/duck.png";
-SwimmerFactory.ballImage.src = "pics/soccer_ball.png";
+SwimmerFactory.duckImage.src = "_assets/pics/duck.png";
+SwimmerFactory.ballImage.src = "_assets/pics/soccer_ball.png";

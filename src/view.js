@@ -10,11 +10,6 @@ ctx = Array();
 statusMap=Array();
 var statusCell=null;
 
-var duckImage = new Image();
-duckImage.src = "pics/duck.png";
-var ballImage = new Image();
-ballImage.src = "pics/soccer_ball.png";
-
 function createCanvasPainter(context) {
 	return new PixelCanvasPainter(context);
 }

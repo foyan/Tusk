@@ -55,10 +55,10 @@ function WaveEquation() {
 	}
 	
 	this.pools = [
-		new Pool("du/dx", "pics/udx.png", function(cell) { return cell.currentData.udx; }),
-		new Pool("d2u/dx2", "pics/udxdx.png", function(cell) { return cell.currentData.udxdx;}),
-		new Pool("upp", "pics/udt.png", function(cell) {return cell.currentData.upp;}),
-		new Pool("up", "pics/u(x,t+dt).png", function(cell) {return cell.currentData.up;}),
+		new Pool("du/dx", "_assets/pics/udx.png", function(cell) { return cell.currentData.udx; }),
+		new Pool("d2u/dx2", "_assets/pics/udxdx.png", function(cell) { return cell.currentData.udxdx;}),
+		new Pool("upp", "_assets/pics/udt.png", function(cell) {return cell.currentData.upp;}),
+		new Pool("up", "_assets/pics/u(x,t+dt).png", function(cell) {return cell.currentData.up;}),
 		new Pool("vx", "", function(cell) {return cell.currentData.vx;}),
 		new Pool("vy", "", function(cell) {return cell.currentData.vy;})
 	];
