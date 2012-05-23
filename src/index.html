@@ -41,18 +41,24 @@
 			</h1>
 			<canvas id="pool"></canvas>
 		</div>
-		<div class="ctrlSection" style="padding:0">
+		<div class="ctrlSection" style="padding:0" id="pool2div">
 			<h1 style="margin-bottom:0px;"><div id="poolList"></div></h1>
 			<canvas id="pool1"></canvas>
 		</div>
 		
-		<div class="ctrlSection" style="width:220px;">
-			<h1>Scratch Pad</h1>
-			Modify cell values by writing: "x1,y1,u0,u1,...,un;x2,y2,u0,u1,...,un;..."<br/>
-			<textarea id="InitData" style="width:200px;height:200px;">39,9,1,1;40,9,1</textarea><br/>
-			<input type="button" value="Apply" onclick="initCells()" />
+		<div style="width:220px;margin:0;padding:0;float:left;">
+			<div class="ctrlSection" style="width:220px;">
+				<h1>Scratch Pad</h1>
+				Modify cell values by writing: "x1,y1,u0,u1,...,un;x2,y2,u0,u1,...,un;..."<br/>
+				<textarea id="InitData" style="width:200px;height:200px;">39,9,1,1;40,9,1</textarea><br/>
+				<input type="button" value="Apply" onclick="initCells()" />
+			</div>
+			
+			<div class="ctrlSection" id="templates">
+				<h1>Templates</h1>
+			</div>
 		</div>
-		
+				
 		<div style="clear:both;" />
 		
 		<div class="ctrlSection">

@@ -28,6 +28,93 @@ function GameOfLife() {
 
 	this.events = [];
 	
+	this.templates = [
+		{
+			name: "50% Alive",
+			get: function(automata) {
+				var s = "";
+				for (var y = 0; y < automata.rows; y++) {
+					for (var x = 0; x < automata.cols; x++) {
+						var val = Math.random() >= 0.5 ? "1" : "0";
+						if (val == "1") {
+							s += y + "," + x + "," + val + ";";
+						}
+					}
+				}
+				return s;
+			}
+		},
+		/*{
+			name: "Glider",
+			get: function(automata) {
+				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
+				var y = Math.floor(Math.random() * automata.rows - 6) + 3;
+				var s  = y + "," + x + ",1;";
+					s += (y+1) + "," + (x+1) + ",1;";
+					s += (y+2) + "," + (x-1) + ",1,1,1";
+				return s;
+			}
+		},*/
+		{
+			name: "54-0",
+			get: function(automata) {
+				var x = Math.floor(automata.cols / 2)-1;
+				var y = Math.floor(automata.rows / 2)-1;
+				return y + "," + x + ",1,1,1;"
+					+ (y+1) + "," + (x+0) + ",1;" + (y+1) + "," + (x+2) + ",1;"
+					+ (y+2) + "," + (x+0) + ",1;" + (y+2) + "," + (x+2) + ",1;"
+					+ (y+4) + "," + (x+0) + ",1;" + (y+4) + "," + (x+2) + ",1;"
+					+ (y+5) + "," + (x+0) + ",1;" + (y+5) + "," + (x+2) + ",1;"
+					+ (y+6) + "," + (x+0) + ",1,1,1;"
+				;
+			}
+		},
+		{
+			name: "f-Pentomimo",
+			get: function(automata) {
+				var x = Math.floor(automata.cols / 2)-1;
+				var y = Math.floor(automata.rows / 2)-1;
+				return y + "," + x + ",1,1;"
+					+ (y+1) + "," + (x-1) + ",1,1;"
+					+ (y+2) + "," + x + ",1"
+				;
+			}
+		}
+		/*{
+			name: "Glider (downstairs, R=>L)",
+			get: function(automata) {
+				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
+				var y = Math.floor(Math.random() * automata.rows - 6) + 3;
+				var s  = y + "," + x + ",1;";
+					s += (y+1) + "," + (x-1) + ",1;";
+					s += (y+2) + "," + (x-1) + ",1,1,1";
+				return s;
+			}
+		},
+		{
+			name: "Glider (upstairs, L=>R)",
+			get: function(automata) {
+				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
+				var y = Math.floor(Math.random() * automata.rows - 6) + 3;
+				var s  = (y+2) + "," + x + ",1;";
+					s += (y+1) + "," + (x+1) + ",1;";
+					s += (y) + "," + (x-1) + ",1,1,1";
+				return s;
+			}
+		},
+		{
+			name: "Glider (upstairs, R=>L)",
+			get: function(automata) {
+				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
+				var y = Math.floor(Math.random() * automata.rows - 6) + 3;
+				var s  = (y+2) + "," + x + ",1;";
+					s += (y+1) + "," + (x-1) + ",1;";
+					s += (y) + "," + (x-1) + ",1,1,1";
+				return s;
+			}
+		}*/
+	];
+	
 	this.createDeadCell = function() {
 		return {status: 0, displayValue: function() { return this.status; }}
 	}

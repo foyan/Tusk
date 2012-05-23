@@ -234,10 +234,10 @@ function initTuskControls() {
 		poolList.appendChild(img);
 	}
 	if (ctx[1].pool != null) {
-		poolList.style.display = "block";
+		document.getElementById("pool2div").style.display = "block";
 		poolList.getElementsByTagName("input")[0].checked = true;
 	} else {
-		poolList.style.display = "none";
+		document.getElementById("pool2div").style.display = "none";
 	}
 	
 	// events
@@ -291,9 +291,32 @@ function initTuskControls() {
 			eventBoxes.push(div);
 		}
 	}
+
+	for (var i = 0; i < templateButtons.length; i++) {
+		templateButtons[i].parentNode.removeChild(templateButtons[i]);
+	}
+	templateButtons = [];
+	if (automata.tusk.templates) {
+		for (var i = 0; i < automata.tusk.templates.length; i++) {
+			var template = automata.tusk.templates[i];
+			var button = document.createElement("input");
+			button.type = "button";
+			button.value = template.name;
+			button.onclick = (function(tmpl, automata) {
+				return function() {
+					var data = tmpl.get(automata);
+					document.getElementById("InitData").value = data;
+				}
+			})(template, automata);
+			document.getElementById("templates").appendChild(button);
+			templateButtons.push(button);
+		}
+	}
+	document.getElementById("templates").style.display = templateButtons.length > 0 ? "block" : "none";
 }
 
 var eventBoxes = [];
+var templateButtons = [];
 
 function sizeChanged() {
 	initAutomata();
