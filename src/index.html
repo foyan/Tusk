@@ -5,6 +5,7 @@
 		<script type="text/javascript" src="Viscosity.js"></script>
 		<script type="text/javascript" src="Pool.js"></script>
 		<script type="text/javascript" src="Swimmer.js"></script>
+		<script type="text/javascript" src="SwimmerFactory.js"></script>
 		<script type="text/javascript" src="Vector.js"></script>
 		<script type="text/javascript" src="RainEvent.js"></script>
 		<script type="text/javascript" src="VortexEvent.js"></script>
@@ -81,6 +82,8 @@
 				SHIFT will...<br/>
 				<input type="radio" name="shiftGodMode" value="1" />set cell to: <input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
 				<input type="radio" name="shiftGodMode" value="2" />inspect cell<br/>
+				<div id="swimmers"></div>
+				<input type="button" value="Remove Swimmers" onclick="removeSwimmers()" />
 			</div>
 		</div>
 		<div class="ctrlSection" id="lastBeforeCustom">

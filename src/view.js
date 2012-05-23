@@ -96,30 +96,30 @@ function load() {
 		if (e.shiftKey ) {
 			statusLabel.innerHTML = automata.tusk.getCellInfo(getCell(e));									  
 		}
-	};		
-				
-	automata.swimmers.push(new Swimmer());
-	automata.swimmers[0].image = duckImage;
-	automata.swimmers[0].location.x = 10;
-	automata.swimmers[0].location.y = 10;
+	};
 	
-	automata.swimmers.push(new Swimmer());
-	automata.swimmers[1].image = ballImage;
-	automata.swimmers[1].location.x = 20;
-	automata.swimmers[1].location.y = 30;
-
-	automata.swimmers.push(new Swimmer());
-	automata.swimmers[2].image = duckImage;
-	automata.swimmers[2].location.x = 80;
-	automata.swimmers[2].location.y = 60;
-
-	automata.swimmers.push(new Swimmer());
-	automata.swimmers[3].image = ballImage;
-	automata.swimmers[3].location.x = 40;
-	automata.swimmers[3].location.y = 40;
-
-
+	var swimmers = document.getElementById("swimmers");
+	for(var type in SwimmerFactory.types) {
+		var button = document.createElement("input");
+		button.type = "button";
+		button.value = SwimmerFactory.types[type].name + "!";
+		button.onclick = (function(t) {
+			return function() {
+				var x = Math.floor(Math.random() * automata.cols);
+				var y = Math.floor(Math.random() * automata.rows);
+				automata.swimmers.push(SwimmerFactory.types[t].creator(x, y));
+				updateAllCellView();
+			}
+		})(type);
+		swimmers.appendChild(button);
+	}
+				
 	initAutomata();
+}
+
+function removeSwimmers() {
+	automata.swimmers = [];
+	updateAllCellView();
 }
 
 function initAutomata() {
