@@ -3,12 +3,9 @@ automata = null;
 WIDTH = 500;
 HEIGHT = 500;
 
-iterationLabel = null;
-canvas = Array();
 ctx = Array();
 
-statusMap=Array();
-var statusCell=null;
+doc = null;
 
 function createCanvasPainter(context) {
 	return new PixelCanvasPainter(context);
@@ -16,57 +13,44 @@ function createCanvasPainter(context) {
 
 function load() {
 	
+	doc = new Doc();
+	
 	automata = new CellularAutomata();
-			
-	iterationLabel = document.getElementById("iterationCount");
-	rainIntensity = document.getElementById("rain");
-	fountainIntensity= document.getElementById("fountain");
-	canvas[0] = document.getElementById("pool");
+				
+	doc.primaryCanvas.width = WIDTH;
+	doc.primaryCanvas.height = HEIGHT;
 	
-	canvas[0].width = WIDTH;
-	canvas[0].height = HEIGHT;
-	
-	ctx[0] = createCanvasPainter(canvas[0].getContext("2d"));
+	ctx[0] = createCanvasPainter(doc.primaryCanvas.getContext("2d"));
 	ctx[0].baseColor = {r: 128, g: 128, b: 255};
 	
-	canvas[1] = document.getElementById("pool1");
-	canvas[1].width = WIDTH;
-	canvas[1].height = HEIGHT;
+	doc.secondaryCanvas.width = WIDTH;
+	doc.secondaryCanvas.height = HEIGHT;
 	
-	ctx[1] = createCanvasPainter(canvas[1].getContext("2d"));
+	ctx[1] = createCanvasPainter(doc.secondaryCanvas.getContext("2d"));
 	
-	var select = document.getElementById("diffFormel");
 	for (var strategy in TuskRegistry) {
 		var opt = document.createElement("option");
 		opt.text = TuskRegistry[strategy].sayHello();
 		opt.value = strategy;
-		select.options.add(opt);
+		doc.tuskSelector.options.add(opt);
 	}
 	
-	var sl = document.getElementById("viscosity");
 	for (var visc in Viscosities) {
 		var opt = document.createElement("option");
 		opt.text = Viscosities[visc].name;
 		opt.value = visc;
-		sl.options.add(opt);
+		doc.viscositySelector.options.add(opt);
 	}
-
 	
-	cellDefaultValue = document.getElementById("setValue");
-	
-	statusLabel = document.getElementById("statusLabel");
-	initDataTextbox = document.getElementById("InitData");
-	modelname=document.getElementById("modelname");
-	
-	automata.tusk = TuskRegistry[getFormelCtrl()]; 
+	automata.tusk = TuskRegistry[doc.tuskSelector.value]; 
 
 	initTuskControls();
 		
-	canvas[0].onmousemove = function(e) {
+	doc.primaryCanvas.onmousemove = function(e) {
 		if (e.altKey) {	
 		    var cell= getCell(e);
 			if(cell!=null) {
-				automata.tusk.mouseMoveAlt(cell, cellDefaultValue);
+				automata.tusk.mouseMoveAlt(cell, doc.cellValueBox);
 				updateAllCellView();
 			}
 		}
@@ -74,7 +58,6 @@ function load() {
 			var cell = getCell(e);
 			if( cell!=null) {
 				updateCellInspector(cell);
-				//statusLabel.innerHTML = automata.tusk.getCellInfo(cell);
 			}
 		}
 		if (e.ctrlKey && tusk.supportsDuck ) {
@@ -86,14 +69,7 @@ function load() {
 			}
 		}
 	};
-		
-	canvas[1].onmousemove = function(e) {
-		if (e.shiftKey ) {
-			statusLabel.innerHTML = automata.tusk.getCellInfo(getCell(e));									  
-		}
-	};
-	
-	var swimmers = document.getElementById("swimmers");
+			
 	for(var type in SwimmerFactory.types) {
 		var button = document.createElement("input");
 		button.type = "button";
@@ -106,7 +82,7 @@ function load() {
 				updateAllCellView();
 			}
 		})(type);
-		swimmers.appendChild(button);
+		doc.swimmersDiv.appendChild(button);
 	}
 				
 	initAutomata();
@@ -118,8 +94,8 @@ function removeSwimmers() {
 }
 
 function initAutomata() {
-	automata.rows = document.getElementById("rows").value;
-	automata.cols = document.getElementById("cols").value;
+	automata.rows = doc.rows.value;
+	automata.cols = doc.cols.value;
 	automata.initCells();
 	
 	for (var i = 0; i < ctx.length; i++) {
@@ -153,7 +129,7 @@ function getCell(e) {
 }	
   
 function initCells(){
-	var initData=initDataTextbox.value;	
+	var initData=doc.scratchPadBox.value;	
 	setCells(initData);
 }
 
@@ -182,22 +158,14 @@ function setCells(data)	{
 }
 		
 function viscosityChanged(){
-	var viscosity = Viscosities[document.getElementById("viscosity").value];
+	var viscosity = Viscosities[doc.viscositySelector.value];
 	automata.tusk.viscosity = viscosity.viscosity;
 	ctx[0].baseColor = viscosity.baseColor;
 	updateAllCellView();
 }
 
-function getFormelCtrl(){
-	var ctrl=document.getElementById("diffFormel");
-	var idx=ctrl.selectedIndex;
-	var val=ctrl.options[idx].value;
-	
-	return val;
-}
-// called when DiffFormel has changed
 function tuskChanged(){	
-	automata.tusk = TuskRegistry[getFormelCtrl()];
+	automata.tusk = TuskRegistry[doc.tuskSelector.value];
 	automata.initCells();
 	initTuskControls();
 	updateAllCellView();
@@ -205,8 +173,8 @@ function tuskChanged(){
 
 function initTuskControls() {
 	ctx[1].pool = null;
-	var poolList = document.getElementById("poolList");
-	poolList.innerHTML = "";
+
+	doc.poolList.innerHTML = "";
 	for (var i in automata.tusk.pools) {
 		var pool = automata.tusk.pools[i];
 		
@@ -225,14 +193,14 @@ function initTuskControls() {
 		
 		radio.onchange = (function(p) {return function() {selectedPoolChanged(p);}})(pool);
 		
-		poolList.appendChild(radio);
-		poolList.appendChild(img);
+		doc.poolList.appendChild(radio);
+		doc.poolList.appendChild(img);
 	}
 	if (ctx[1].pool != null) {
-		document.getElementById("pool2div").style.display = "block";
-		poolList.getElementsByTagName("input")[0].checked = true;
+		doc.secondaryCanvasDiv.style.display = "block";
+		doc.poolList.getElementsByTagName("input")[0].checked = true;
 	} else {
-		document.getElementById("pool2div").style.display = "none";
+		doc.secondaryCanvasDiv.style.display = "none";
 	}
 	
 	// events
@@ -281,7 +249,7 @@ function initTuskControls() {
 				div.appendChild(span);
 
 			}
-			document.getElementById("lastBeforeCustom").parentNode.appendChild(div);
+			doc.lastBeforeCustom.parentNode.appendChild(div);
 			
 			eventBoxes.push(div);
 		}
@@ -300,14 +268,14 @@ function initTuskControls() {
 			button.onclick = (function(tmpl, automata) {
 				return function() {
 					var data = tmpl.get(automata);
-					document.getElementById("InitData").value = data;
+					doc.scratchPadBox.value = data;
 				}
 			})(template, automata);
-			document.getElementById("templates").appendChild(button);
+			doc.templateDiv.appendChild(button);
 			templateButtons.push(button);
 		}
 	}
-	document.getElementById("templates").style.display = templateButtons.length > 0 ? "block" : "none";
+	doc.templateDiv.style.display = templateButtons.length > 0 ? "block" : "none";
 }
 
 var eventBoxes = [];
@@ -318,7 +286,7 @@ function sizeChanged() {
 }
 
 function slicesChanged() {
-	automata.tusk.slices = document.getElementById("slices").value;
+	automata.tusk.slices = doc.slicesBox.value;
 }
 
 function selectedPoolChanged(pool) {
@@ -346,7 +314,7 @@ function singleStep(){
 function step() {
 	automata.step();
 	updateAllCellView();
-	iterationLabel.innerHTML = automata.iterations;
+	doc.iterationLabel.innerHTML = automata.iterations;
 	if (running) {
 		window.setTimeout(step, 0);
 	}
@@ -404,33 +372,33 @@ function updateCellInspector(cell) {
 	var x = cell.x;
 	var y = cell.y;
 	if (x-1 >= 0 && y-1 >= 0) {
-		updateCellInspectorCell("NW", automata.model[y-1][x-1]);
+		updateCellInspectorCell("nw", automata.model[y-1][x-1]);
 	}
 	if (x-1 >= 0 && y+1 < automata.rows) {
-		updateCellInspectorCell("SW", automata.model[y+1][x-1]);
+		updateCellInspectorCell("sw", automata.model[y+1][x-1]);
 	}
 	if (x+1 < automata.cols && y+1 < automata.rows) {
-		updateCellInspectorCell("SE", automata.model[y+1][x+1]);
+		updateCellInspectorCell("se", automata.model[y+1][x+1]);
 	}
 	if (y-1 >= 0 && x+1 < automata.cols) {
-		updateCellInspectorCell("NE", automata.model[y-1][x+1]);
+		updateCellInspectorCell("ne", automata.model[y-1][x+1]);
 	}
 	if (y-1 >= 0) {
-		updateCellInspectorCell("N", automata.model[y-1][x]);
+		updateCellInspectorCell("n", automata.model[y-1][x]);
 	}
 	if (x-1 >= 0) {
-		updateCellInspectorCell("W", automata.model[y][x-1]);
+		updateCellInspectorCell("w", automata.model[y][x-1]);
 	}
 	if (y+1 < automata.rows) {
-		updateCellInspectorCell("S", automata.model[y+1][x]);
+		updateCellInspectorCell("s", automata.model[y+1][x]);
 	}
 	if (x+1 < automata.cols) {
-		updateCellInspectorCell("E", automata.model[y][x+1]);
+		updateCellInspectorCell("e", automata.model[y][x+1]);
 	}
 }
 
 function updateCellInspectorCell(id, cell) {
-	document.getElementById("cellInspector_" + id).innerHTML = formatNum(cell.currentData.displayValue());
+	doc.cellInspector[id].innerHTML = formatNum(cell.currentData.displayValue());
 }
 
 window.onload = load;
