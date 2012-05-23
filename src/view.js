@@ -353,7 +353,7 @@ function step() {
 	updateAllCellView();
 	iterationLabel.innerHTML = automata.iterations;
 	if (running) {
-		window.setTimeout(step, 00);
+		window.setTimeout(step, 0);
 	}
 }
 

@@ -20,7 +20,7 @@ function ATusk() {
 	// Berechnet den neuen Wert einer Zelle.	
 	this.calcCell = function(me, dt) {} // => du = float[] wobei du[0]=u
 	
-	this.viscosity = 1.0;
+	this.viscosity = 0.5;
 	
 	this.damping = 0.995;
 	

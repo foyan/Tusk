@@ -10,13 +10,13 @@ function Viscosity(name, viscosity, baseColor) {
 
 var Viscosities = {
 	
-	water: new Viscosity("Water @ 20° C", 1, {r: 128, g: 128, b: 255}),
+	water: new Viscosity("Water @ 20° C", 0.5, {r: 128, g: 128, b: 255}),
 	
-	blood: new Viscosity("Blood", 10, {r: 255, g: 0, b: 0}),
+	blood: new Viscosity("Blood", 5, {r: 255, g: 60, b: 60}),
 	
-	honey: new Viscosity("Honey", 1000, {r: 228, g: 202, b: 66}),
+	honey: new Viscosity("Honey", 500, {r: 228, g: 202, b: 66}),
 	
-	petroleum: new Viscosity("Petroleum", 0.65, {r: 0, g: 180, b: 180}),
+	petroleum: new Viscosity("Petroleum", 0.325, {r: 0, g: 90, b: 90}),
 	
 	concrete: new Viscosity("Concrete", 100000000, {r: 50, g: 50, b: 50})
 	
