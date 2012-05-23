@@ -1,7 +1,7 @@
 if (typeof(module) != "undefined") {
 	module.exports = CellularAutomata;
-	var Cell = require('../src/Cell.js');
-	var Swimmer = require('../src/Swimmer.js');
+	var Cell = require('../../src/automata/Cell.js');
+	var Swimmer = require('../../src/automata/Swimmer.js');
 }
 
 function CellularAutomata() {

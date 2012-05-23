@@ -1,5 +1,5 @@
 var should = require('should');  
-var VonNeumannNeighbourhood = require(__dirname + '/../src/VonNeumannNeighbourhood.js'); 
+var VonNeumannNeighbourhood = require(__dirname + '/../src/automata/VonNeumannNeighbourhood.js'); 
   
 describe('VonNeumannNeighbourhood', function() {
 

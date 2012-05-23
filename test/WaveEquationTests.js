@@ -1,6 +1,6 @@
 var should = require('should');  
 var WaveEquation = require(__dirname + '/../src/tusks/WaveEquation.js');
-var Cell = require(__dirname + '/../src/Cell.js');
+var Cell = require(__dirname + '/../src/automata/Cell.js');
 
 describe('WaveEquation', function() {
 	

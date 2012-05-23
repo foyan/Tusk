@@ -1,5 +1,5 @@
 var should = require('should');  
-var CellularAutomata = require(__dirname + '/../src/CellularAutomata.js');  
+var CellularAutomata = require(__dirname + '/../src/automata/CellularAutomata.js');  
   
 describe('CellularAutomata', function() {
 

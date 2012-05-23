@@ -1,7 +1,7 @@
 if (typeof(module) != "undefined") {
 	module.exports = GameOfLife;
 	var ATusk = require('../../src/tusks/ATusk.js');
-	var MooreNeighbourhood = require('../../src/MooreNeighbourhood.js');
+	var MooreNeighbourhood = require('../../src/automata/MooreNeighbourhood.js');
 }
 
 GameOfLife.prototype = new ATusk();

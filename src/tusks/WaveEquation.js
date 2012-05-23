@@ -1,7 +1,7 @@
 if (typeof(module) != "undefined") {
 	module.exports = WaveEquation;
 	var ATusk = require('../../src/tusks/ATusk.js');
-	var VonNeumannNeighbourhood = require('../../src/VonNeumannNeighbourhood.js');
+	var VonNeumannNeighbourhood = require('../../src/automata/VonNeumannNeighbourhood.js');
 	var RainEvent = require('../../src/RainEvent.js');
 	var VortexEvent = require('../../src/VortexEvent.js');
 	var FountainEvent = require('../../src/FountainEvent.js');
