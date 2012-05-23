@@ -1,5 +1,5 @@
 var should = require('should');  
-var GameOfLife = require(__dirname + '/../src/GameOfLife.js'); 
+var GameOfLife = require(__dirname + '/../src/tusks/GameOfLife.js'); 
   
 describe('GameOfLife', function() {
 

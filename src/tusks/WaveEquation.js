@@ -1,11 +1,11 @@
 if (typeof(module) != "undefined") {
 	module.exports = WaveEquation;
-	var ATusk = require('../src/ATusk.js');
-	var VonNeumannNeighbourhood = require('../src/VonNeumannNeighbourhood.js');
-	var RainEvent = require('../src/RainEvent.js');
-	var VortexEvent = require('../src/VortexEvent.js');
-	var FountainEvent = require('../src/FountainEvent.js');
-	var Pool = require('../src/Pool.js');
+	var ATusk = require('../../src/tusks/ATusk.js');
+	var VonNeumannNeighbourhood = require('../../src/VonNeumannNeighbourhood.js');
+	var RainEvent = require('../../src/RainEvent.js');
+	var VortexEvent = require('../../src/VortexEvent.js');
+	var FountainEvent = require('../../src/FountainEvent.js');
+	var Pool = require('../../src/Pool.js');
 }
 
 WaveEquation.prototype = new ATusk();

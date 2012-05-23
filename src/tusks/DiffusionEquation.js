@@ -1,7 +1,7 @@
 if (typeof(module) != "undefined") {
 	module.exports = DiffusionEquation;
 	var ATusk = require('../src/ATusk.js');
-	var VonNeumannNeighbourhood = require('../src/VonNeumannNeighbourhood.js');
+	var VonNeumannNeighbourhood = require('../../src/VonNeumannNeighbourhood.js');
 }
 
 DiffusionEquation.prototype = new ATusk();
