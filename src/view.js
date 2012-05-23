@@ -163,15 +163,13 @@ function initCells(){
 }
 
 function reset(){
-	firstTime=true;
-	step();
+	initAutomata();
 }
 
 function setCells(data)	{
 	var idRows=data.split(";");	
 	var idx=0;
 	var maxRows=(idRows.length < automata.rows ? idRows.length: automata.rows);
-	beginUpdate();
 	for (var i = 0; i < maxRows; i++) {
 		var idCols=idRows[i].split(",");
 		var y=parseFloat(idCols[0]);
@@ -179,16 +177,13 @@ function setCells(data)	{
 		var maxCols=(idCols.length < automata.cols ? idCols.length: automata.cols);
 		for (var j = 2; j < maxCols; j++) {	
 			idx= startX+j-2;
-			idx=(idx>automata.cols?automata.cols:idx);				
-			var cellData= automata.model[y][idx] ;
-			cellData.currentGradients[0] = parseFloat(idCols[j]); 
-			for( var i2=1; i2<cellData.currentGradients.length; i2++) {
-				cellData.currentGradients[i2] = 0;
-			}
-			updateCellView(cellData);
+			idx=(idx>automata.cols?automata.cols:idx);
+
+			var cell = automata.model[y][idx];
+			automata.tusk.setCellValue(cell, parseFloat(idCols[j]));
 		}
 	}
-	endUpdate();
+	updateAllCellView();
 }
 		
 function viscosityChanged(){
@@ -262,6 +257,9 @@ function initTuskControls() {
 			var checkbox = document.createElement("input");
 			checkbox.type = "checkbox";
 			checkbox.style.margin = "0px";
+			checkbox.style.marginBottom = "-6px";
+			checkbox.style.marginRight = "3px";
+			checkbox.style.padding = "0px";
 			checkbox.onchange = (function(ev, div) {
 				return function() {
 					ev.enabled = !ev.enabled;

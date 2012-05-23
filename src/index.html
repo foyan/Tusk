@@ -46,7 +46,15 @@
 			<canvas id="pool1"></canvas>
 		</div>
 		
+		<div class="ctrlSection" style="width:220px;">
+			<h1>Scratch Pad</h1>
+			Modify cell values by writing: "x1,y1,u0,u1,...,un;x2,y2,u0,u1,...,un;..."<br/>
+			<textarea id="InitData" style="width:200px;height:200px;">39,9,1,1;40,9,1</textarea><br/>
+			<input type="button" value="Apply" onclick="initCells()" />
+		</div>
+		
 		<div style="clear:both;" />
+		
 		<div class="ctrlSection">
 			<h1>Control</h1>
 			<input type="button" onclick="toggle();" value="Toggle" class="button" /><br/>
@@ -67,11 +75,6 @@
 				<tr>
 					<td>Viscosity</td>
 					<td><select id="viscosity" name="viscosity" size="1" onchange="viscosityChanged()">
-					  <!--<option value="1">Water @ 20° C</option>
-					  <option value="10">Blood</option>
-					  <option value="1000">Honey</option>
-					  <option value="0.65">Petroleum</option>
-					  <option value="10000000000000">Concrete</option>//-->
 		  			</select></td>
 				</tr>
 			</table>
@@ -82,7 +85,7 @@
 				SHIFT will...<br/>
 				<input type="radio" name="shiftGodMode" value="1" />set cell to: <input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
 				<input type="radio" name="shiftGodMode" value="2" />inspect cell<br/>
-				<div id="swimmers"></div>
+				<div id="swimmers" style="margin:0;padding:0;margin-bottom:2px;"></div>
 				<input type="button" value="Remove Swimmers" onclick="removeSwimmers()" />
 			</div>
 		</div>

@@ -49,6 +49,11 @@ function WaveEquation() {
 		)
 	];
 	
+	this.setCellValue = function(cell, value) {
+		cell.currentData.up = value - cell.currentData.ut;
+		cell.currentData.ut = value;
+	}
+	
 	this.pools = [
 		new Pool("du/dx", "pics/udx.png", function(cell) { return cell.currentData.udx; }),
 		new Pool("d2u/dx2", "pics/udxdx.png", function(cell) { return cell.currentData.udxdx;}),

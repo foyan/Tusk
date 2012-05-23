@@ -21,6 +21,10 @@ function GameOfLife() {
 	GameOfLife.prototype.mouseMoveAlt = function(cell, cellDefaultValue) {
 		cell.currentData.status = 1;
 	}
+	
+	this.setCellValue = function(cell, value) {
+		cell.currentData.status = value;
+	}
 
 	this.events = [];
 	

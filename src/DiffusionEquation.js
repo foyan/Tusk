@@ -29,6 +29,11 @@ function DiffusionEquation() {
 		};
 	};
 	
+	this.setCellValue = function(cell, value) {
+		cell.currentData.u = value;
+		cell.currentData.dudx = 0;
+	}
+	
 	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
 	this.events = [
