@@ -8,10 +8,12 @@ function View() {
 	this.automata = new CellularAutomata();
 	
 	this.transport = null;
+	this.cellInspector = null;
 	
 	this.load = function(doc) {
 		this.doc = doc;
 		this.transport = new TransportController(this.doc, this);
+		this.cellInspector = new CellInspectorController(this.doc, this);
 		
 		this.configureCanvases();
 		

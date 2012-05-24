@@ -27,7 +27,7 @@ function load() {
 		if (e.shiftKey) {
 			var cell = TheView.getCellAt(e);
 			if( cell!=null) {
-				updateCellInspector(cell);
+				TheView.cellInspector.inspect(cell);
 			}
 		}
 		if (e.ctrlKey && tusk.supportsDuck ) {
@@ -198,40 +198,6 @@ function selectedPoolChanged(pool) {
 	if (automataInitialized) {
 		TheView.paintAll();
 	}
-}
-
-function updateCellInspector(cell) {
-	updateCellInspectorCell("c", cell);
-	var x = cell.x;
-	var y = cell.y;
-	if (x-1 >= 0 && y-1 >= 0) {
-		updateCellInspectorCell("nw", automata.model[y-1][x-1]);
-	}
-	if (x-1 >= 0 && y+1 < automata.rows) {
-		updateCellInspectorCell("sw", automata.model[y+1][x-1]);
-	}
-	if (x+1 < automata.cols && y+1 < automata.rows) {
-		updateCellInspectorCell("se", automata.model[y+1][x+1]);
-	}
-	if (y-1 >= 0 && x+1 < automata.cols) {
-		updateCellInspectorCell("ne", automata.model[y-1][x+1]);
-	}
-	if (y-1 >= 0) {
-		updateCellInspectorCell("n", automata.model[y-1][x]);
-	}
-	if (x-1 >= 0) {
-		updateCellInspectorCell("w", automata.model[y][x-1]);
-	}
-	if (y+1 < automata.rows) {
-		updateCellInspectorCell("s", automata.model[y+1][x]);
-	}
-	if (x+1 < automata.cols) {
-		updateCellInspectorCell("e", automata.model[y][x+1]);
-	}
-}
-
-function updateCellInspectorCell(id, cell) {
-	doc.cellInspector[id].innerHTML = ViewUtils.formatNumber(cell.currentData.displayValue());
 }
 
 window.onload = load;
