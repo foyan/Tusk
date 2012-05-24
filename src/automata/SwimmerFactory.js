@@ -10,8 +10,8 @@ var SwimmerFactory = {
 		return swimmer;
 	},
 	
-	types: [
-		{
+	types: {
+		duck: {
 			name: "Duck",
 			creator: function(x, y) {
 				var swimmer = SwimmerFactory.internalCreator(x, y);
@@ -19,7 +19,7 @@ var SwimmerFactory = {
 				return swimmer;
 			}
 		},
-		{
+		ball: {
 			name: "Ball",
 			creator: function(x, y) {
 				var swimmer = SwimmerFactory.internalCreator(x, y);
@@ -27,7 +27,7 @@ var SwimmerFactory = {
 				return swimmer;
 			}
 		}
-	]
+	}
 	
 };
 

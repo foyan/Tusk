@@ -38,22 +38,7 @@ function load() {
 			}
 		}
 	};
-			
-	for(var type in SwimmerFactory.types) {
-		var button = document.createElement("input");
-		button.type = "button";
-		button.value = SwimmerFactory.types[type].name + "!";
-		button.onclick = (function(t) {
-			return function() {
-				var x = Math.floor(Math.random() * automata.cols);
-				var y = Math.floor(Math.random() * automata.rows);
-				automata.swimmers.push(SwimmerFactory.types[t].creator(x, y));
-				TheView.paintAll();
-			}
-		})(type);
-		doc.swimmersDiv.appendChild(button);
-	}
-				
+						
 	TheView.initAutomata();
 }
 

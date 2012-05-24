@@ -15,7 +15,7 @@ function View() {
 		this.primaryPainter = PainterFactory.types[0].creator(this.doc.primaryCanvas);
 		this.secondaryPainter = PainterFactory.types[0].creator(this.doc.secondaryCanvas);
 		
-		ViewUtils.bindStrategies(this.doc.tuskSelector, TuskRegistry, function(s) { return s.sayHello(); }, (function(view) {
+		ViewUtils.bindStrategiesToCombobox(this.doc.tuskSelector, TuskRegistry, function(s) { return s.sayHello(); }, (function(view) {
 			return function(tusk) {
 				view.automata.tusk = tusk;
 				view.automata.initCells();
@@ -24,12 +24,21 @@ function View() {
 			};
 		})(this));
 		
-		ViewUtils.bindStrategies(this.doc.viscositySelector, Viscosities, function(s) { return s.name; }, (function(view) {
+		ViewUtils.bindStrategiesToCombobox(this.doc.viscositySelector, Viscosities, function(s) { return s.name; }, (function(view) {
 			return function(viscosity) {
-				automata.tusk.viscosity = viscosity.viscosity;
+				view.automata.tusk.viscosity = viscosity.viscosity;
 				view.primaryPainter.baseColor = viscosity.baseColor;
 				view.paintAll();
-			}
+			};
+		})(this));
+		
+		ViewUtils.bindStrategiesToButtonList(this.doc.swimmersDiv, SwimmerFactory.types, function(s) { return s.name + "!"; }, (function(view) {
+			return function(type) {
+				var x = Math.floor(Math.random() * view.automata.cols);
+				var y = Math.floor(Math.random() * view.automata.rows);
+				view.automata.swimmers.push(type.creator(x, y));
+				view.paintAll();
+			};
 		})(this));
 	}
 	

@@ -12,7 +12,7 @@ var ViewUtils = {
 		};
 	},
 	
-	bindStrategies: function(combobox, strategies, text, onchange) {
+	bindStrategiesToCombobox: function(combobox, strategies, text, onchange) {
 		var def = null;
 		for (var strategy in strategies) {
 			var opt = document.createElement("option");
@@ -28,6 +28,18 @@ var ViewUtils = {
 		if (def) {
 //			onchange(def);
 		}
-	}
+	},
 	
+	bindStrategiesToButtonList: function(div, strategies, text, onclick) {
+		for (var strategy in strategies) {
+			var button = document.createElement("input");
+			button.type = "button";
+			button.value = text(strategies[strategy]);
+			button.onclick = (function(s) {
+				return function() { onclick(s); }
+			})(strategies[strategy]);
+			div.appendChild(button);
+		}
+	}
+		
 };
