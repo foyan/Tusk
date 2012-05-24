@@ -1,10 +1,9 @@
 VectorCanvasPainter = function(ctx) {
 	this.context = ctx;
 	
-	this.getUIndex = function() { return 0; };
-	this.getBaseColor = function() { return {r: 128, g: 128, b: 255 }; };
-	
-	this.updateCellView = function(cell) {
+	this.scaling = new Vector();
+		
+	this.paintCell = function(cell) {
 		var du = cell.currentGradients; // get values ...
 		var x = cell.x * scaleWidth; // ... calculate x position in pixels ...
 		var y = cell.y * scaleHeight; // ... calculate y position in pixels ...
@@ -16,7 +15,7 @@ VectorCanvasPainter = function(ctx) {
 		this.context.fillRect(x, y, scaleWidth, scaleHeight);
 	};
 	
-	this.drawDuck = function(duck, cell) {
+	this.paintSwimmer = function(duck, cell) {
 		if(duckImage == null) {
 			this.context.fillStyle = "rgb(255,255,0)";
 			this.context.fillRect(duck.x,duck.y,scaleWidth,scaleHeight);

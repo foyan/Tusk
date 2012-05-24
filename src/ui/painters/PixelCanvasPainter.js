@@ -14,7 +14,7 @@ PixelCanvasPainter = function(ctx) {
 	
 	var PIXEL_DEPTH = 4;
 	
-	this.updateCellView = function(cell) {
+	this.paintCell = function(cell) {
 		
 		var x = cell.x * this.scaling.x;
 		var y = cell.y * this.scaling.y;
@@ -35,7 +35,7 @@ PixelCanvasPainter = function(ctx) {
 		}
 	};
 	
-	this.drawSwimmer = function(swimmer) {
+	this.paintSwimmer = function(swimmer) {
 		
 		if (swimmer.image != null) {
 			var x = swimmer.location.x * this.scaling.x;

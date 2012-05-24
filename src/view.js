@@ -3,31 +3,16 @@ automata = null;
 WIDTH = 500;
 HEIGHT = 500;
 
-ctx = Array();
-
 doc = null;
-
-function createCanvasPainter(context) {
-	return new PixelCanvasPainter(context);
-}
 
 function load() {
 	
 	doc = new Doc();
+					
+	TheView.load(doc);
 	
-	automata = new CellularAutomata();
-				
-	doc.primaryCanvas.width = WIDTH;
-	doc.primaryCanvas.height = HEIGHT;
-	
-	ctx[0] = createCanvasPainter(doc.primaryCanvas.getContext("2d"));
-	ctx[0].baseColor = {r: 128, g: 128, b: 255};
-	
-	doc.secondaryCanvas.width = WIDTH;
-	doc.secondaryCanvas.height = HEIGHT;
-	
-	ctx[1] = createCanvasPainter(doc.secondaryCanvas.getContext("2d"));
-	
+	automata = TheView.automata;
+		
 	for (var strategy in TuskRegistry) {
 		var opt = document.createElement("option");
 		opt.text = TuskRegistry[strategy].sayHello();
@@ -51,7 +36,7 @@ function load() {
 		    var cell= getCell(e);
 			if(cell!=null) {
 				automata.tusk.mouseMoveAlt(cell, doc.cellValueBox);
-				updateAllCellView();
+				TheView.paintAll();
 			}
 		}
 		if (e.shiftKey) {
@@ -65,7 +50,6 @@ function load() {
 			if( cell!=null) {
 				ducks[ducks.length]= new Point(1+cell.x*WIDTH/automata.cols, 1+cell.y*HEIGHT/automata.rows);
 				// cell.hasDuck = !cell.hasDuck;
-				// updateCellView(cell);
 			}
 		}
 	};
@@ -79,33 +63,20 @@ function load() {
 				var x = Math.floor(Math.random() * automata.cols);
 				var y = Math.floor(Math.random() * automata.rows);
 				automata.swimmers.push(SwimmerFactory.types[t].creator(x, y));
-				updateAllCellView();
+				TheView.paintAll();
 			}
 		})(type);
 		doc.swimmersDiv.appendChild(button);
 	}
 				
-	initAutomata();
+	TheView.initAutomata();
 }
 
 function removeSwimmers() {
 	automata.swimmers = [];
-	updateAllCellView();
+	TheView.paintAll();
 }
 
-function initAutomata() {
-	automata.rows = doc.rows.value;
-	automata.cols = doc.cols.value;
-	automata.initCells();
-	
-	for (var i = 0; i < ctx.length; i++) {
-		ctx[i].scaling.x = WIDTH / automata.cols;
-		ctx[i].scaling.y = HEIGHT / automata.rows;
-	}
-	
-	updateAllCellView();
-	automataInitialized = true;
-}
 
 var automataInitialized = false;
 
@@ -154,31 +125,31 @@ function setCells(data)	{
 			automata.tusk.setCellValue(cell, parseFloat(idCols[j]));
 		}
 	}
-	updateAllCellView();
+	TheView.paintAll();
 }
 		
 function viscosityChanged(){
 	var viscosity = Viscosities[doc.viscositySelector.value];
 	automata.tusk.viscosity = viscosity.viscosity;
-	ctx[0].baseColor = viscosity.baseColor;
-	updateAllCellView();
+	TheView.primaryPainter.baseColor = viscosity.baseColor;
+	TheView.paintAll();
 }
 
 function tuskChanged(){	
 	automata.tusk = TuskRegistry[doc.tuskSelector.value];
 	automata.initCells();
 	initTuskControls();
-	updateAllCellView();
+	TheView.paintAll();
 }
 
 function initTuskControls() {
-	ctx[1].pool = null;
+	TheView.secondaryPainter.pool = null;
 
 	doc.poolList.innerHTML = "";
 	for (var i in automata.tusk.pools) {
 		var pool = automata.tusk.pools[i];
 		
-		if (ctx[1].pool == null) {
+		if (TheView.secondaryPainter.pool == null) {
 			selectedPoolChanged(pool);
 		}
 		
@@ -196,7 +167,7 @@ function initTuskControls() {
 		doc.poolList.appendChild(radio);
 		doc.poolList.appendChild(img);
 	}
-	if (ctx[1].pool != null) {
+	if (TheView.secondaryPainter.pool != null) {
 		doc.secondaryCanvasDiv.style.display = "block";
 		doc.poolList.getElementsByTagName("input")[0].checked = true;
 	} else {
@@ -290,9 +261,9 @@ function slicesChanged() {
 }
 
 function selectedPoolChanged(pool) {
-	ctx[1].pool = pool;
+	TheView.secondaryPainter.pool = pool;
 	if (automataInitialized) {
-		updateAllCellView();
+		TheView.paintAll();
 	}
 }
 
@@ -313,7 +284,7 @@ function singleStep(){
 
 function step() {
 	automata.step();
-	updateAllCellView();
+	TheView.paintAll();
 	doc.iterationLabel.innerHTML = automata.iterations;
 	if (running) {
 		window.setTimeout(step, 0);
@@ -325,37 +296,10 @@ function getCells(pt) {
 	return automata.model[Math.floor(pt.x / (WIDTH/automata.cols))][Math.floor(pt.y / (HEIGHT/automata.rows))];
 };
 		
-function updateAllCellView(){
-	beginUpdate();
-	automata.forEachCell(updateCellView);
-	endUpdate();
-	automata.forEachSwimmer(drawSwimmer);
-}		
-
-
 function transformDisp2CellCoordinate(x,y){
 	var x1 = Math.floor(x / WIDTH/automata.cols);
 	var y1 = Math.floor(y / HEIGHT/automata.rows);
 	return new Point(x1,y1);
-}
-
-function updateCellView(cell) {
-	ctx[0].updateCellView(cell);
-	ctx[1].updateCellView(cell);
-}
-
-function drawSwimmer(swimmer) {
-	ctx[0].drawSwimmer(swimmer);
-}
-
-function beginUpdate() {
-	ctx[0].begin();
-	ctx[1].begin();
-}
-
-function endUpdate() {
-	ctx[0].end();
-	ctx[1].end();
 }
 
 function getFormattedColor(du, r0, g0, b0) {

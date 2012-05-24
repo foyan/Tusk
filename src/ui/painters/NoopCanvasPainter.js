@@ -1,14 +1,13 @@
 NoopCanvasPainter = function(ctx) {
 	this.context = ctx;
 	
-	this.getUIndex = function() { return 0; };
-	this.getBaseColor = function() { return {r: 128, g: 128, b: 255 }; };
-	
-	this.updateCellView = function(cell) {
+	this.scaling = new Vector();
+		
+	this.paintCell = function(cell) {
 		// NOOP.
 	};
 	
-	this.drawDuck = function(duck, cell) {
+	this.paintSwimmer = function(swimmer, cell) {
 		// NOOP.
 	};
 	
