@@ -19,11 +19,18 @@ function View() {
 			return function(tusk) {
 				view.automata.tusk = tusk;
 				view.automata.initCells();
-				initTuskControls;
+				initTuskControls();
 				view.paintAll();
 			};
 		})(this));
 		
+		ViewUtils.bindStrategies(this.doc.viscositySelector, Viscosities, function(s) { return s.name; }, (function(view) {
+			return function(viscosity) {
+				automata.tusk.viscosity = viscosity.viscosity;
+				view.primaryPainter.baseColor = viscosity.baseColor;
+				view.paintAll();
+			}
+		})(this));
 	}
 	
 	this.configureCanvases = function() {

@@ -12,17 +12,9 @@ function load() {
 	TheView.load(doc);
 	
 	automata = TheView.automata;
-			
-	for (var visc in Viscosities) {
-		var opt = document.createElement("option");
-		opt.text = Viscosities[visc].name;
-		opt.value = visc;
-		doc.viscositySelector.options.add(opt);
-	}
-	
-	automata.tusk = TuskRegistry[doc.tuskSelector.value]; 
-
-	initTuskControls();
+				
+	TheView.doc.tuskSelector.onchange();
+	TheView.doc.viscositySelector.onchange();
 		
 	doc.primaryCanvas.onmousemove = function(e) {
 		if (e.altKey) {	
@@ -121,13 +113,6 @@ function setCells(data)	{
 	TheView.paintAll();
 }
 		
-function viscosityChanged(){
-	var viscosity = Viscosities[doc.viscositySelector.value];
-	automata.tusk.viscosity = viscosity.viscosity;
-	TheView.primaryPainter.baseColor = viscosity.baseColor;
-	TheView.paintAll();
-}
-
 function initTuskControls() {
 	TheView.secondaryPainter.pool = null;
 

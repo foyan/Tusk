@@ -13,16 +13,21 @@ var ViewUtils = {
 	},
 	
 	bindStrategies: function(combobox, strategies, text, onchange) {
+		var def = null;
 		for (var strategy in strategies) {
 			var opt = document.createElement("option");
 			opt.text = text(strategies[strategy]);
 			opt.value = strategy;
 			combobox.options.add(opt);
+			def = strategies[strategy];
 		}
 		combobox.onchange = function() {
 			var strategy = strategies[combobox.value];
 			onchange(strategy);
 		};
+		if (def) {
+//			onchange(def);
+		}
 	}
 	
 };
