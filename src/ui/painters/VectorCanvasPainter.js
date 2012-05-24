@@ -9,7 +9,7 @@ VectorCanvasPainter = function(ctx) {
 		var y = cell.y * scaleHeight; // ... calculate y position in pixels ...
 		var baseColor = this.getBaseColor(); // ... get base painter color ...
 		// ... let Tusk calculate actual cell color, and format it as 'rgb(r, g, b)...'
-		var color = getFormattedColor(du[this.getUIndex()], baseColor.r, baseColor.g, baseColor.b);
+		var color = ViewUtils.getFormattedColor(du[this.getUIndex()], baseColor.r, baseColor.g, baseColor.b);
 		this.context.fillStyle = color;
 		// ... draw and fill a rectangle.
 		this.context.fillRect(x, y, scaleWidth, scaleHeight);

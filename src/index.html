@@ -21,6 +21,7 @@
 		<script type="text/javascript" src="tusks/TuskRegistry.js"></script>
 		<script type="text/javascript" src="ui/Doc.js"></script>
 		<script type="text/javascript" src="view.js"></script>
+		<script type="text/javascript" src="ui/TransportController.js"></script>
 		<script type="text/javascript" src="ui/View.js"></script>
 		<script type="text/javascript" src="ui/painters/VectorCanvasPainter.js"></script>
 		<script type="text/javascript" src="ui/painters/PixelCanvasPainter.js"></script>
@@ -65,9 +66,9 @@
 		
 		<div class="ctrlSection">
 			<h1>Control</h1>
-			<input type="button" onclick="toggle();" value="Toggle" class="button" /><br/>
-			<input type="button" onclick="singleStep();" value="single step" class="button"/><br/>
-			<input type="button" onclick="reset();" value="reset" class="button"/><br/>
+			<input type="button" id="toggle" value="Toggle" class="button" /><br/>
+			<input type="button" id="step" value="Step" class="button"/><br/>
+			<input type="button" id="reset" value="Reset" class="button"/><br/>
 		</div>
 		<div class="ctrlSection">
 			<h1>Automata</h1>

@@ -7,8 +7,11 @@ function View() {
 	
 	this.automata = new CellularAutomata();
 	
+	this.transport = null;
+	
 	this.load = function(doc) {
 		this.doc = doc;
+		this.transport = new TransportController(this.doc, this);
 		
 		this.configureCanvases();
 		
@@ -88,6 +91,14 @@ function View() {
 				view.primaryPainter.paintSwimmer(swimmer);
 			}
 		})(this));
+	}
+	
+	this.getCellAt = function(event) {
+		var off = ViewUtils.offset(event.target);
+		var x = Math.floor((event.clientX - off.x - 2) / (this.CANVAS_WIDTH / this.automata.rows));
+		var y = Math.floor((event.clientY - off.y - 2) / (this.CANVAS_HEIGHT / this.automata.cols));
+		if (x < 0 || y < 0 || x >= this.automata.cols || y >= this.automata.rows) return null;
+		return this.automata.model[y][x];
 	}
 
 }

@@ -18,20 +18,20 @@ function load() {
 		
 	doc.primaryCanvas.onmousemove = function(e) {
 		if (e.altKey) {	
-		    var cell= getCell(e);
+		    var cell= TheView.getCellAt(e);
 			if(cell!=null) {
 				automata.tusk.mouseMoveAlt(cell, doc.cellValueBox);
 				TheView.paintAll();
 			}
 		}
 		if (e.shiftKey) {
-			var cell = getCell(e);
+			var cell = TheView.getCellAt(e);
 			if( cell!=null) {
 				updateCellInspector(cell);
 			}
 		}
 		if (e.ctrlKey && tusk.supportsDuck ) {
-			var cell = getCell(e);
+			var cell = TheView.getCellAt(e);
 			if( cell!=null) {
 				ducks[ducks.length]= new Point(1+cell.x*WIDTH/automata.cols, 1+cell.y*HEIGHT/automata.rows);
 				// cell.hasDuck = !cell.hasDuck;
@@ -49,33 +49,10 @@ function removeSwimmers() {
 
 
 var automataInitialized = false;
-
-function offset(target) {
-	var off = {x: target.offsetLeft, y: target.offsetTop};
-	if (target.offsetParent) {
-		var poff = offset(target.offsetParent);
-		off.x += poff.x;
-		off.y += poff.y;
-	}
-	return off;
-}
-
-function getCell(e) {
-	var off = offset(e.target);
-	var x = Math.floor((e.clientX - off.x - 2) / (WIDTH/automata.rows));
-	var y = Math.floor((e.clientY - off.y - 2) / (HEIGHT/automata.cols));
-	if( x<0 || y<0 || x>automata.cols || y>automata.rows) return null;
-	var cell = automata.model[y][x];
-	return cell;
-}	
   
 function initCells(){
 	var initData=doc.scratchPadBox.value;	
 	setCells(initData);
-}
-
-function reset(){
-	initAutomata();
 }
 
 function setCells(data)	{
@@ -223,50 +200,6 @@ function selectedPoolChanged(pool) {
 	}
 }
 
-var running = false;
-
-function toggle() {
-	running = !running;
-	if (running) {
-		step();
-	}
-}
-
-function singleStep(){
-	step();
-}
-
-
-
-function step() {
-	automata.step();
-	TheView.paintAll();
-	doc.iterationLabel.innerHTML = automata.iterations;
-	if (running) {
-		window.setTimeout(step, 0);
-	}
-}
-
-
-function getCells(pt) {
-	return automata.model[Math.floor(pt.x / (WIDTH/automata.cols))][Math.floor(pt.y / (HEIGHT/automata.rows))];
-};
-		
-function transformDisp2CellCoordinate(x,y){
-	var x1 = Math.floor(x / WIDTH/automata.cols);
-	var y1 = Math.floor(y / HEIGHT/automata.rows);
-	return new Point(x1,y1);
-}
-
-function getFormattedColor(du, r0, g0, b0) {
-	var color = getColor(du, r0, g0, b0);
-	return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
-}
-
-function formatNum(num){
-  return num.toPrecision(6);
-}
-
 function updateCellInspector(cell) {
 	updateCellInspectorCell("c", cell);
 	var x = cell.x;
@@ -298,7 +231,7 @@ function updateCellInspector(cell) {
 }
 
 function updateCellInspectorCell(id, cell) {
-	doc.cellInspector[id].innerHTML = formatNum(cell.currentData.displayValue());
+	doc.cellInspector[id].innerHTML = ViewUtils.formatNumber(cell.currentData.displayValue());
 }
 
 window.onload = load;

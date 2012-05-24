@@ -6,6 +6,12 @@ function Doc() {
 	
 	this.iterationLabel = document.getElementById("iterationCount");
 	
+	this.toggle = document.getElementById("toggle");
+	
+	this.step = document.getElementById("step");
+	
+	this.reset = document.getElementById("reset");
+	
 	this.tuskSelector = document.getElementById("diffFormel");
 	
 	this.viscositySelector = document.getElementById("viscosity");
