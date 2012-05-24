@@ -12,14 +12,7 @@ function load() {
 	TheView.load(doc);
 	
 	automata = TheView.automata;
-		
-	for (var strategy in TuskRegistry) {
-		var opt = document.createElement("option");
-		opt.text = TuskRegistry[strategy].sayHello();
-		opt.value = strategy;
-		doc.tuskSelector.options.add(opt);
-	}
-	
+			
 	for (var visc in Viscosities) {
 		var opt = document.createElement("option");
 		opt.text = Viscosities[visc].name;
@@ -132,13 +125,6 @@ function viscosityChanged(){
 	var viscosity = Viscosities[doc.viscositySelector.value];
 	automata.tusk.viscosity = viscosity.viscosity;
 	TheView.primaryPainter.baseColor = viscosity.baseColor;
-	TheView.paintAll();
-}
-
-function tuskChanged(){	
-	automata.tusk = TuskRegistry[doc.tuskSelector.value];
-	automata.initCells();
-	initTuskControls();
 	TheView.paintAll();
 }
 

@@ -14,6 +14,16 @@ function View() {
 		
 		this.primaryPainter = PainterFactory.types[0].creator(this.doc.primaryCanvas);
 		this.secondaryPainter = PainterFactory.types[0].creator(this.doc.secondaryCanvas);
+		
+		ViewUtils.bindStrategies(this.doc.tuskSelector, TuskRegistry, function(s) { return s.sayHello(); }, (function(view) {
+			return function(tusk) {
+				view.automata.tusk = tusk;
+				view.automata.initCells();
+				initTuskControls;
+				view.paintAll();
+			};
+		})(this));
+		
 	}
 	
 	this.configureCanvases = function() {

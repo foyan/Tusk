@@ -10,6 +10,19 @@ var ViewUtils = {
 			g: g,
 			b: b
 		};
+	},
+	
+	bindStrategies: function(combobox, strategies, text, onchange) {
+		for (var strategy in strategies) {
+			var opt = document.createElement("option");
+			opt.text = text(strategies[strategy]);
+			opt.value = strategy;
+			combobox.options.add(opt);
+		}
+		combobox.onchange = function() {
+			var strategy = strategies[combobox.value];
+			onchange(strategy);
+		};
 	}
 	
 };
