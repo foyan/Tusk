@@ -32,7 +32,7 @@ function View() {
 	}
 	
 	this.bindRootStrategies = function() {
-		ViewUtils.bindStrategiesToCombobox(this.doc.tuskSelector, TuskRegistry, function(s) { return s.sayHello(); }, (function(view) {
+		ViewUtils.bindStrategiesToCombobox(null, this.doc.tuskSelector, TuskRegistry, function(s) { return s.sayHello(); }, (function(view) {
 			return function(tusk) {
 				view.automata.tusk = tusk;
 				view.automata.initCells();
@@ -41,7 +41,7 @@ function View() {
 			};
 		})(this));
 		
-		ViewUtils.bindStrategiesToCombobox(this.doc.viscositySelector, Viscosities, function(s) { return s.name; }, (function(view) {
+		ViewUtils.bindStrategiesToCombobox(null, this.doc.viscositySelector, Viscosities, function(s) { return s.name; }, (function(view) {
 			return function(viscosity) {
 				view.automata.tusk.viscosity = viscosity.viscosity;
 				view.primaryPainter.baseColor = viscosity.baseColor;
@@ -49,7 +49,7 @@ function View() {
 			};
 		})(this));
 		
-		ViewUtils.bindStrategiesToButtonList(this.doc.swimmersDiv, SwimmerFactory.types, function(s) { return s.name + "!"; }, (function(view) {
+		ViewUtils.bindStrategiesToButtonList(null, this.doc.swimmersDiv, SwimmerFactory.types, function(s) { return s.name + "!"; }, (function(view) {
 			return function(type) {
 				var x = Math.floor(Math.random() * view.automata.cols);
 				var y = Math.floor(Math.random() * view.automata.rows);
@@ -60,7 +60,7 @@ function View() {
 	}
 	
 	this.bindTuskStrategies = function(tusk) {
-		ViewUtils.bindStrategiesToRadioList(this.doc.poolList ? this.doc.poolList : {}, tusk.pools, (function(view) {
+		ViewUtils.bindStrategiesToRadioList("pools", this.doc.poolList ? this.doc.poolList : {}, tusk.pools, (function(view) {
 			return function(pool) {
 				var img = document.createElement("img");
 				img.setAttribute("src", pool.imageSource);

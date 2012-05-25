@@ -35,7 +35,7 @@ function TransportController(doc, view) {
 	}
 	
 	this.doc.toggle.onclick = (function(controller) { return function() { controller.toggle(); } })(this);
-	this.doc.step.onclick = this.step;
-	this.doc.reset.onclick = this.reset;
+	this.doc.step.onclick = (function(controller) { return function() { controller.step(); } })(this);
+	this.doc.reset.onclick = (function(controller) { return function() { controller.reset(); } })(this);
 	
 }

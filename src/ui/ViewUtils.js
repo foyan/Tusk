@@ -13,13 +13,34 @@ var ViewUtils = {
 		return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
 	},
 
-	bindStrategiesToCombobox: function(combobox, strategies, text, onchange) {
+	strategyBoxes: [],
+
+	clearStrategies: function(id) {
+		if (id) {
+			if (ViewUtils.strategyBoxes[id]) {
+				for (var i = 0; i < ViewUtils.strategyBoxes[id].length; i++) {
+					ViewUtils.strategyBoxes[id][i].parentNode.removeChild(ViewUtils.strategyBoxes[id][i]);
+				}
+			}
+			ViewUtils.strategyBoxes[id] = [];
+		}
+	},
+	
+	addStrategy: function(id, content) {
+		if (id) {
+			ViewUtils.strategyBoxes[id].push(content);			
+		}
+	},
+		
+	bindStrategiesToCombobox: function(id, combobox, strategies, text, onchange) {
+		ViewUtils.clearStrategies(id);
 		var def = null;
 		for (var strategy in strategies) {
 			var opt = document.createElement("option");
 			opt.text = text(strategies[strategy]);
 			opt.value = strategy;
 			combobox.options.add(opt);
+			ViewUtils.addStrategy(id, opt);
 			def = strategies[strategy];
 		}
 		combobox.onchange = function() {
@@ -31,7 +52,8 @@ var ViewUtils = {
 		}
 	},
 	
-	bindStrategiesToButtonList: function(div, strategies, text, onclick) {
+	bindStrategiesToButtonList: function(id, div, strategies, text, onclick) {
+		ViewUtils.clearStrategies(id);
 		for (var strategy in strategies) {
 			var button = document.createElement("input");
 			button.type = "button";
@@ -42,12 +64,12 @@ var ViewUtils = {
 				}
 			})(strategies[strategy]);
 			div.appendChild(button);
+			ViewUtils.addStrategy(id, button);
 		}
 	},
 	
-	bindStrategiesToRadioList: function(div, strategies, content, onchange) {
-		div.innerHTML = "";
-		
+	bindStrategiesToRadioList: function(id, div, strategies, content, onchange) {
+		ViewUtils.clearStrategies(id);
 		var groupName = ViewUtils.makeObjectId();
 		for (var strategy in strategies) {
 			var radio = document.createElement("input");
@@ -64,19 +86,13 @@ var ViewUtils = {
 			
 			div.appendChild(radio);
 			div.appendChild(cont);
+			ViewUtils.addStrategy(id, radio);
+			ViewUtils.addStrategy(id, cont);
 		}
 	},
 	
-	strategyBoxes: [],
-	
 	bindStrategiesToBoxes: function(id, parent, strategies, name, toggle, createView) {
-		if (ViewUtils.strategyBoxes[id]) {
-			for (var i = 0; i < ViewUtils.strategyBoxes[id].length; i++) {
-				ViewUtils.strategyBoxes[id][i].parentNode.removeChild(ViewUtils.strategyBoxes[id][i]);
-			}
-		}
-		ViewUtils.strategyBoxes[id] = [];
-		
+		ViewUtils.clearStrategies(id);
 		for (var i = 0; i < strategies.length; i++) {
 			var strategy = strategies[i];
 			
@@ -119,7 +135,7 @@ var ViewUtils = {
 			}
 			parent.appendChild(div);
 			
-			ViewUtils.strategyBoxes[id].push(div);
+			ViewUtils.addStrategy(id, div);
 		}
 		
 	},
