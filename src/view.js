@@ -78,34 +78,15 @@ function setCells(data)	{
 function initTuskControls() {
 	TheView.secondaryPainter.pool = null;
 
-	doc.poolList.innerHTML = "";
-	for (var i in automata.tusk.pools) {
-		var pool = automata.tusk.pools[i];
-		
-		if (TheView.secondaryPainter.pool == null) {
-			selectedPoolChanged(pool);
-		}
-		
-		var radio = document.createElement("input");
-		radio.setAttribute("type", "radio");
-		radio.setAttribute("name", "pools");
-		radio.setAttribute("value", pool.name);
-		
-		var img = document.createElement("img");
-		img.setAttribute("src", pool.imageSource);
-		img.setAttribute("alt", pool.name);
-		
-		radio.onchange = (function(p) {return function() {selectedPoolChanged(p);}})(pool);
-		
-		doc.poolList.appendChild(radio);
-		doc.poolList.appendChild(img);
-	}
+	TheView.bindTuskStrategies(automata.tusk);
+	
+	/*
 	if (TheView.secondaryPainter.pool != null) {
 		doc.secondaryCanvasDiv.style.display = "block";
 		doc.poolList.getElementsByTagName("input")[0].checked = true;
 	} else {
 		doc.secondaryCanvasDiv.style.display = "none";
-	}
+	}*/
 	
 	// events
 	for (var i = 0; i < eventBoxes.length; i++) {
@@ -191,13 +172,6 @@ function sizeChanged() {
 
 function slicesChanged() {
 	automata.tusk.slices = doc.slicesBox.value;
-}
-
-function selectedPoolChanged(pool) {
-	TheView.secondaryPainter.pool = pool;
-	if (automataInitialized) {
-		TheView.paintAll();
-	}
 }
 
 window.onload = load;

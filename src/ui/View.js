@@ -15,11 +15,23 @@ function View() {
 		this.transport = new TransportController(this.doc, this);
 		this.cellInspector = new CellInspectorController(this.doc, this);
 		
+		this.bindRootStrategies();
+		
 		this.configureCanvases();
 		
 		this.primaryPainter = PainterFactory.types[0].creator(this.doc.primaryCanvas);
 		this.secondaryPainter = PainterFactory.types[0].creator(this.doc.secondaryCanvas);
 		
+	}
+	
+	this.configureCanvases = function() {
+		this.doc.primaryCanvas.width = this.CANVAS_WIDTH;
+		this.doc.primaryCanvas.height = this.CANVAS_HEIGHT;
+		this.doc.secondaryCanvas.width = this.CANVAS_WIDTH;
+		this.doc.secondaryCanvas.height = this.CANVAS_HEIGHT;
+	}
+	
+	this.bindRootStrategies = function() {
 		ViewUtils.bindStrategiesToCombobox(this.doc.tuskSelector, TuskRegistry, function(s) { return s.sayHello(); }, (function(view) {
 			return function(tusk) {
 				view.automata.tusk = tusk;
@@ -44,14 +56,25 @@ function View() {
 				view.automata.swimmers.push(type.creator(x, y));
 				view.paintAll();
 			};
-		})(this));
+		})(this));		
 	}
 	
-	this.configureCanvases = function() {
-		this.doc.primaryCanvas.width = this.CANVAS_WIDTH;
-		this.doc.primaryCanvas.height = this.CANVAS_HEIGHT;
-		this.doc.secondaryCanvas.width = this.CANVAS_WIDTH;
-		this.doc.secondaryCanvas.height = this.CANVAS_HEIGHT;
+	this.bindTuskStrategies = function(tusk) {
+		ViewUtils.bindStrategiesToRadioList(this.doc.poolList ? this.doc.poolList : {}, tusk.pools, (function(view) {
+			return function(pool) {
+				var img = document.createElement("img");
+				img.setAttribute("src", pool.imageSource);
+				img.setAttribute("alt", pool.name);
+				return img;
+			};
+		})(this), (function(view) {
+			return function(pool) {
+				view.secondaryPainter.pool = pool;
+				if (automataInitialized) {
+					view.paintAll();
+				}
+			};
+		})(this))
 	}
 	
 	this.primaryPainter = null;

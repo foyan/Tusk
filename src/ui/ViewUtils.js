@@ -37,9 +37,33 @@ var ViewUtils = {
 			button.type = "button";
 			button.value = text(strategies[strategy]);
 			button.onclick = (function(s) {
-				return function() { onclick(s); }
+				return function() {
+					onclick(s);
+				}
 			})(strategies[strategy]);
 			div.appendChild(button);
+		}
+	},
+	
+	bindStrategiesToRadioList: function(div, strategies, content, onchange) {
+		div.innerHTML = "";
+		
+		var groupName = ViewUtils.makeObjectId();
+		for (var strategy in strategies) {
+			var radio = document.createElement("input");
+			radio.setAttribute("type", "radio");
+			radio.setAttribute("name", groupName);
+			radio.setAttribute("value", ViewUtils.makeObjectId());
+			radio.onclick = (function(s) {
+				return function() {
+					onchange(s);
+				};
+			});
+			
+			var cont = content(strategies[strategy]);
+			
+			div.appendChild(radio);
+			div.appendChild(cont);
 		}
 	},
 	
@@ -55,8 +79,12 @@ var ViewUtils = {
 	
 	formatNumber: function(num){
 		return num.toPrecision(6);
+	},
+	
+	__objectId: 1,
+	
+	makeObjectId: function() {
+		return "obj" + (ViewUtils.__objectId++);
 	}
-
-
 		
 };
