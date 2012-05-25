@@ -1,10 +1,5 @@
 automata = null;
 
-WIDTH = 500;
-HEIGHT = 500;
-
-doc = null;
-
 function load() {
 	
 	doc = new Doc();
@@ -39,29 +34,6 @@ function load() {
 		}
 	};
 						
-	TheView.initAutomata();
-}
-
-function removeSwimmers() {
-	automata.swimmers = [];
-	TheView.paintAll();
-}
-
-
-var automataInitialized = false;
-  		
-function initTuskControls() {
-	TheView.secondaryPainter.pool = null;
-
-	TheView.bindTuskStrategies(automata.tusk);
-}
-
-function sizeChanged() {
-	initAutomata();
-}
-
-function slicesChanged() {
-	automata.tusk.slices = doc.slicesBox.value;
 }
 
 window.onload = load;

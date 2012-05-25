@@ -38,6 +38,13 @@ function Doc() {
 	
 	this.applyScratchPad = document.getElementById("applyScratchPad");
 	
+	this.removeSwimmers = document.getElementById("removeSwimmers");
+	
+	this.size = {
+		rows: document.getElementById("rows"),
+		cols: document.getElementById("cols")
+	};
+	
 	this.cellInspector = {
 		w: document.getElementById("cellInspector_W"),
 		e: document.getElementById("cellInspector_E"),

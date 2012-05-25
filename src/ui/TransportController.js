@@ -28,7 +28,6 @@ function TransportController(doc, view) {
 	this.reset = function() {
 		this.view.automata.iterations = 0;
 		this.view.initAutomata();
-		this.view.paintAll();
 		this.doc.iterationLabel.innerHTML = this.view.automata.iterations;
 	}
 	

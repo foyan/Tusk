@@ -11,6 +11,8 @@ function View() {
 	this.cellInspector = null;
 	this.scratchPad = null;
 	
+	this.automataInitialized = false;
+	
 	this.load = function(doc) {
 		this.doc = doc;
 		this.transport = new TransportController(this.doc, this);
@@ -24,6 +26,27 @@ function View() {
 		this.primaryPainter = PainterFactory.types[0].creator(this.doc.primaryCanvas);
 		this.secondaryPainter = PainterFactory.types[0].creator(this.doc.secondaryCanvas);
 		
+		this.doc.removeSwimmers.onclick = (function(view) {
+			return function() {
+				view.automata.swimmers = [];
+				view.paintAll();
+			};
+		})(this);
+		
+		this.doc.size.rows.onchange = (function(view) {
+			return function() {
+				view.initAutomata();
+			}
+		})(this);
+		
+		this.doc.slicesBox.onchange = (function(view){
+			return function() {
+				view.automata.tusk.slices = view.doc.slicesBox.value;
+			};
+		})(this);
+		
+		this.initAutomata();
+
 	}
 	
 	this.configureCanvases = function() {
@@ -38,7 +61,7 @@ function View() {
 			return function(tusk) {
 				view.automata.tusk = tusk;
 				view.automata.initCells();
-				initTuskControls();
+				view.bindTuskStrategies();
 				view.paintAll();
 			};
 		})(this));
@@ -62,7 +85,9 @@ function View() {
 	}
 	
 	this.bindTuskStrategies = function(tusk) {
-		ViewUtils.bindStrategiesToRadioList("pools", this.doc.poolList, tusk.pools, (function(view) {
+		this.secondaryPainter.pool = null;
+
+		ViewUtils.bindStrategiesToRadioList("pools", this.doc.poolList, this.automata.tusk.pools, (function(view) {
 			return function(pool) {
 				var img = document.createElement("img");
 				img.setAttribute("src", pool.imageSource);
@@ -72,7 +97,7 @@ function View() {
 		})(this), (function(view) {
 			return function(pool) {
 				view.secondaryPainter.pool = pool;
-				if (automataInitialized) {
+				if (this.automataInitialized) {
 					view.paintAll();
 				}
 			};
@@ -121,7 +146,7 @@ function View() {
 		})(this));
 				
 		this.paintAll();
-		automataInitialized = true;
+		this.automataInitialized = true;
 	}
 	
 	this.paintAll = function() {
@@ -148,7 +173,7 @@ function View() {
 		if (x < 0 || y < 0 || x >= this.automata.cols || y >= this.automata.rows) return null;
 		return this.automata.model[y][x];
 	}
-
+	
 }
 
 var TheView = new View();

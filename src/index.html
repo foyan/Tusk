@@ -77,11 +77,11 @@
 			<table>
 				<tr>
 					<td>Size</td>
-					<td><input type="text" id="rows" value="100" style="width:50px;" onchange="sizeChanged();" />x<input type="text" id="cols" value="100" style="width:50px;" onchange="sizeChanged();" /></td>
+					<td><input type="text" id="rows" value="100" style="width:50px;" />x<input type="text" id="cols" value="100" style="width:50px;" /></td>
 				</tr>
 				<tr>
 					<td>Time&nbsp;Slices</td>
-					<td><input type="text" id="slices" value="4" style="width:50px;" onchange="slicesChanged();" /></td>
+					<td><input type="text" id="slices" value="4" style="width:50px;" /></td>
 				</tr>
 				<tr>
 					<td>Viscosity</td>
@@ -97,7 +97,7 @@
 				<input type="radio" name="shiftGodMode" value="1" />set cell to: <input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
 				<input type="radio" name="shiftGodMode" value="2" />inspect cell<br/>
 				<div id="swimmers" style="margin:0;padding:0;margin-bottom:2px;"></div>
-				<input type="button" value="Remove Swimmers" onclick="removeSwimmers()" />
+				<input type="button" value="Remove Swimmers" id="removeSwimmers" />
 			</div>
 		</div>
 		<div class="ctrlSection" id="lastBeforeCustom">
