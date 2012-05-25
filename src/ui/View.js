@@ -74,7 +74,17 @@ function View() {
 					view.paintAll();
 				}
 			};
-		})(this))
+		})(this));
+		
+		this.doc.poolList.parentNode.parentNode.style.display = tusk.pools && tusk.pools.length > 0 ? "block" : "none";
+		
+		ViewUtils.bindStrategiesToBoxes("events", doc.lastBeforeCustom.parentNode, tusk.events, function(ev) {
+			return ev.name;
+		}, function(ev, enabled) {
+			ev.enabled = enabled;
+		}, function(ev, doc) {
+			return ev.createView ? ev.createView(doc) : null;
+		});
 	}
 	
 	this.primaryPainter = null;

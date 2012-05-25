@@ -54,17 +54,74 @@ var ViewUtils = {
 			radio.setAttribute("type", "radio");
 			radio.setAttribute("name", groupName);
 			radio.setAttribute("value", ViewUtils.makeObjectId());
-			radio.onclick = (function(s) {
+			radio.onchange = (function(s) {
 				return function() {
 					onchange(s);
 				};
-			});
+			})(strategies[strategy]);
 			
 			var cont = content(strategies[strategy]);
 			
 			div.appendChild(radio);
 			div.appendChild(cont);
 		}
+	},
+	
+	strategyBoxes: [],
+	
+	bindStrategiesToBoxes: function(id, parent, strategies, name, toggle, createView) {
+		if (ViewUtils.strategyBoxes[id]) {
+			for (var i = 0; i < ViewUtils.strategyBoxes[id].length; i++) {
+				ViewUtils.strategyBoxes[id][i].parentNode.removeChild(ViewUtils.strategyBoxes[id][i]);
+			}
+		}
+		ViewUtils.strategyBoxes[id] = [];
+		
+		for (var i = 0; i < strategies.length; i++) {
+			var strategy = strategies[i];
+			
+			var div = document.createElement("div");
+			div.className = "ctrlSection disabled";
+			
+			var h = document.createElement("h1");
+			
+			var checkbox = document.createElement("input");
+			checkbox.type = "checkbox";
+			checkbox.style.margin = "0px";
+			checkbox.style.marginBottom = "-6px";
+			checkbox.style.marginRight = "3px";
+			checkbox.style.padding = "0px";
+			checkbox.onchange = (function(s, div, chk) {
+				return function() {
+					toggle(s, chk.checked);
+					if (!chk.checked) {
+						div.classList.add("disabled");
+					} else {
+						div.classList.remove("disabled");
+					}
+				};	
+			})(strategy, div, checkbox);
+			
+			var span = document.createElement("span");
+			span.innerHTML = name(strategy);
+			
+			h.appendChild(checkbox);
+			h.appendChild(span);
+			
+			div.appendChild(h);
+			var view = createView(strategy, document);
+			if (view != null) {
+				div.appendChild(view);
+			} else {
+				var span = document.createElement("span");
+				span.innerHTML = ":-)";
+				div.appendChild(span);
+			}
+			parent.appendChild(div);
+			
+			ViewUtils.strategyBoxes[id].push(div);
+		}
+		
 	},
 	
 	offset: function(target) {

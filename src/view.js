@@ -79,66 +79,6 @@ function initTuskControls() {
 	TheView.secondaryPainter.pool = null;
 
 	TheView.bindTuskStrategies(automata.tusk);
-	
-	/*
-	if (TheView.secondaryPainter.pool != null) {
-		doc.secondaryCanvasDiv.style.display = "block";
-		doc.poolList.getElementsByTagName("input")[0].checked = true;
-	} else {
-		doc.secondaryCanvasDiv.style.display = "none";
-	}*/
-	
-	// events
-	for (var i = 0; i < eventBoxes.length; i++) {
-		eventBoxes[i].parentNode.removeChild(eventBoxes[i]);
-	}
-	eventBoxes = [];
-	if (automata.tusk.events) {
-		for (var i = 0; i < automata.tusk.events.length; i++) {
-			var event = automata.tusk.events[i];
-			
-			var div = document.createElement("div");
-			div.className = "ctrlSection disabled";
-			
-			var h = document.createElement("h1");
-			
-			var checkbox = document.createElement("input");
-			checkbox.type = "checkbox";
-			checkbox.style.margin = "0px";
-			checkbox.style.marginBottom = "-6px";
-			checkbox.style.marginRight = "3px";
-			checkbox.style.padding = "0px";
-			checkbox.onchange = (function(ev, div) {
-				return function() {
-					ev.enabled = !ev.enabled;
-					if (!ev.enabled) {
-						div.classList.add("disabled");
-					} else {
-						div.classList.remove("disabled");
-					}
-				};	
-			})(event, div);
-			
-			var span = document.createElement("span");
-			span.innerHTML = event.name;
-			
-			h.appendChild(checkbox);
-			h.appendChild(span);
-			
-			div.appendChild(h);
-			if (event.createView) {
-				div.appendChild(event.createView(document));
-			} else {
-				var span = document.createElement("span");
-				span.innerHTML = ":-)";
-				div.appendChild(span);
-
-			}
-			doc.lastBeforeCustom.parentNode.appendChild(div);
-			
-			eventBoxes.push(div);
-		}
-	}
 
 	for (var i = 0; i < templateButtons.length; i++) {
 		templateButtons[i].parentNode.removeChild(templateButtons[i]);
@@ -163,7 +103,6 @@ function initTuskControls() {
 	doc.templateDiv.style.display = templateButtons.length > 0 ? "block" : "none";
 }
 
-var eventBoxes = [];
 var templateButtons = [];
 
 function sizeChanged() {
