@@ -29,6 +29,8 @@ function WaveEquation() {
 	
 	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
+	this.templates = [];
+
 	this.events = [
 		new RainEvent(
 			function(cell, value) {

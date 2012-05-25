@@ -79,31 +79,7 @@ function initTuskControls() {
 	TheView.secondaryPainter.pool = null;
 
 	TheView.bindTuskStrategies(automata.tusk);
-
-	for (var i = 0; i < templateButtons.length; i++) {
-		templateButtons[i].parentNode.removeChild(templateButtons[i]);
-	}
-	templateButtons = [];
-	if (automata.tusk.templates) {
-		for (var i = 0; i < automata.tusk.templates.length; i++) {
-			var template = automata.tusk.templates[i];
-			var button = document.createElement("input");
-			button.type = "button";
-			button.value = template.name;
-			button.onclick = (function(tmpl, automata) {
-				return function() {
-					var data = tmpl.get(automata);
-					doc.scratchPadBox.value = data;
-				}
-			})(template, automata);
-			doc.templateDiv.appendChild(button);
-			templateButtons.push(button);
-		}
-	}
-	doc.templateDiv.style.display = templateButtons.length > 0 ? "block" : "none";
 }
-
-var templateButtons = [];
 
 function sizeChanged() {
 	initAutomata();

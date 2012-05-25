@@ -54,6 +54,7 @@ var ViewUtils = {
 	
 	bindStrategiesToButtonList: function(id, div, strategies, text, onclick) {
 		ViewUtils.clearStrategies(id);
+		strategies = ViewUtils.arrayToObject(strategies);
 		for (var strategy in strategies) {
 			var button = document.createElement("input");
 			button.type = "button";
@@ -158,6 +159,16 @@ var ViewUtils = {
 	
 	makeObjectId: function() {
 		return "obj" + (ViewUtils.__objectId++);
+	},
+	
+	arrayToObject: function(arr) {
+		if (arr.length) {
+			var obj = {};
+			for (var i = 0; i < arr.length; i++) {
+				obj[i] = arr[i];
+			}
+		}
+		return arr;
 	}
 		
 };

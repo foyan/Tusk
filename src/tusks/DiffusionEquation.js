@@ -36,6 +36,8 @@ function DiffusionEquation() {
 	
 	this.getNeighbours = new VonNeumannNeighbourhood().getNeighbours;
 	
+	this.templates = [];
+	
 	this.events = [
 		new RainEvent(function(cell, value) { cell.currentData.u = value; }),
 		new VortexEvent(function(cell, value) { cell.currentData.u = value; })

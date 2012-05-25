@@ -60,7 +60,7 @@ function View() {
 	}
 	
 	this.bindTuskStrategies = function(tusk) {
-		ViewUtils.bindStrategiesToRadioList("pools", this.doc.poolList ? this.doc.poolList : {}, tusk.pools, (function(view) {
+		ViewUtils.bindStrategiesToRadioList("pools", this.doc.poolList, tusk.pools, (function(view) {
 			return function(pool) {
 				var img = document.createElement("img");
 				img.setAttribute("src", pool.imageSource);
@@ -76,15 +76,26 @@ function View() {
 			};
 		})(this));
 		
-		this.doc.secondaryCanvasDiv.style.display = tusk.pools && tusk.pools.length > 0 ? "block" : "none";
+		this.doc.secondaryCanvasDiv.style.display = this.automata.tusk.pools && this.automata.tusk.pools.length > 0 ? "block" : "none";
 		
-		ViewUtils.bindStrategiesToBoxes("events", doc.lastBeforeCustom.parentNode, tusk.events, function(ev) {
+		ViewUtils.bindStrategiesToBoxes("events", doc.lastBeforeCustom.parentNode, this.automata.tusk.events, function(ev) {
 			return ev.name;
 		}, function(ev, enabled) {
 			ev.enabled = enabled;
 		}, function(ev, doc) {
 			return ev.createView ? ev.createView(doc) : null;
 		});
+		
+		ViewUtils.bindStrategiesToButtonList("templates", this.doc.templateDiv, this.automata.tusk.templates, function(template) {
+			return template.name;
+		}, (function(view) {
+			return function(template) {
+				var data = template.get(automata);
+				view.doc.scratchPadBox.value = data;
+			};
+		})(this));
+
+		this.doc.templateDiv.style.display = this.automata.tusk.templates.length > 0 ? "block" : "none";
 	}
 	
 	this.primaryPainter = null;
