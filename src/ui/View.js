@@ -76,7 +76,7 @@ function View() {
 			};
 		})(this));
 		
-		this.doc.poolList.parentNode.parentNode.style.display = tusk.pools && tusk.pools.length > 0 ? "block" : "none";
+		this.doc.secondaryCanvasDiv.style.display = tusk.pools && tusk.pools.length > 0 ? "block" : "none";
 		
 		ViewUtils.bindStrategiesToBoxes("events", doc.lastBeforeCustom.parentNode, tusk.events, function(ev) {
 			return ev.name;
