@@ -9,11 +9,13 @@ function View() {
 	
 	this.transport = null;
 	this.cellInspector = null;
+	this.scratchPad = null;
 	
 	this.load = function(doc) {
 		this.doc = doc;
 		this.transport = new TransportController(this.doc, this);
 		this.cellInspector = new CellInspectorController(this.doc, this);
+		this.scratchPad = new ScratchPadController(this.doc, this);
 		
 		this.bindRootStrategies();
 		

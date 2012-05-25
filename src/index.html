@@ -23,6 +23,7 @@
 		<script type="text/javascript" src="view.js"></script>
 		<script type="text/javascript" src="ui/TransportController.js"></script>
 		<script type="text/javascript" src="ui/CellInspectorController.js"></script>
+		<script type="text/javascript" src="ui/ScratchPadController.js"></script>
 		<script type="text/javascript" src="ui/View.js"></script>
 		<script type="text/javascript" src="ui/painters/VectorCanvasPainter.js"></script>
 		<script type="text/javascript" src="ui/painters/PixelCanvasPainter.js"></script>
@@ -55,7 +56,7 @@
 				<h1>Scratch Pad</h1>
 				Modify cell values by writing: "x1,y1,u0,u1,...,un;x2,y2,u0,u1,...,un;..."<br/>
 				<textarea id="InitData" style="width:200px;height:200px;">39,9,1,1;40,9,1</textarea><br/>
-				<input type="button" value="Apply" onclick="initCells()" />
+				<input id="applyScratchPad" type="button" value="Apply" />
 			</div>
 			
 			<div class="ctrlSection" id="templates">

@@ -36,6 +36,8 @@ function Doc() {
 	
 	this.slicesBox = document.getElementById("slices");
 	
+	this.applyScratchPad = document.getElementById("applyScratchPad");
+	
 	this.cellInspector = {
 		w: document.getElementById("cellInspector_W"),
 		e: document.getElementById("cellInspector_E"),

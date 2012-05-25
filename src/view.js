@@ -49,32 +49,7 @@ function removeSwimmers() {
 
 
 var automataInitialized = false;
-  
-function initCells(){
-	var initData=doc.scratchPadBox.value;	
-	setCells(initData);
-}
-
-function setCells(data)	{
-	var idRows=data.split(";");	
-	var idx=0;
-	var maxRows=(idRows.length < automata.rows ? idRows.length: automata.rows);
-	for (var i = 0; i < maxRows; i++) {
-		var idCols=idRows[i].split(",");
-		var y=parseFloat(idCols[0]);
-		var startX=parseFloat(idCols[1]);
-		var maxCols=(idCols.length < automata.cols ? idCols.length: automata.cols);
-		for (var j = 2; j < maxCols; j++) {	
-			idx= startX+j-2;
-			idx=(idx>automata.cols?automata.cols:idx);
-
-			var cell = automata.model[y][idx];
-			automata.tusk.setCellValue(cell, parseFloat(idCols[j]));
-		}
-	}
-	TheView.paintAll();
-}
-		
+  		
 function initTuskControls() {
 	TheView.secondaryPainter.pool = null;
 
