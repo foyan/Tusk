@@ -67,13 +67,6 @@ function WaveEquation() {
 	
 	WaveEquation.prototype.sayHello = function() { return "Wave Equation"; }
 
-	WaveEquation.prototype.mouseMoveAlt=function(cell, cellDefaultValue) {
-		var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
-				
-		cell.currentData.ut = initVal;
-		cell.currentData.up = this.calculateUp(cell, 1, 1);
-	}
-	
 	this.getVelocity = function(cell) {
 		var v = new Vector();
 		v.x = cell.currentData.vx;

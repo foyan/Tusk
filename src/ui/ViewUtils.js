@@ -34,22 +34,17 @@ var ViewUtils = {
 		
 	bindStrategiesToCombobox: function(id, combobox, strategies, text, onchange) {
 		ViewUtils.clearStrategies(id);
-		var def = null;
 		for (var strategy in strategies) {
 			var opt = document.createElement("option");
 			opt.text = text(strategies[strategy]);
 			opt.value = strategy;
 			combobox.options.add(opt);
 			ViewUtils.addStrategy(id, opt);
-			def = strategies[strategy];
 		}
 		combobox.onchange = function() {
 			var strategy = strategies[combobox.value];
 			onchange(strategy);
 		};
-		if (def) {
-//			onchange(def);
-		}
 	},
 	
 	bindStrategiesToButtonList: function(id, div, strategies, text, onclick) {

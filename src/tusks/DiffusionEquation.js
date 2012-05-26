@@ -9,17 +9,6 @@ DiffusionEquation.prototype = new ATusk();
 function DiffusionEquation() {
 
 	DiffusionEquation.prototype.sayHello = function() { return "Diffusion"; }
-
-	DiffusionEquation.prototype.getCellInfo=function(cell){
-		var lf="\t";
-		var info= "u="+formatNum(cell.currentData.u); 
-		return info;
-	}
-
-	DiffusionEquation.prototype.mouseMoveAlt=function(cell, cellDefaultValue){
-		var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
-		cell.currentData.u = 0.9;
-	}
 		
 	this.createCellData = function() {
 		return {
@@ -43,6 +32,10 @@ function DiffusionEquation() {
 		new VortexEvent(function(cell, value) { cell.currentData.u = value; })
 	];
 
+	this.pools = [
+		new Pool("du/dx", "_assets/pics/udx.png", function(cell) { return cell.currentData.dudx; }),
+	];
+	
 	DiffusionEquation.prototype.calcCell = function(cell, dt) {
 		
 		var c = 1.0/this.viscosity;

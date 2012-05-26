@@ -40,6 +40,7 @@ function View() {
 				view.initAutomata();
 			}
 		})(this);
+		this.doc.size.cols.onchange = this.doc.size.rows.onchange;
 		
 		this.doc.slicesBox.onchange = (function(view){
 			return function() {
@@ -48,6 +49,8 @@ function View() {
 		})(this);
 		
 		this.doc.tuskSelector.onchange();
+		this.doc.painter.onchange();
+		this.doc.viscositySelector.onchange();
 
 		this.initAutomata();
 
@@ -117,10 +120,10 @@ function View() {
 				}
 			};
 		})(this));
-		
+				
 		this.doc.secondaryCanvasDiv.style.display = this.automata.tusk.pools && this.automata.tusk.pools.length > 0 ? "block" : "none";
 		
-		ViewUtils.bindStrategiesToBoxes("events", doc.lastBeforeCustom.parentNode, this.automata.tusk.events, function(ev) {
+		ViewUtils.bindStrategiesToBoxes("events", this.doc.lastBeforeCustom.parentNode, this.automata.tusk.events, function(ev) {
 			return ev.name;
 		}, function(ev, enabled) {
 			ev.enabled = enabled;
@@ -132,12 +135,13 @@ function View() {
 			return template.name;
 		}, (function(view) {
 			return function(template) {
-				var data = template.get(automata);
+				var data = template.get(view.automata);
 				view.doc.scratchPadBox.value = data;
 			};
 		})(this));
 
 		this.doc.templateDiv.style.display = this.automata.tusk.templates.length > 0 ? "block" : "none";
+		
 	}
 	
 	this.primaryPainter = null;
@@ -194,5 +198,4 @@ function View() {
 	
 }
 
-var TheView = new View();
-//window.onload = TheView.load(new Doc());
+window.onload = function() { new View().load(new Doc()); };

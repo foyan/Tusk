@@ -10,41 +10,16 @@ function GameOfLife() {
 
 	this.slices = 1;
 	
-	//Override the parent's method
 	GameOfLife.prototype.sayHello = function() { return "Game of Life"; }
-
-	GameOfLife.prototype.getCellInfo=function(cell){
-		var info= "u="+formatNum(cell.currentGradients[0]); 
-		return info;
-	}
-	
-	GameOfLife.prototype.mouseMoveAlt = function(cell, cellDefaultValue) {
-		cell.currentData.status = 1;
-	}
 	
 	this.setCellValue = function(cell, value) {
-		cell.currentData.status = value;
+		cell.currentData.status = 1;
 	}
 
 	this.events = [];
 	
 	this.templates = [
 		{
-			name: "50% Alive",
-			get: function(automata) {
-				var s = "";
-				for (var y = 0; y < automata.rows; y++) {
-					for (var x = 0; x < automata.cols; x++) {
-						var val = Math.random() >= 0.5 ? "1" : "0";
-						if (val == "1") {
-							s += y + "," + x + "," + val + ";";
-						}
-					}
-				}
-				return s;
-			}
-		},
-		/*{
 			name: "Glider",
 			get: function(automata) {
 				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
@@ -54,7 +29,7 @@ function GameOfLife() {
 					s += (y+2) + "," + (x-1) + ",1,1,1";
 				return s;
 			}
-		},*/
+		},
 		{
 			name: "54-0",
 			get: function(automata) {
@@ -80,39 +55,6 @@ function GameOfLife() {
 				;
 			}
 		}
-		/*{
-			name: "Glider (downstairs, R=>L)",
-			get: function(automata) {
-				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
-				var y = Math.floor(Math.random() * automata.rows - 6) + 3;
-				var s  = y + "," + x + ",1;";
-					s += (y+1) + "," + (x-1) + ",1;";
-					s += (y+2) + "," + (x-1) + ",1,1,1";
-				return s;
-			}
-		},
-		{
-			name: "Glider (upstairs, L=>R)",
-			get: function(automata) {
-				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
-				var y = Math.floor(Math.random() * automata.rows - 6) + 3;
-				var s  = (y+2) + "," + x + ",1;";
-					s += (y+1) + "," + (x+1) + ",1;";
-					s += (y) + "," + (x-1) + ",1,1,1";
-				return s;
-			}
-		},
-		{
-			name: "Glider (upstairs, R=>L)",
-			get: function(automata) {
-				var x = Math.floor(Math.random() * automata.cols - 6) + 3;
-				var y = Math.floor(Math.random() * automata.rows - 6) + 3;
-				var s  = (y+2) + "," + x + ",1;";
-					s += (y+1) + "," + (x-1) + ",1;";
-					s += (y) + "," + (x-1) + ",1,1,1";
-				return s;
-			}
-		}*/
 	];
 	
 	this.createDeadCell = function() {
