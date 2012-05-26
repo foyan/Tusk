@@ -10,6 +10,7 @@ function View() {
 	this.transport = null;
 	this.cellInspector = null;
 	this.scratchPad = null;
+	this.godsPanel = null;
 	
 	this.automataInitialized = false;
 	
@@ -18,6 +19,7 @@ function View() {
 		this.transport = new TransportController(this.doc, this);
 		this.cellInspector = new CellInspectorController(this.doc, this);
 		this.scratchPad = new ScratchPadController(this.doc, this);
+		this.godsPanel = new GodsPanelController(this.doc, this);
 		
 		this.bindRootStrategies();
 		

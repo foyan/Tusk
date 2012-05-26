@@ -25,6 +25,7 @@
 		<script type="text/javascript" src="ui/TransportController.js"></script>
 		<script type="text/javascript" src="ui/CellInspectorController.js"></script>
 		<script type="text/javascript" src="ui/ScratchPadController.js"></script>
+		<script type="text/javascript" src="ui/GodsPanelController.js"></script>
 		<script type="text/javascript" src="ui/View.js"></script>
 		<script type="text/javascript" src="ui/painters/VectorCanvasPainter.js"></script>
 		<script type="text/javascript" src="ui/painters/PixelCanvasPainter.js"></script>
@@ -98,9 +99,9 @@
 		<div class="ctrlSection">
 			<h1>God's Panel</h1>
 			<div style="padding: 2px;">
-				SHIFT will...<br/>
-				<input type="radio" name="shiftGodMode" value="1" />set cell to: <input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
-				<input type="radio" name="shiftGodMode" value="2" />inspect cell<br/>
+				SHIFT will inspect cell.<br/>
+				CTRL will change cell value to
+				<input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
 				<div id="swimmers" style="margin:0;padding:0;margin-bottom:2px;"></div>
 				<input type="button" value="Remove Swimmers" id="removeSwimmers" />
 			</div>
