@@ -13,8 +13,7 @@ function DiffusionEquation() {
 	this.createCellData = function() {
 		return {
 			u: 0,
-			dudx: 0,
-			displayValue: function() { return this.u; }
+			dudx: 0
 		};
 	};
 	
@@ -35,6 +34,8 @@ function DiffusionEquation() {
 	this.pools = [
 		new Pool("du/dx", "_assets/pics/udx.png", function(cell) { return cell.currentData.dudx; }),
 	];
+	
+	this.primaryPool = new Pool("u", "", function(cell) { return cell.currentData.u; });
 	
 	this.calcDifferentials = function(cell, dt, get) {
 		var c = 1.0/this.viscosity;

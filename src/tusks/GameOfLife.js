@@ -18,6 +18,10 @@ function GameOfLife() {
 
 	this.events = [];
 	
+	this.pools = [];
+	
+	this.primaryPool = new Pool("status", "", function(cell) { return cell.currentData.status; });
+
 	this.templates = [
 		{
 			name: "Glider",
@@ -58,10 +62,10 @@ function GameOfLife() {
 	];
 	
 	this.createDeadCell = function() {
-		return {status: 0, displayValue: function() { return this.status; }}
+		return {status: 0};
 	}
 	this.createLivingCell = function() {
-		return {status: 1, displayValue: function() { return this.status; }}
+		return {status: 1};
 	}
 	
 	this.createCellData = this.createDeadCell;

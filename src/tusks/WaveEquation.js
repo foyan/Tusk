@@ -20,9 +20,7 @@ function WaveEquation() {
 			udtdt: 0,
 			udt: 0,
 			vx: 0,
-			vy: 0,
-
-			displayValue: function() { return this.u; }
+			vy: 0
 		};
 	};
 	
@@ -106,9 +104,7 @@ function WaveEquation() {
 			
 			udx: differentials.udx,
 			udxdx: differentials.udxdx,
-			udtdt: differentials.udtdt,
-			
-			displayValue: function() { return this.u; }
+			udtdt: differentials.udtdt
 		};
 	}
 		

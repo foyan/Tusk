@@ -11,9 +11,7 @@ function View() {
 	this.cellInspector = null;
 	this.scratchPad = null;
 	this.godsPanel = null;
-	
-	this.automataInitialized = false;
-	
+		
 	this.load = function(doc) {
 		this.doc = doc;
 		this.transport = new TransportController(this.doc, this);
@@ -50,6 +48,7 @@ function View() {
 		
 		this.doc.tuskSelector.onchange();
 		this.doc.painter.onchange();
+		this.doc.tuskSelector.onchange();
 		this.doc.viscositySelector.onchange();
 		this.doc.integration.onchange();
 
@@ -70,6 +69,7 @@ function View() {
 				view.automata.tusk = tusk;
 				view.automata.initCells();
 				view.bindTuskStrategies();
+				view.primaryPainter.pool = tusk.primaryPool;
 				view.paintAll();
 			};
 		})(this));
@@ -124,9 +124,7 @@ function View() {
 		})(this), (function(view) {
 			return function(pool) {
 				view.secondaryPainter.pool = pool;
-				if (this.automataInitialized) {
-					view.paintAll();
-				}
+				view.paintAll();
 			};
 		})(this));
 				
@@ -168,7 +166,6 @@ function View() {
 		
 		this.updatePainterScaling();
 		this.paintAll();
-		this.automataInitialized = true;
 	}
 	
 	this.updatePainterScaling = function() {
