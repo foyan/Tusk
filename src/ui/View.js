@@ -51,6 +51,7 @@ function View() {
 		this.doc.tuskSelector.onchange();
 		this.doc.painter.onchange();
 		this.doc.viscositySelector.onchange();
+		this.doc.integration.onchange();
 
 		this.initAutomata();
 
@@ -98,6 +99,14 @@ function View() {
 				view.secondaryPainter = PainterFactory.create(p, view.doc.secondaryCanvas, view);
 				view.updatePainterScaling();
 				view.doc.viscositySelector.onchange();
+			};
+		})(this));	
+
+		ViewUtils.bindStrategiesToCombobox(null, this.doc.integration, IntegrationRegistry, function(i) {
+			return i.name;
+		}, (function(view) {
+			return function(i) {
+				view.automata.integration = i;
 			};
 		})(this));	
 	}

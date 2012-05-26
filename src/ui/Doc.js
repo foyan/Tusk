@@ -16,6 +16,8 @@ function Doc() {
 	
 	this.viscositySelector = document.getElementById("viscosity");
 	
+	this.integration = document.getElementById("integration");
+	
 	this.cellValueBox = document.getElementById("setValue");
 	
 	this.scratchPadBox = document.getElementById("InitData");

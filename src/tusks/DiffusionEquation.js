@@ -36,6 +36,27 @@ function DiffusionEquation() {
 		new Pool("du/dx", "_assets/pics/udx.png", function(cell) { return cell.currentData.dudx; }),
 	];
 	
+	this.calcDifferentials = function(cell, dt, get) {
+		var c = 1.0/this.viscosity;
+		
+		var dudx = (4 * get(cell).u
+			- get(cell.neighbours.n).u 
+			- get(cell.neighbours.w).u
+			- get(cell.neighbours.e).u
+			- get(cell.neighbours.s).u
+		) / 4 * c;
+		
+		return { dudx: dudx };
+	}
+	
+	this.applyDifferentials = function(cell, dt, differentials, get) {
+		var nextData = this.createCellData();
+		nextData.dudx = differentials.dudx;
+		nextData.u = get(cell).u - differentials.dudx * dt;
+		
+		return nextData;
+	}
+	
 	DiffusionEquation.prototype.calcCell = function(cell, dt) {
 		
 		var c = 1.0/this.viscosity;

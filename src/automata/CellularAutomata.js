@@ -18,6 +18,8 @@ function CellularAutomata() {
 	
 	this.swimmers = [];
 	
+	this.integration = null;
+	
 	this.forEachCell = function(fn) {
 		for (var x = 0; x < this.cols; x++) {
 			for (var y = 0; y < this.rows; y++) {
@@ -65,9 +67,7 @@ function CellularAutomata() {
 			);
 		}
 	}
-	
-	this.integration = new Euler();
-	
+		
 	this.step = function() {
 				
 		if (this.tusk != null) {

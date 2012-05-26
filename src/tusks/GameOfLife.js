@@ -68,7 +68,9 @@ function GameOfLife() {
 
 	this.getNeighbours = new MooreNeighbourhood().getNeighbours;
 
-	GameOfLife.prototype.calcCell = function(cell, dt) 	{
+	this.calcDifferentials = function() {};
+
+	this.applyDifferentials = function(cell, dt) 	{
 		/*
 			Regeln: 
 				Quelle: http://alphard.ethz.ch/Hafner/PPS/PPS2001/Life/Life2.htm#Game
