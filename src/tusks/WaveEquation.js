@@ -84,7 +84,7 @@ function WaveEquation() {
 			+ (get(cell.neighbours.e).u + get(cell.neighbours.s).u) / 2;
 		
 		var udtdt = udxdx * c;
-		var udt = get(cell).udt + udtdt * dt;
+		var udt = (get(cell).udt + udtdt * dt) * dt;
 		
 		return {
 			udt: udt,
@@ -95,9 +95,9 @@ function WaveEquation() {
 		};
 	}
 	
-	this.applyDifferentials = function(cell, dt, differentials, get) {
+	this.applyDifferentials = function(cell, differentials, get) {
 		return {
-			u: (get(cell).u + differentials.udt * dt) * this.damping,
+			u: (get(cell).u + differentials.udt) * this.damping,
 			udt: differentials.udt,
 			vx: (get(cell.neighbours.w).u - get(cell).u) * 10 / this.viscosity,
 			vy: (get(cell.neighbours.n).u - get(cell).u) * 10 / this.viscosity,
@@ -107,5 +107,5 @@ function WaveEquation() {
 			udtdt: differentials.udtdt
 		};
 	}
-		
+			
 }
