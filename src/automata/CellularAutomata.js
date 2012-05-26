@@ -120,6 +120,9 @@ function CellularAutomata() {
 							}
 							cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
 							swimmer.scale = 1.2 + Math.min(1, Math.max(-1, cell.currentData.displayValue()));
+							if (swimmer.changeValue) {
+								automata.tusk.setCellValue(cell, swimmer.changeValue(cell.currentData.displayValue()));
+							}
 						};
 					})(this)
 				);

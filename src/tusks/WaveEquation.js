@@ -67,21 +67,6 @@ function WaveEquation() {
 	
 	WaveEquation.prototype.sayHello = function() { return "Wave Equation"; }
 
-	WaveEquation.prototype.getCellInfo = function(cell){		 
-		var lf="\t";
-		var info= 
-		"u="+formatNum(cell.currentData.ut) + lf+
-		"u'="+formatNum(cell.currentData.udx) + lf+
-		"u''="+formatNum(cell.currentData.udxdx)+lf+
-		"u.="+formatNum(cell.currentData.up) + lf+
-		"u..="+formatNum(cell.currentData.upp) + lf+
-		//"v_x="+formatNum(cell.currentVelocities[0]) + lf+
-		//"v_y="+formatNum(cell.currentVelocities[1]) + lf+
-		//"phi="+formatNum(calculateDuckPhi(cell.currentVelocities[0], cell.currentVelocities[1]))*360/6.28 +
-		 "<br/>"
-		return info;
-	}
-	
 	WaveEquation.prototype.mouseMoveAlt=function(cell, cellDefaultValue) {
 		var initVal= (cellDefaultValue.value == null || cellDefaultValue.value == "") ? -0.9 : parseFloat(cellDefaultValue.value);
 				

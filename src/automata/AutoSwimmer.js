@@ -34,4 +34,9 @@ function AutoSwimmer() {
 			: 0);
 	}
 	
+	/*
+	this.changeValue = function(value) {
+		return -0.2;
+	}
+	*/
 }
