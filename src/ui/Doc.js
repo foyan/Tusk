@@ -40,6 +40,8 @@ function Doc() {
 	
 	this.removeSwimmers = document.getElementById("removeSwimmers");
 	
+	this.painter = document.getElementById("painter");
+	
 	this.size = {
 		rows: document.getElementById("rows"),
 		cols: document.getElementById("cols")

@@ -9,7 +9,7 @@ var ViewUtils = {
 	},
 	
 	getFormattedColor: function(du, r0, g0, b0) {
-		var color = getColor(du, r0, g0, b0);
+		var color = ViewUtils.getColor(du, r0, g0, b0);
 		return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
 	},
 

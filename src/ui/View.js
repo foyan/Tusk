@@ -83,7 +83,18 @@ function View() {
 				view.automata.swimmers.push(type.creator(x, y));
 				view.paintAll();
 			};
-		})(this));		
+		})(this));
+		
+		ViewUtils.bindStrategiesToCombobox(null, this.doc.painter, PainterFactory.types, function(p) {
+			return p.name;
+		}, (function(view) {
+			return function(p) {
+				view.primaryPainter = PainterFactory.create(p, view.doc.primaryCanvas, view);
+				view.secondaryPainter = PainterFactory.create(p, view.doc.secondaryCanvas, view);
+				view.updatePainterScaling();
+				view.doc.viscositySelector.onchange();
+			};
+		})(this));	
 	}
 	
 	this.bindTuskStrategies = function(tusk) {
@@ -140,15 +151,18 @@ function View() {
 		this.automata.cols = this.doc.cols.value;
 		this.automata.initCells();
 		
+		this.updatePainterScaling();
+		this.paintAll();
+		this.automataInitialized = true;
+	}
+	
+	this.updatePainterScaling = function() {
 		this.forAllPainters((function(view) {
 			return function(painter) {
 				painter.scaling.x = view.CANVAS_WIDTH / view.automata.rows;
 				painter.scaling.y = view.CANVAS_HEIGHT / view.automata.cols;
 			};
 		})(this));
-				
-		this.paintAll();
-		this.automataInitialized = true;
 	}
 	
 	this.paintAll = function() {
