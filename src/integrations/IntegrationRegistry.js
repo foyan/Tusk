@@ -1,4 +1,5 @@
 var IntegrationRegistry = {
 	euler: new Euler(),
-	runge:  new Runge()
+	runge:  new Runge(),
+	rungeKutta: new RungeKutta()
 };

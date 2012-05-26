@@ -6,6 +6,8 @@ function RainEvent(applyCell) {
 	
 	this.dropsPerIteration = 4;
 	
+	this.sign = 1;
+	
 	this.apply = function(automata) {
 		var drops = this.dropsPerIteration == 0 ? 0
 			: this.dropsPerIteration >= 1 ? this.dropsPerIteration
@@ -15,7 +17,8 @@ function RainEvent(applyCell) {
 			var x = Math.floor(Math.random() * automata.cols);
 			var y = Math.floor(Math.random() * automata.rows);
 			var cell = automata.model[x][y];
-			applyCell(cell, 1);
+			this.sign = this.sign * -1;
+			applyCell(cell, this.sign);
 		}
 		
 	}

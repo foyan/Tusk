@@ -46,6 +46,12 @@ function WaveEquation() {
 				cell.currentData.udt = value - cell.currentData.u;
 				cell.currentData.u = value;
 			}
+		),
+		new SmorkEvent(
+			function(cell, value) {
+				cell.currentData.udt = value - cell.currentData.u;
+				cell.currentData.u = value;
+			}
 		)
 	];
 	

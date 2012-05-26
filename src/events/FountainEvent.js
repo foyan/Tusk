@@ -11,8 +11,8 @@ function FountainEvent(applyCell) {
 	this.apply = function(automata) {
 		var fountains = [
 			{
-				x: automata.cols / 2,
-				y: automata.rows / 2,
+				x: Math.floor(automata.cols / 2),
+				y: Math.floor(automata.rows / 2),
 				threshold: 10
 			},
 			{
