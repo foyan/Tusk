@@ -99,6 +99,9 @@ function View() {
 				view.secondaryPainter = PainterFactory.create(p, view.doc.secondaryCanvas, view);
 				view.updatePainterScaling();
 				view.doc.viscositySelector.onchange();
+				if (view.automata.tusk != null) {
+					view.primaryPainter.pool = view.automata.tusk.primaryPool;
+				}
 			};
 		})(this));	
 
