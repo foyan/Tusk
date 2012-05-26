@@ -86,7 +86,7 @@ function CellularAutomata() {
 				this.forEachCell(
 					(function(automata) {
 						return function(cell) {
-							var nextData = automata.tusk.calcCell(cell, dt, automata.damping, automata.viscosity);
+							var nextData = automata.tusk.calcCell(cell, dt);
 							cell.nextData = nextData;
 						};
 					})(this)
