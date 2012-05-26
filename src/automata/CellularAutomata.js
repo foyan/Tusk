@@ -66,6 +66,8 @@ function CellularAutomata() {
 		}
 	}
 	
+	this.integration = new Euler();
+	
 	this.step = function() {
 				
 		if (this.tusk != null) {
@@ -79,26 +81,7 @@ function CellularAutomata() {
 				}
 			}
 			
-			// do transitions		
-			var dt = 1 / this.tusk.slices;
-			for (var t = 0; t < this.tusk.slices; t++) {
-				
-				this.forEachCell(
-					(function(automata) {
-						return function(cell) {
-							var nextData = automata.tusk.calcCell(cell, dt);
-							cell.nextData = nextData;
-						};
-					})(this)
-				);
-				
-				this.forEachCell(
-					function(cell) {
-						cell.currentData = cell.nextData;
-					}
-				);
-				
-			}
+			this.integration.integrate(this);
 			
 			// let swimmers travel
 			if (this.tusk.getVelocity) {
