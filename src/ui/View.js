@@ -15,6 +15,9 @@ function View() {
 	this.automataInitialized = false;
 	
 	this.load = function(doc) {
+		
+		this.automata.createWorkers(4);
+		
 		this.doc = doc;
 		this.transport = new TransportController(this.doc, this);
 		this.cellInspector = new CellInspectorController(this.doc, this);

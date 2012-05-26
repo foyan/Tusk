@@ -18,6 +18,28 @@ function CellularAutomata() {
 	
 	this.swimmers = [];
 	
+	this.workers = [];
+	
+	this.createWorkers = function(count) {
+		
+		for(var i = 0; i < this.workers.length; i++) {
+			this.workers[i].terminate();
+		}
+		this.workers = [];
+		
+		for (var i = 0; i < count; i++) {
+			var worker = new Worker("webworking/worker.js");
+			worker.onmessage = function(event) {
+				alert("Worker said: " + event.data);
+			}
+			worker.postMessage({
+				'msg': 'init',
+				'id': i,
+				'count': count
+			});
+		}
+	}
+	
 	this.forEachCell = function(fn) {
 		for (var x = 0; x < this.cols; x++) {
 			for (var y = 0; y < this.rows; y++) {
