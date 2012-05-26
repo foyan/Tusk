@@ -4,6 +4,8 @@ PixelCanvasPainter = function(ctx) {
 	this.pool = null;
 	
 	this.scaling = new Vector();
+	
+	this.view = null;
 
 	this.baseColor = {r: 128, g: 128, b: 128};
 	
@@ -24,7 +26,7 @@ PixelCanvasPainter = function(ctx) {
 		
 		for (var ix = x; ix < x + this.scaling.x; ix++) {
 			for (var iy = y; iy < y + this.scaling.y; iy++) {
-				var p = (iy * WIDTH + ix);
+				var p = (iy * this.view.CANVAS_WIDTH + ix);
 				
 				this.data[p] =
             		(255   << 24) | // alpha
@@ -55,7 +57,7 @@ PixelCanvasPainter = function(ctx) {
 	};
 	
 	this.begin = function() {
-		this.imageData = this.context.createImageData(WIDTH, HEIGHT);
+		this.imageData = this.context.createImageData(this.view.CANVAS_WIDTH, this.view.CANVAS_HEIGHT);
 		this.buf = new ArrayBuffer(this.imageData.data.length);
 		this.buf8 = new Uint8ClampedArray(this.buf);
 		this.data = new Uint32Array(this.buf);

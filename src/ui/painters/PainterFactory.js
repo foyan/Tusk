@@ -19,6 +19,12 @@ var PainterFactory = {
 				return new NoopCanvasPainter(canvas.getContext("2d"));
 			}
 		},
-	]
+	],
+	
+	create: function(type, canvas, view) {
+		var painter = type.creator(canvas);
+		painter.view = view;
+		return painter;
+	}
 					
 };

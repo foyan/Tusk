@@ -23,8 +23,8 @@ function View() {
 		
 		this.configureCanvases();
 		
-		this.primaryPainter = PainterFactory.types[0].creator(this.doc.primaryCanvas);
-		this.secondaryPainter = PainterFactory.types[0].creator(this.doc.secondaryCanvas);
+		this.primaryPainter = PainterFactory.create(PainterFactory.types[0], this.doc.primaryCanvas, this);
+		this.secondaryPainter = PainterFactory.create(PainterFactory.types[0], this.doc.secondaryCanvas, this);
 		
 		this.doc.removeSwimmers.onclick = (function(view) {
 			return function() {
@@ -45,6 +45,8 @@ function View() {
 			};
 		})(this);
 		
+		this.doc.tuskSelector.onchange();
+
 		this.initAutomata();
 
 	}
