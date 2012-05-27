@@ -6,8 +6,10 @@ function Doc() {
 	
 	this.iterationLabel = document.getElementById("iterationCount");
 	
-	this.toggle = document.getElementById("toggle");
+	this.run = document.getElementById("run");
 	
+	this.pause = document.getElementById("pause");
+
 	this.step = document.getElementById("step");
 	
 	this.reset = document.getElementById("reset");

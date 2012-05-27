@@ -89,7 +89,10 @@ function View() {
 				view.automata.swimmers.push(type.creator(x, y));
 				view.paintAll();
 			};
-		})(this));
+		})(this), function(s) {
+			var sw = s.creator(0,0);
+			return sw.image.src;
+		});
 		
 		ViewUtils.bindStrategiesToCombobox(null, this.doc.painter, PainterFactory.types, function(p) {
 			return p.name;

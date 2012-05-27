@@ -8,7 +8,12 @@ function TransportController(doc, view) {
 	this.toggle = function() {
 		this.running = !this.running;
 		if (this.running) {
+			this.doc.run.style.display = "none";
+			this.doc.pause.style.display = "block";
 			this.step();
+		} else {
+			this.doc.run.style.display = "block";
+			this.doc.pause.style.display = "none";
 		}
 	}
 	
@@ -31,10 +36,14 @@ function TransportController(doc, view) {
 		this.doc.iterationLabel.innerHTML = this.view.automata.iterations;
 	}
 	
-	this.doc.toggle.onclick = (function(controller) { return function() {
+	this.doc.run.onclick = (function(controller) { return function() {
 		controller.toggle();
 	} })(this);
 	
+	this.doc.pause.onclick = (function(controller) { return function() {
+		controller.toggle();
+	} })(this);
+
 	this.doc.step.onclick = (function(controller) { return function() { 
 		controller.step(); 
 	} })(this);

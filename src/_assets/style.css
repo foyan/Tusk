@@ -98,5 +98,29 @@ p.iterationCount { font-size: 20pt; }
 	text-align: center;
 }
 
+a.buttonLink {
+	color: white;
+	font-weight: bold;
+	background-color: #729fcf;
+	border: 1px solid #445f7c;
+	padding: 1px;
+	padding-bottom: 3px;
+	text-decoration: none;
+	display: block;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding-right: 10px;
+}
+
+a.buttonLink:hover {
+	background-color: #445f7c;
+}
+
+a.buttonLink img {
+	padding: 0;
+	margin: 0;
+	margin-bottom: -4px;
+	margin-right: 4px;
+}
 
 

@@ -47,20 +47,29 @@ var ViewUtils = {
 		};
 	},
 	
-	bindStrategiesToButtonList: function(id, div, strategies, text, onclick) {
+	bindStrategiesToButtonList: function(id, div, strategies, text, onclick, image) {
 		ViewUtils.clearStrategies(id);
 		strategies = ViewUtils.arrayToObject(strategies);
 		for (var strategy in strategies) {
-			var button = document.createElement("input");
-			button.type = "button";
-			button.value = text(strategies[strategy]);
-			button.onclick = (function(s) {
+			var a = document.createElement("a");
+			a.href = "#";
+			a.className = "buttonLink";
+			a.style.cssFloat = "left";
+			a.onclick = (function(s) {
 				return function() {
 					onclick(s);
 				}
 			})(strategies[strategy]);
-			div.appendChild(button);
-			ViewUtils.addStrategy(id, button);
+			div.appendChild(a);
+			var img = document.createElement("img");
+			img.src = image ? image(strategies[strategy]) : "_assets/pics/ghost.gif";
+			img.style.height = "16px";
+			if (!image) {
+				img.style.width = "16px";
+			}
+			a.appendChild(img);
+			a.innerHTML += text(strategies[strategy]);
+			ViewUtils.addStrategy(id, a);
 		}
 	},
 	
