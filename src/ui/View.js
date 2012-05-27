@@ -11,9 +11,7 @@ function View() {
 	this.cellInspector = null;
 	this.scratchPad = null;
 	this.godsPanel = null;
-	
-	this.automataInitialized = false;
-	
+		
 	this.load = function(doc) {
 		
 		this.automata.createWorkers(4);
@@ -53,7 +51,9 @@ function View() {
 		
 		this.doc.tuskSelector.onchange();
 		this.doc.painter.onchange();
+		this.doc.tuskSelector.onchange();
 		this.doc.viscositySelector.onchange();
+		this.doc.integration.onchange();
 
 		this.initAutomata();
 
@@ -72,6 +72,7 @@ function View() {
 				view.automata.tusk = tusk;
 				view.automata.initCells();
 				view.bindTuskStrategies();
+				view.primaryPainter.pool = tusk.primaryPool;
 				view.paintAll();
 			};
 		})(this));
@@ -101,6 +102,17 @@ function View() {
 				view.secondaryPainter = PainterFactory.create(p, view.doc.secondaryCanvas, view);
 				view.updatePainterScaling();
 				view.doc.viscositySelector.onchange();
+				if (view.automata.tusk != null) {
+					view.primaryPainter.pool = view.automata.tusk.primaryPool;
+				}
+			};
+		})(this));	
+
+		ViewUtils.bindStrategiesToCombobox(null, this.doc.integration, IntegrationRegistry, function(i) {
+			return i.name;
+		}, (function(view) {
+			return function(i) {
+				view.automata.integration = i;
 			};
 		})(this));	
 	}
@@ -118,9 +130,7 @@ function View() {
 		})(this), (function(view) {
 			return function(pool) {
 				view.secondaryPainter.pool = pool;
-				if (this.automataInitialized) {
-					view.paintAll();
-				}
+				view.paintAll();
 			};
 		})(this));
 				
@@ -162,7 +172,6 @@ function View() {
 		
 		this.updatePainterScaling();
 		this.paintAll();
-		this.automataInitialized = true;
 	}
 	
 	this.updatePainterScaling = function() {

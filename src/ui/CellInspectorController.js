@@ -34,7 +34,7 @@ function CellInspectorController(doc, view) {
 	};
 	
 	this.inspectOne = function(id, cell) {
-		this.doc.cellInspector[id].innerHTML = ViewUtils.formatNumber(cell.currentData.displayValue());
+		this.doc.cellInspector[id].innerHTML = ViewUtils.formatNumber(this.view.automata.tusk.primaryPool.getValue(cell));
 	};
 	
 }

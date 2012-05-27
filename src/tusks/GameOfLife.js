@@ -18,6 +18,10 @@ function GameOfLife() {
 
 	this.events = [];
 	
+	this.pools = [];
+	
+	this.primaryPool = new Pool("status", "", function(cell) { return cell.currentData.status; });
+
 	this.templates = [
 		{
 			name: "Glider",
@@ -58,17 +62,19 @@ function GameOfLife() {
 	];
 	
 	this.createDeadCell = function() {
-		return {status: 0, displayValue: function() { return this.status; }}
+		return {status: 0};
 	}
 	this.createLivingCell = function() {
-		return {status: 1, displayValue: function() { return this.status; }}
+		return {status: 1};
 	}
 	
 	this.createCellData = this.createDeadCell;
 
 	this.getNeighbours = new MooreNeighbourhood().getNeighbours;
 
-	GameOfLife.prototype.calcCell = function(cell, dt) 	{
+	this.calcDifferentials = function() {};
+
+	this.applyDifferentials = function(cell, dt) 	{
 		/*
 			Regeln: 
 				Quelle: http://alphard.ethz.ch/Hafner/PPS/PPS2001/Life/Life2.htm#Game

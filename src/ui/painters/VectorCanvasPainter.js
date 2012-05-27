@@ -6,13 +6,18 @@ VectorCanvasPainter = function(ctx) {
 	this.baseColor = {r: 128, g: 128, b: 128};
 
 	this.paintCell = function(cell) {
-		var x = cell.x * this.scaling.x; // ... calculate x position in pixels ...
-		var y = cell.y * this.scaling.y; // ... calculate y position in pixels ...
-		var baseColor = this.baseColor; // ... get base painter color ...
-		// ... let Tusk calculate actual cell color, and format it as 'rgb(r, g, b)...'
-		var color = ViewUtils.getFormattedColor(this.pool != null ? this.pool.getValue(cell) : cell.currentData.displayValue(), baseColor.r, baseColor.g, baseColor.b);
+		
+		if (this.pool == null) {
+			return;
+		}
+		
+		var x = cell.x * this.scaling.x;
+		var y = cell.y * this.scaling.y;
+		var baseColor = this.baseColor;
+
+		var color = ViewUtils.getFormattedColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
 		this.context.fillStyle = color;
-		// ... draw and fill a rectangle.
+
 		this.context.fillRect(x, y, this.scaling.x, this.scaling.y);
 	};
 	

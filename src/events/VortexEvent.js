@@ -22,7 +22,7 @@ function VortexEvent(applyCell) {
 		
 		for (var x = 0; x < width; x++) {
 			for (var y = 0; y < height; y++) {
-				var cell = automata.model[automata.rows / 2 - width / 2 + x][automata.cols / 2 - height / 2 + y];
+				var cell = automata.model[Math.floor(automata.rows / 2) - width / 2 + x][Math.floor(automata.cols / 2) - height / 2 + y];
 				this.applyCell(cell, -1);
 			}
 		}

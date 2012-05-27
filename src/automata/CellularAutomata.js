@@ -39,6 +39,8 @@ function CellularAutomata() {
 			});
 		}
 	}
+
+	this.integration = null;
 	
 	this.forEachCell = function(fn) {
 		for (var x = 0; x < this.cols; x++) {
@@ -87,7 +89,7 @@ function CellularAutomata() {
 			);
 		}
 	}
-	
+		
 	this.step = function() {
 				
 		if (this.tusk != null) {
@@ -101,26 +103,7 @@ function CellularAutomata() {
 				}
 			}
 			
-			// do transitions		
-			var dt = 1 / this.tusk.slices;
-			for (var t = 0; t < this.tusk.slices; t++) {
-				
-				this.forEachCell(
-					(function(automata) {
-						return function(cell) {
-							var nextData = automata.tusk.calcCell(cell, dt);
-							cell.nextData = nextData;
-						};
-					})(this)
-				);
-				
-				this.forEachCell(
-					function(cell) {
-						cell.currentData = cell.nextData;
-					}
-				);
-				
-			}
+			this.integration.integrate(this);
 			
 			// let swimmers travel
 			if (this.tusk.getVelocity) {
@@ -141,9 +124,9 @@ function CellularAutomata() {
 								}
 							}
 							cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
-							swimmer.scale = 1.2 + Math.min(1, Math.max(-1, cell.currentData.displayValue()));
+							swimmer.scale = 1.2 + Math.min(1, Math.max(-1, automata.tusk.primaryPool.getValue(cell)));
 							if (swimmer.changeValue) {
-								automata.tusk.setCellValue(cell, swimmer.changeValue(cell.currentData.displayValue()));
+								automata.tusk.setCellValue(cell, swimmer.changeValue(automata.tusk.primaryPool.getValue(cell)));
 							}
 						};
 					})(this)
