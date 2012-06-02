@@ -166,7 +166,7 @@ alte $R_{i-1}R_iR_{i+1}$ &111& 110 & 101 &100 &011 &010 &001 &000  \\\hline
 neues $R_i$ & 0 & 1 & 1 & 0& 1 & 1 & 1 & 0 \\\hline
 \end{tabular}
 \end{center}
-\caption{Wolfram-Konfugration 110}
+\caption{Wolfram-Konfiguration 110}
 \label{wolfram110}
 \end{table}
 
@@ -238,12 +238,45 @@ mit zellulären Automaten kann durchgeführt werden, indem folgendes getan wird:
 \item In der Übergangsfunktion $\delta$ steckt die eigentliche Differentialgleichung. In der Regel verändert sie nur die Elemente von $D$.
 \end{itemize}
 
-\section{$\delta$ der Wellengleichung}
+\section{Differenzierung nach dem Ort}
 
-Ausgehend von der homogenen Wellengleichung
-\begin{equation*}
-\frac{\partial^2 u}{\partial t^2} = k\cdot \frac{\partial^2 u}{\partial \vec{x}^2}
-\end{equation*}
+%Wir starten mit der homogenen Wellengleichung
+%\begin{equation*}
+%\frac{\partial^2 u}{\partial t^2} = k\cdot \frac{\partial^2 u}{\partial \vec{x}^2}
+%\end{equation*}
+
+Wir starten mit den gegebenen Werten $u_{\vec x}$ (den Zuständen der Zellen aus $R$). Daraus erhalten wir die diskrete Funktion
+\[
+u: R \mapsto \mathbb{R}, u(\vec x) = u_{\vec x}
+\]
+
+welche durch komponentenweises Einsetzen des Differenzenquotienten $\frac {\Delta u}{\Delta \vec x}$ folgendermassen differenzierbar ist (unter Zuhilfenahme des Einheitsvektors $\vec e_i$ für jede Komponente von $\vec x$ sowie der Erkenntnis, dass durch die diskrete Ausgangsfunktion $\Delta \vec{x}$ komponentenweise $1$ ist):
+\begin{equation}\label{diffone}
+	\left(\frac {\Delta}{\Delta \vec x} u\right)_{\vec x} = u_{\vec x} - \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - \vec e_i}
+\end{equation}
+Diese Differenzen können natürlich wiederum differenziert werden:
+\begin{eqnarray*}
+	\left(\frac{\Delta}{\Delta \vec x}\left( \frac {\Delta}{\Delta \vec x} u \right)_{\vec x}\right)_{\vec x} &=& \left(\frac {\Delta}{\Delta \vec x} u\right)_{\vec x} - \sum\limits_{i=1}^{\dim(\vec x)} \left( \frac {\Delta}{\Delta \vec x} u \right)_{\vec x - \vec e_i}
+\end{eqnarray*}
+Durch Einsetzen von \ref{diffone} in die obige Gleichung ergibt sich dann für die Differenz zweiter Ordnung:
+\begin{eqnarray*}
+\left( \frac{\Delta^2}{\Delta \vec x^2} u\right)_{\vec x} &=& u_{\vec x} - \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - \vec e_i} - 
+\sum\limits_{i=1}^{\dim(\vec x)} \left( u_{\vec {x^*}} - \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec {x^*} - \vec e_i} \right)_{\vec {x^*} := \vec x - \vec e_i} \\
+&=& u_{\vec x} - \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - \vec e_i} - \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - \vec e_i} + \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - 2\vec e_i} \\
+&=&  u_{\vec x} - 2\cdot\sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - \vec e_i} + \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - 2\vec e_i}
+\end{eqnarray*}
+
+\begin{bemerkung}[Indizes]
+Da der Definitionsbereich der besprochenen Funktion diskret ist, verringert sich die Kardinalität des Definitionsbereichs der Differenzen mit fortschreitender Ordnung jeweils um $1$ pro Dimension. Geographisch gesprochen, liegt die Differenz zweier Zellen ja eigentlich auf der gemeinsamen Kante dieser zwei Zellen. Daher ist es in der Praxis sinnvoll, die Differenzen gerader Ordnungen (bei deren Berechnung wie eben gesehen 3 Zellen pro Dimension involviert sind) jeweils in die Zelle in der Mitte zu schieben. Im Falle der zweiten Ordnung ergibt sich damit:
+\begin{equation}
+\left( \frac{\Delta^2}{\Delta \vec x^2} u\right)_{\vec x} =\sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - \vec e_i}  -2\cdot u_{\vec x} + \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x + \vec e_i}
+\end{equation}
+\end{bemerkung}
+
+\section{Integration über der Zeit}
+
+
+
 und folgenden Zusammenhängen:
 %\begin{equation*}
 %\begin{array}{rcl}
