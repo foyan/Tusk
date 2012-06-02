@@ -250,7 +250,7 @@ Wir starten mit den gegebenen Werten $u_{\vec x}$ (den Zuständen der Zellen aus
 u: R \mapsto \mathbb{R}, u(\vec x) = u_{\vec x}
 \]
 
-welche durch komponentenweises Einsetzen des Differenzenquotienten $\frac {\Delta u}{\Delta \vec x}$ folgendermassen differenzierbar ist (unter Zuhilfenahme des Einheitsvektors $\vec e_i$ für jede Komponente von $\vec x$ sowie der Erkenntnis, dass durch die diskrete Ausgangsfunktion $\Delta \vec{x}$ komponentenweise $1$ ist):
+welche durch komponentenweises Einsetzen des Differenzenquotienten $\frac {\Delta u}{\Delta \vec x}$ folgendermassen differenzierbar ist (unter Zuhilfenahme des Einheitsvektors $\vec e_i$ für jede Komponente von $\vec x$ sowie der Erkenntnis, dass durch die diskrete Ausgangsfunktion $\Delta \vec{x}$ komponentenweise $1$ ist; die Interpretation, wo genau sich die Nachbarzelle $\vec x \pm n\cdot\vec e$ befindet, überlassen wir der für den zellulären Automaten gültigen Nachbarschaftsfunktion):
 \begin{equation}\label{diffone}
 	\left(\frac {\Delta}{\Delta \vec x} u\right)_{\vec x} = u_{\vec x} - \sum\limits_{i=1}^{\dim(\vec x)} u_{\vec x - \vec e_i}
 \end{equation}
@@ -273,9 +273,140 @@ Da der Definitionsbereich der besprochenen Funktion diskret ist, verringert sich
 \end{equation}
 \end{bemerkung}
 
-\section{Integration über der Zeit}
+\section{Integration nach der Zeit mit Einschrittverfahren}
 
+\newcommand{\intr}{\mathbf{int}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\duxt}{\left(\frac{\Delta}{\Delta \vec x}u \right)_{\vec x, t}}
 
+\subsection{Forderung}
+
+Wir starten mit den gegebenen Werten $\left(\frac{\Delta}{\Delta \vec x}u \right)_{\vec x}$ (den vorgängig berechneten Differenzen zwischen den Zellen). Wir definieren die allgemeine Integrationsfunktion
+\[
+\intr :  \mathbb{R}^2 \mapsto \mathbb{R}
+\]
+für welche jeweils gelten muss:
+\[
+\intr\left(\duxt, h \right) \approx \int\limits_t^{t+h} u_{\vec x} \d t
+\]
+
+Da die $u_{\vec x}$ zu jedem Zeitpunkt $t$ (also pro Zeitschritt $h$ beziehungsweise $\d t$) jeweils von ihren Nachbarzellen abhängen, ist es vonnöten, sämtliche Zellen für einen einzigen Zeitschritt simultan durchzurechnen.
+
+\subsection{Die impliziten Runge-Kutta-Verfahren}
+
+Da uns hier nur Einschrittverfahren interessieren, schauen wir uns im Detail die Klasse der Runge-Kutta-Verfahren\footnote{Carl David Tolmé Runge (1856--1927), deutscher Mathematiker \cite{wiki:Runge}}\footnote{Martin Wilhelm Kutta (1867--1944), deutscher Mathematiker \cite{wiki:Kutta}} an, welche auf dem expliziten Euler-Verfahren\footnote{Leonhard Euler (1707--1783), Schweizer Mathematiker und Physiker \cite{wiki:Euler}} basieren und durch Butcher-Tableaux\footnote{John Charles Butcher (*1933), neuseeländischer Mathematiker \cite{wiki:Butcher}} allgemein definiert werden können.
+
+Sämtliche Runge-Kutta-Verfahren können folgendermassen dargestellt werden:
+\[
+y_{n+1} = y_n + h\cdot \sum\limits_{j=1}^s \gamma_j \cdot k_j
+\]
+wobei $h$ die gewählte Schrittweite, $\gamma_j$ die charakteristischen Koeffizienten des gewählten Verfahrens sowie $k_j$ die Auswertungen der zu integrierenden Funktion $f$ an bestimmten Stützstellen repräsentieren. Für $k_j$ gilt dann:
+\[
+k_j = f\left(t_n + h\cdot\alpha_j, y^n + h\cdot \sum\limits_{i=1}^m \beta_{j,i}\cdot k_i \right)
+\]
+
+wobei $\alpha_j$ sowie $\beta_{j,i}$ wiederum charakteristische Koeffizienten sind \cite{Massjung, wiki:RungeKutta}, welche zusammen mit den $\gamma_j$ in einem Butcher-Tableau folgendermassen angeordnet werden können:
+\[
+\begin{bmatrix}
+\begin{array}{c|c}
+a & B\\
+\hline     & c \\
+\end{array}
+\end{bmatrix} = \begin{bmatrix}
+\begin{array}{c|cccc}
+  \alpha_1    & \beta_{1,1} & \beta_{1,2}& \cdots & \beta_{1,m}\\
+  \alpha_2    & \beta_{2,1} & \beta_{2,2}& \cdots & \beta_{2,m}\\
+  \vdots & \vdots & \vdots& \ddots& \vdots\\
+  \alpha_m    & \beta_{m,1} & \beta_{m,2}& \cdots & \beta_{m,m}\\
+  \hline & \gamma_1    & \gamma_2   & \cdots & \gamma_m\\
+\end{array}
+
+\end{bmatrix}
+\]
+
+Runge-Kutta-Verfahren sind im Allgemeinen implizit, weil zur Bestimmung der $k_j$ sowie $y^{n+1}$ ein (mindestens lineares) $(m+1)\times(m+1)$-Gleichungssystem gelöst werden muss; dies verursacht natürlich entsprechende Kalamitäten. Solchartige Verfahren sind aber sehr stabil.\cite{Deuflhard}
+
+\subsection{Die expliziten Runge-Kutta-Verfahren}
+
+Ist es nun möglich, Koeffizienten zu finden, deren Matrix $B$ strikte nilpotente untere Dreiecksgestalt hat, so spricht man von einem expliziten Verfahren, weil sich das Gleichungssystem einfach durch Rückwärtseinsetzen lösen lässt (sogar wenn es nichtlinear ist):
+
+\[
+\begin{bmatrix}
+\begin{array}{c|c}
+a & B\\
+\hline     & c \\
+\end{array}
+\end{bmatrix} = \begin{bmatrix}
+\begin{array}{c|cccc}
+  \alpha_1 & 0  \\
+  \alpha_2    & \beta_{2,1} & 0\\
+  \vdots & \vdots & \vdots& \ddots\\
+  \alpha_m    & \beta_{m,1} & \beta_{m,2}& \cdots & 0\\
+  \hline & \gamma_1    & \gamma_2   & \cdots & \gamma_m\\
+\end{array}
+
+\end{bmatrix}
+\]
+
+Für ausgewählte explizite Verfahren lassen sich nun sowohl Butcher-Tableau als auch die geforderte Integrationsfunktion $\intr$ folgendermassen aufstellen:
+
+\begin{description}
+\item[Euler]
+\begin{eqnarray*}
+\begin{bmatrix}
+\begin{array}{c|c}
+a & B\\
+\hline     & c \\
+\end{array}
+\end{bmatrix}
+ &=& \begin{bmatrix}
+\begin{array}{c|c}
+0 & 0 \\\hline
+& 1
+\end{array}
+\end{bmatrix} \\
+\Rightarrow \intr\left(\duxt, h\right) &=& u_{\vec x, t} + h\cdot \duxt
+\end{eqnarray*}
+
+\item[Runge-Kutta 2. Ordnung]
+\begin{eqnarray*}
+\begin{bmatrix}
+\begin{array}{c|c}
+a & B\\
+\hline     & c \\
+\end{array}
+\end{bmatrix} &=& \begin{bmatrix}
+\begin{array}{c|cc}
+0 & 0 \\
+\frac 1 2 & \frac 1 2 & 0 \\\hline
+& 0 & 1
+\end{array}
+\end{bmatrix} \\
+\Rightarrow \intr\left(\duxt, h\right) &=& u_{\vec x, t} + h\cdot k_2 \\
+&=& u_{\vec x, t} + h\cdot \left(u_{\vec x, t + \frac 1 2} + \frac 1 2 h \cdot k_1 \right) \\
+&=& u_{\vec x, t} + h\cdot \left(u_{\vec x, t} + \frac 1 2 h \cdot \left( dfg\right) \right)
+\end{eqnarray*}
+
+\item[Runge-Kutta 4. Ordnung]
+\[
+\begin{bmatrix}
+\begin{array}{c|c}
+a & B\\
+\hline     & c \\
+\end{array}
+\end{bmatrix} = \begin{bmatrix}
+\begin{array}{c|cccc}
+0 & 0 \\
+\frac 1 2 & \frac 1 2 & 0 \\
+\frac 1 2 & 0 & \frac 1 2 & 0 \\
+1 & 0 & 0 & 1 & 0 \\\hline
+& \frac 1 6 & \frac 1 3 & \frac 1 3 & \frac 1 6
+\end{array}
+\end{bmatrix}
+\]
+\end{description}
+
+\section{Gesammelter Blindtext}
 
 und folgenden Zusammenhängen:
 %\begin{equation*}
