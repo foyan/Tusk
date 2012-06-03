@@ -13,7 +13,7 @@ function GameOfLife() {
 	GameOfLife.prototype.sayHello = function() { return "Game of Life"; }
 	
 	this.setCellValue = function(cell, value) {
-		cell.currentData.status = 1;
+		cell.currentData.status = value;
 	}
 
 	this.events = [];
@@ -57,6 +57,25 @@ function GameOfLife() {
 					+ (y+1) + "," + (x-1) + ",1,1;"
 					+ (y+2) + "," + x + ",1"
 				;
+			}
+		},
+		{
+			name: "Window",
+			get: function(automata) {
+				var x = Math.floor(automata.cols / 2)-5;
+				var y = Math.floor(automata.rows / 2)-5;
+				var s  = y + "," + x + ",1,1,1,1,1,1,1,1,1,1,1,1,1;";
+					s += (y+1) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+					s += (y+2) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+					s += (y+3) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+					s += (y+4) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+						s += (y+5) + "," + (x) + ",1,1,1,1,1,1,1,1,1,1,1,1,1;";
+					s += (y+6) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+					s += (y+7) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+					s += (y+8) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+					s += (y+9) + "," + (x) + ",1,0,0,0,0,0,1,0,0,0,0,0,1;";
+						s += (y+10) + "," + (x) + ",1,1,1,1,1,1,1,1,1,1,1,1,1;";
+				return s;
 			}
 		}
 	];
