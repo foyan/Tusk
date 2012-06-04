@@ -1,22 +1,24 @@
 \contentsline {section}{\numberline {1}Einleitung}{2}{section.1}
+\contentsline {part}{I\hspace {1em}Theorie}{2}{part.1}
 \contentsline {section}{\numberline {2}Zellul\IeC {\"a}re Automaten}{2}{section.2}
-\contentsline {section}{\numberline {3}Vom zellul\IeC {\"a}ren Automaten zur Differentialgleichung}{4}{section.3}
-\contentsline {section}{\numberline {4}Differenzierung nach dem Ort}{5}{section.4}
-\contentsline {section}{\numberline {5}Integration nach der Zeit mit Einschrittverfahren}{6}{section.5}
-\contentsline {subsection}{\numberline {5.1}Forderung}{6}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Die impliziten Runge-Kutta-Verfahren}{6}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}Die expliziten Runge-Kutta-Verfahren}{7}{subsection.5.3}
-\contentsline {section}{\numberline {6}Gesammelter Blindtext}{8}{section.6}
-\contentsline {section}{\numberline {7}$\delta $ der Ente}{9}{section.7}
-\contentsline {section}{\numberline {8}Numerische Verfahren}{9}{section.8}
-\contentsline {section}{\numberline {9}Bemerkungen zur Implementation}{9}{section.9}
-\contentsline {subsection}{\numberline {9.1}Wahl des Umfelds}{9}{subsection.9.1}
-\contentsline {subsection}{\numberline {9.2}Architektur}{9}{subsection.9.2}
-\contentsline {subsection}{\numberline {9.3}\tt CellularAutomata}{9}{subsection.9.3}
-\contentsline {subsubsection}{\numberline {9.3.1}Initialisierung der Zellen}{10}{subsubsection.9.3.1}
-\contentsline {subsubsection}{\numberline {9.3.2}Ein Iterationsschritt}{11}{subsubsection.9.3.2}
-\contentsline {subsection}{\numberline {9.4}Grafische Ausgabe}{11}{subsection.9.4}
-\contentsline {subsubsection}{\numberline {9.4.1}{\tt VectorCanvasPainter}}{11}{subsubsection.9.4.1}
-\contentsline {subsubsection}{\numberline {9.4.2}{\tt PixelCanvasPainter}}{12}{subsubsection.9.4.2}
-\contentsline {section}{\numberline {10}Schlussfolgerung}{13}{section.10}
+\contentsline {section}{\numberline {3}Vom zellul\IeC {\"a}ren Automaten zur Differentialgleichung}{5}{section.3}
+\contentsline {section}{\numberline {4}Numerische L\IeC {\"o}sung von Differentialgleichungen}{5}{section.4}
+\contentsline {subsection}{\numberline {4.1}Differenzierung nach dem Ort}{5}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Integration nach der Zeit mit Einschrittverfahren}{6}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Forderung}{6}{subsubsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}Die impliziten Runge-Kutta-Verfahren}{7}{subsubsection.4.2.2}
+\contentsline {subsubsection}{\numberline {4.2.3}Die expliziten Runge-Kutta-Verfahren}{7}{subsubsection.4.2.3}
+\contentsline {subsection}{\numberline {4.3}Die homogene Wellengleichung}{9}{subsection.4.3}
+\contentsline {section}{\numberline {5}$\delta $ der Ente}{9}{section.5}
+\contentsline {section}{\numberline {6}Numerische Verfahren}{10}{section.6}
+\contentsline {section}{\numberline {7}Bemerkungen zur Implementation}{10}{section.7}
+\contentsline {subsection}{\numberline {7.1}Wahl des Umfelds}{10}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}Architektur}{10}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}\tt CellularAutomata}{10}{subsection.7.3}
+\contentsline {subsubsection}{\numberline {7.3.1}Initialisierung der Zellen}{10}{subsubsection.7.3.1}
+\contentsline {subsubsection}{\numberline {7.3.2}Ein Iterationsschritt}{11}{subsubsection.7.3.2}
+\contentsline {subsection}{\numberline {7.4}Grafische Ausgabe}{11}{subsection.7.4}
+\contentsline {subsubsection}{\numberline {7.4.1}{\tt VectorCanvasPainter}}{12}{subsubsection.7.4.1}
+\contentsline {subsubsection}{\numberline {7.4.2}{\tt PixelCanvasPainter}}{12}{subsubsection.7.4.2}
+\contentsline {section}{\numberline {8}Schlussfolgerung}{13}{section.8}
 \contentsline {section}{Literaturverzeichnis}{13}{section*.4}

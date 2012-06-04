@@ -118,7 +118,11 @@ Diese Projektarbeit (bestehend aus diesem Dokument sowie der zugehörigen Softwa
 
 Diese Projektarbeit wurde im Rahmen des Kurses Softwareprojekt 2 an der Hochschule für Technik Zürich durchgeführt. Der Quellcode sowie auch dieses Dokument sind Online auf \url{http://www.github.com/foyan/Tusk} zu finden.
 
+Das vorliegende Dokument ist so gegliedert, dass im folgenden Kapitel die nötigen theoretischen Grundsteine über zelluläre Automaten, numerische Lösung von Differentialgleichungen sowie die Verknüpfung dieser beiden Aspekte gelegt werden. Daraufhin werden ausgewählte Bereiche der Implementation kommentiert, und zu guter Letzt folgt ein Résumé, das sich mit der Beantwortung oder Nichtbeantwortbarkeit der eingangs gestellten Fragen und Thesen beschäftigt.
+
 Der Autoren Dank geht (in alphabetischer Reihenfolge der Vornamen) an Albert Heuberger für geballte mathematische Kompetenz gepaart mit unendlicher Geduld, an Lukas Eppler für die ständige Begleitung, sowie an Philippe Nahlik für die tolle Kursführung.
+
+\part{Theorie}
 
 \section{Zelluläre Automaten}
 
@@ -235,10 +239,14 @@ mit zellulären Automaten kann durchgeführt werden, indem folgendes getan wird:
 \item $R$ entspricht einer sinnvollen (groben) Diskretisierung der örtlichen Variablen $\vec{x}$ in einer, zwei oder drei Dimensionen
 \item Jede Zelle in $R$ ist ein Tupel $(Q, D)$ mit $Q$ als einer Menge von berechnungsfernen Zustandsinformationen und den Differentialen nach der Zeit $D = \left( u, \frac{\partial u}{t}, \frac{\partial^2 u}{\partial t^2}, \cdots, \frac{\partial^n u}{t^n} \right)  \in \mathbb{R}^n$
 \item Eine neue Generation entspricht jeweils der fortgelaufenen Zeit $\partial t$, welche sehr fein diskretisiert werden muss
-\item In der Übergangsfunktion $\delta$ steckt die eigentliche Differentialgleichung. In der Regel verändert sie nur die Elemente von $D$.
+\item In der Übergangsfunktion $\delta$ steckt die eigentliche Differentialgleichung. In der Regel verändert sie nur die Elemente von $D$. Sollte die Differentialgleichung Terme mit verschiedenen Ordnungen enthalten, wird die Gleichung unter Zuhilfenahme entsprechender Hilfsgleichungen $\lambda_1, \lambda_2, \dots, \lambda_n$ in ein äquivalentes System gewöhnlicher Differentialgleichungen umgeformt. 
 \end{itemize}
 
-\section{Differenzierung nach dem Ort}
+\section{Numerische Lösung von Differentialgleichungen}
+
+Damit die numerische Lösung von Differentialgleichungen gelingt, sind vor allem zwei Fertigkeiten vonnöten: Die numerische Differenzierung sowie die numerische Integration. Wir wollen beide Gebiete kurz streifen, und zwar unter den für uns nützlichen Gesichtspunkten bezüglich der Wahl der Variablen sowie der vorliegenden impliziten Funktionen (beziehungsweise diskreten Werten als Zellinhalte des zellulären Automaten).
+
+\subsection{Differenzierung nach dem Ort}
 
 %Wir starten mit der homogenen Wellengleichung
 %\begin{equation*}
@@ -273,13 +281,13 @@ Da der Definitionsbereich der besprochenen Funktion diskret ist, verringert sich
 \end{equation}
 \end{bemerkung}
 
-\section{Integration nach der Zeit mit Einschrittverfahren}
+\subsection{Integration nach der Zeit mit Einschrittverfahren}
 
 \newcommand{\intr}{\mathbf{int}}
 \renewcommand{\d}{\mathrm{d}}
 \newcommand{\duxt}{\left(\frac{\Delta}{\Delta \vec x}u \right)_{\vec x, t}}
 
-\subsection{Forderung}
+\subsubsection{Forderung}
 
 Wir starten mit den gegebenen Werten $\left(\frac{\Delta}{\Delta \vec x}u \right)_{\vec x}$ (den vorgängig berechneten Differenzen zwischen den Zellen). Wir definieren die allgemeine Integrationsfunktion
 \[
@@ -292,7 +300,7 @@ für welche jeweils gelten muss:
 
 Da die $u_{\vec x}$ zu jedem Zeitpunkt $t$ (also pro Zeitschritt $h$ beziehungsweise $\d t$) jeweils von ihren Nachbarzellen abhängen, ist es vonnöten, sämtliche Zellen für einen einzigen Zeitschritt simultan durchzurechnen.
 
-\subsection{Die impliziten Runge-Kutta-Verfahren}
+\subsubsection{Die impliziten Runge-Kutta-Verfahren}
 
 Da uns hier nur Einschrittverfahren interessieren, schauen wir uns im Detail die Klasse der Runge-Kutta-Verfahren\footnote{Carl David Tolmé Runge (1856--1927), deutscher Mathematiker \cite{wiki:Runge}}\footnote{Martin Wilhelm Kutta (1867--1944), deutscher Mathematiker \cite{wiki:Kutta}} an, welche auf dem expliziten Euler-Verfahren\footnote{Leonhard Euler (1707--1783), Schweizer Mathematiker und Physiker \cite{wiki:Euler}} basieren und durch Butcher-Tableaux\footnote{John Charles Butcher (*1933), neuseeländischer Mathematiker \cite{wiki:Butcher}} allgemein definiert werden können.
 
@@ -326,7 +334,7 @@ a & B\\
 
 Runge-Kutta-Verfahren sind im Allgemeinen implizit, weil zur Bestimmung der $k_j$ sowie $y^{n+1}$ ein (mindestens lineares) $(m+1)\times(m+1)$-Gleichungssystem gelöst werden muss; dies verursacht natürlich entsprechende Kalamitäten. Solchartige Verfahren sind aber sehr stabil.\cite{Deuflhard}
 
-\subsection{Die expliziten Runge-Kutta-Verfahren}
+\subsubsection{Die expliziten Runge-Kutta-Verfahren}
 
 Ist es nun möglich, Koeffizienten zu finden, deren Matrix $B$ strikte nilpotente untere Dreiecksgestalt hat, so spricht man von einem expliziten Verfahren, weil sich das Gleichungssystem einfach durch Rückwärtseinsetzen lösen lässt (sogar wenn es nichtlinear ist):
 
@@ -383,8 +391,8 @@ a & B\\
 \end{array}
 \end{bmatrix} \\
 \Rightarrow \intr\left(\duxt, h\right) &=& u_{\vec x, t} + h\cdot k_2 \\
-&=& u_{\vec x, t} + h\cdot \left(u_{\vec x, t + \frac 1 2} + \frac 1 2 h \cdot k_1 \right) \\
-&=& u_{\vec x, t} + h\cdot \left(u_{\vec x, t} + \frac 1 2 h \cdot \left( dfg\right) \right)
+%k_2 &=& \left(\frac{\Delta}{\Delta t} u \right)_{\vec x, t + \frac 1 2 h} \\
+&=&  u_{\vec x, t} + h\cdot\left( \right) \\
 \end{eqnarray*}
 
 \item[Runge-Kutta 4. Ordnung]
@@ -406,7 +414,7 @@ a & B\\
 \]
 \end{description}
 
-\section{Gesammelter Blindtext}
+\subsection{Die homogene Wellengleichung}
 
 und folgenden Zusammenhängen:
 %\begin{equation*}
