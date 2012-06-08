@@ -49,7 +49,8 @@ PixelCanvasPainter = function(ctx) {
 			var width = swimmer.image.width * swimmer.scale;
 			var height = swimmer.image.height * swimmer.scale;
 			this.context.translate(x, y);
-			this.context.rotate(swimmer.phi());
+			var phi=swimmer.phi();
+			this.context.rotate(phi);
 			this.context.drawImage(swimmer.image, -width / 2, -height / 2, width, height);
 			this.context.rotate(-swimmer.phi());
 			this.context.translate(-x, -y);

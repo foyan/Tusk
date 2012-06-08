@@ -28,9 +28,9 @@ function AutoSwimmer() {
 	
 	this.phi = function() {
 		return (this.velocity.x >= 0 && this.velocity.y < 0 ? Math.atan(this.velocity.x/-this.velocity.y)
-			: this.velocity.x > 0 && this.velocity.y >= 0 ? Math.PI/2 + Math.atan(-this.velocity.y/this.velocity.x)
-			: this.velocity.x <= 0 && this.velocity.y > 0 ? Math.PI + Math.atan(this.velocity.x/-this.velocity.y)
-			: this.velocity.x < 0 && this.velocity.y <= 0 ? Math.PI * 3/2 + Math.atan(-this.velocity.y/this.velocity.x)
+			: this.velocity.x > 0 && this.velocity.y >= 0 ? Math.PI/2 + Math.atan(+this.velocity.y/this.velocity.x)
+			: this.velocity.x <= 0 && this.velocity.y > 0 ? Math.PI + Math.atan(-this.velocity.x/this.velocity.y)
+			: this.velocity.x < 0 && this.velocity.y <= 0 ? Math.PI * 3/2 + Math.atan(this.velocity.y/this.velocity.x)
 			: 0);
 	}
 	
