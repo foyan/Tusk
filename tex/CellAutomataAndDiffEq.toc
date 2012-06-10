@@ -8,17 +8,15 @@
 \contentsline {subsubsection}{\numberline {4.2.1}Forderung}{6}{subsubsection.4.2.1}
 \contentsline {subsubsection}{\numberline {4.2.2}Die impliziten Runge-Kutta-Verfahren}{7}{subsubsection.4.2.2}
 \contentsline {subsubsection}{\numberline {4.2.3}Die expliziten Runge-Kutta-Verfahren}{7}{subsubsection.4.2.3}
-\contentsline {subsection}{\numberline {4.3}Die homogene Wellengleichung}{9}{subsection.4.3}
-\contentsline {section}{\numberline {5}$\delta $ der Ente}{9}{section.5}
-\contentsline {section}{\numberline {6}Numerische Verfahren}{10}{section.6}
-\contentsline {section}{\numberline {7}Bemerkungen zur Implementation}{10}{section.7}
-\contentsline {subsection}{\numberline {7.1}Wahl des Umfelds}{10}{subsection.7.1}
-\contentsline {subsection}{\numberline {7.2}Architektur}{10}{subsection.7.2}
-\contentsline {subsection}{\numberline {7.3}\tt CellularAutomata}{10}{subsection.7.3}
-\contentsline {subsubsection}{\numberline {7.3.1}Initialisierung der Zellen}{10}{subsubsection.7.3.1}
-\contentsline {subsubsection}{\numberline {7.3.2}Ein Iterationsschritt}{11}{subsubsection.7.3.2}
-\contentsline {subsection}{\numberline {7.4}Grafische Ausgabe}{11}{subsection.7.4}
-\contentsline {subsubsection}{\numberline {7.4.1}{\tt VectorCanvasPainter}}{12}{subsubsection.7.4.1}
-\contentsline {subsubsection}{\numberline {7.4.2}{\tt PixelCanvasPainter}}{12}{subsubsection.7.4.2}
-\contentsline {section}{\numberline {8}Schlussfolgerung}{13}{section.8}
+\contentsline {subsection}{\numberline {4.3}Die homogene Wellengleichung}{8}{subsection.4.3}
+\contentsline {part}{II\hspace {1em}Bemerkungen zur Implementation}{10}{part.2}
+\contentsline {section}{\numberline {5}Wahl des Umfelds}{10}{section.5}
+\contentsline {section}{\numberline {6}Architektur}{10}{section.6}
+\contentsline {section}{\numberline {7}\tt CellularAutomata}{10}{section.7}
+\contentsline {subsection}{\numberline {7.1}Initialisierung der Zellen}{11}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}Ein Iterationsschritt}{12}{subsection.7.2}
+\contentsline {section}{\numberline {8}Grafische Ausgabe}{12}{section.8}
+\contentsline {subsection}{\numberline {8.1}{\tt VectorCanvasPainter}}{12}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}{\tt PixelCanvasPainter}}{12}{subsection.8.2}
+\contentsline {part}{III\hspace {1em}Schlussfolgerung}{13}{part.3}
 \contentsline {section}{Literaturverzeichnis}{13}{section*.4}

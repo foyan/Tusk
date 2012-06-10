@@ -20,6 +20,7 @@
 %   read geometry.pdf for detailed page layout information
 
 \usepackage{graphicx} % support the \includegraphics command and options
+\DeclareGraphicsRule{*}{mps}{*}{}
 
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
 
@@ -211,7 +212,7 @@ Als besonders spannend hat sich die in Tabelle \ref{wolfram110} dargestellte Kon
 
 Das von Conway\footnote{John Horton Conway (* 26. Dezember 1937), englischer Mathematiker\cite{wiki:conway}} 1970 entworfene Game of Life ist eine bis heute populäre Umsetzung der Automatentheorie und insbesondere der Idee der zellulären Automaten \cite{wiki:gameoflife}.
 
-Der ursprüngliche Entwurf befindet sich in einem zweidimensionalen $R$ unter Verwendung der Moore-Nachbarschaft. Die Zellen können zwei mögliche Zustände $\left\{\ql, \qt \right\}$ annehmen, und die Übergangsfunktion ist definiert als:
+Der ursprüngliche Entwurf befindet sich in einem zweidimensionalen $R$ unter Verwendung der Moore-Nachbarschaft. Die Zellen können zwei mögliche Zustände $\left\{\ql, \qt \right\}$ annehmen, und die Übergangsfunktion ist definiert \cite{Hafner} als:
 \begin{equation*}
 \delta(r, N) = \begin{cases}
 \ql & (r = \qt \land \varsigma(\ql,N) = 3) \\
@@ -237,7 +238,10 @@ k_n \frac{\partial^n u}{\partial t^n} + k_{n-1} \frac{\partial^{n-1} u}{\partial
 mit zellulären Automaten kann durchgeführt werden, indem folgendes getan wird:
 \begin{itemize}
 \item $R$ entspricht einer sinnvollen (groben) Diskretisierung der örtlichen Variablen $\vec{x}$ in einer, zwei oder drei Dimensionen
-\item Jede Zelle in $R$ ist ein Tupel $(Q, D)$ mit $Q$ als einer Menge von berechnungsfernen Zustandsinformationen und den Differentialen nach der Zeit $D = \left( u, \frac{\partial u}{t}, \frac{\partial^2 u}{\partial t^2}, \cdots, \frac{\partial^n u}{t^n} \right)  \in \mathbb{R}^n$
+\item Jede Zelle in $R$ ist ein Tupel $(Q, D)$ mit $Q$ als einer Menge von berechnungsfernen Zustandsinformationen und den Differentialen nach der Zeit
+\[
+D = \left( u, \frac{\partial u}{t}, \frac{\partial^2 u}{\partial t^2}, \cdots, \frac{\partial^n u}{t^n} \right)  \in \mathbb{R}^n
+\]
 \item Eine neue Generation entspricht jeweils der fortgelaufenen Zeit $\partial t$, welche sehr fein diskretisiert werden muss
 \item In der Übergangsfunktion $\delta$ steckt die eigentliche Differentialgleichung. In der Regel verändert sie nur die Elemente von $D$. Sollte die Differentialgleichung Terme mit verschiedenen Ordnungen enthalten, wird die Gleichung unter Zuhilfenahme entsprechender Hilfsgleichungen $\lambda_1, \lambda_2, \dots, \lambda_n$ in ein äquivalentes System gewöhnlicher Differentialgleichungen umgeformt. 
 \end{itemize}
@@ -286,6 +290,7 @@ Da der Definitionsbereich der besprochenen Funktion diskret ist, verringert sich
 \newcommand{\intr}{\mathbf{int}}
 \renewcommand{\d}{\mathrm{d}}
 \newcommand{\duxt}{\left(\frac{\Delta}{\Delta \vec x}u \right)_{\vec x, t}}
+\newcommand{\duxtp}[1]{\left(\frac{\Delta}{\Delta \vec x}u \right)_{\vec x, t + #1 h}}
 
 \subsubsection{Forderung}
 
@@ -392,7 +397,8 @@ a & B\\
 \end{bmatrix} \\
 \Rightarrow \intr\left(\duxt, h\right) &=& u_{\vec x, t} + h\cdot k_2 \\
 %k_2 &=& \left(\frac{\Delta}{\Delta t} u \right)_{\vec x, t + \frac 1 2 h} \\
-&=&  u_{\vec x, t} + h\cdot\left( \right) \\
+%&=&  u_{\vec x, t} + h\cdot\intr\left(\duxtp{\frac 1 2} \right) \\
+&=&  u_{\vec x, t} + h\cdot\intr\left(\duxtp{\frac 1 2} \right) \\
 \end{eqnarray*}
 
 \item[Runge-Kutta 4. Ordnung]
@@ -416,7 +422,18 @@ a & B\\
 
 \subsection{Die homogene Wellengleichung}
 
-und folgenden Zusammenhängen:
+Am Beispiel der homogenen Wellengleichung soll nun die Umsetzung einer Differentialgleichung in einem zellulären Automaten gezeigt werden. Die homogene Wellengleichung ist eine partielle Differentialgleichung zweiter Ordnung und lautet \cite{wiki:Wellengleichung}:
+\[
+\frac 1 {c^2} \frac{\partial^2 u}{\partial t^2}-\sum_{i=1}^{n} \left( \frac{\partial^2 u}{\partial x_i^2} \right)  = 0
+\]
+
+oder ein bisschen umgeformt ($\frac 1 {c^2} = \frac 1 k$) und die Einzelkomponenten $x_1, x_2, \dots, x_n$ als Vektor geschrieben:
+\[
+\frac {\partial^2 u} {\partial \vec x^2} = k \cdot \frac {\partial^2 u}{\partial t^2}
+\]
+
+Nach diesem Schema soll zweimal nach dem Ort differenziert und zweimal nach der Zeit integriert werden:
+
 %\begin{equation*}
 %\begin{array}{rcl}
 \begin{align*}
@@ -428,6 +445,24 @@ u_i &&& u_i(t+\Delta t) = u_i(t) +  \frac{\partial u_i(t+\Delta t)}{\partial t}\
 \end{align*}
 %\end{array}
 %\end{equation*}
+
+Als Nachbarschaft wird die Von-Neumann-Nachbarschaft gewählt, weil bei der Moore-Nachbarschaft die Eckzellen nicht linear unabhängig wären. Ergo ergibt sich folgende Übergangsfunktion $\delta$, abhängig von der Zelle $r$ sowie den Nachbarzellen $n, e, s, w$ (Norden, Osten, Süden, Westen für ein zweidimensionales Zellfeld):
+
+\begin{eqnarray*}
+\delta(r, n, e, s, w) &=& \begin{bmatrix}
+	\delta_{\frac {\Delta r}{\Delta t}}(r,n,e,s,w) \\
+	\delta_{\frac {\Delta^2 r}{\Delta t^2}}(r,n,e,s,w)
+\end{bmatrix} \\
+&=& \begin{bmatrix}
+	r_{\frac {\Delta r}{\Delta t}} + \delta_{\frac {\Delta^2 r}{\Delta t^2}}(r,n,e,s,w)  \cdot \Delta t \\
+	\frac{\Delta^2 r}{\Delta \vec x^2} \cdot k  \\
+\end{bmatrix} \\
+&=& \begin{bmatrix}
+	r_{\frac {\Delta r}{\Delta t}} + \delta_{\frac {\Delta^2 r}{\Delta t^2}}(r,n,e,s,w)  \cdot \Delta t \\
+	(-2 r + \frac 1 2 (n + e + s + w)) \cdot k
+\end{bmatrix}
+\end{eqnarray*}
+
 sowie unter der Annahme, dass die Richtung der Nachbarzellen bekannt sind (d.h. jeweils der Vorgänger beziehungsweise der Nachfolger innerhalb einer Dimension bekannt sind und deswegen $N$ auch ausgedrückt werden kann als:)
 \[
 N^* =\begin{pmatrix} \overbrace{n_{1,1} \in N}^{\textrm{1. Dimension}} & \overbrace{n_{2,1} \in N}^{\textrm{2. Dimension}} & \cdots & \overbrace{n_{\frac{1}{2}|N|, 1} \in N}^{\textrm{$\frac{1}{2}|N|$te Dimension}} & \textrm{Vorgänger} \\
@@ -441,21 +476,9 @@ kann die Übergangsfunktion $\delta$ für die Wellengleichung folgendermassen fo
 \delta(r, N^*) = 
 \end{eqnarray*}
 
-\section{$\delta$ der Ente}
+\part{Bemerkungen zur Implementation}
 
-Zu jeder ernstzunehmenden Simulation von Wasser gehören sich darin (aktiv oder passiv) bewegende Objekte -- im Idealfall sind das Enten. Die Differentialgleichung der Badeente im Wasser lautet:
-\[
-\frac{\partial \vec{x}}{\partial t} = k\cdot \frac{\partial u}{\partial \vec{x}}
-\]
-Sprich: der Geschwindigkeitsvektor im $\vec{x}$-Vektorfeld (also die Ableitung nach der Zeit $t$) ist abhängig von den Steigungen (also der Differenzen der Höhe $u$) entlang aller Dimensionen.
-
-Speziell dabei ist noch, dass so eine Ente natürlich nur in endlich vielen Zellen vorkommen kann. Da die $\vec{x}$-Komponente 
-
-\section{Numerische Verfahren}
-
-\section{Bemerkungen zur Implementation}
-
-\subsection{Wahl des Umfelds}
+\section{Wahl des Umfelds}
 
 Die Wahl des Umfelds fiel auf eine Kombination aus JavaScript und dem HTML5-{\tt canvas}-Element für die grafische Ausgabe. Die hauptsächlichen Gründe dafür sind die einfache Umsetzung sowie die sehr gute Portabilität, vorallem auch auf portable Devices mit Touch-Bedienung. Dadurch kommt der primäre Use Case der Software (Bewegung einer Flüssigkeit mittels dem Pointing Input) besonders gut zur Geltung, weil der Input eben mit dem Finger vorgenommen werden kann.
 
@@ -463,9 +486,11 @@ Bedenken wurden vorgängig und während der ersten Implementierungsphase vor all
 
 Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in der Haupthalle des Zürcher Hauptbahnhofs in Betracht gezogen worden.
 
-\subsection{Architektur}
+\section{Architektur}
 
-\subsection{\tt CellularAutomata}
+\includegraphics{uml/Architektur.1}
+
+\section{\tt CellularAutomata}
 
 Die Klasse {\tt CellularAutomata} hält die einzelnen Zellen, kontrolliert den Ablauf der Time-Slices und verarbeitet die Rückgabewerte der Gleichungsimplementation.
 
@@ -482,7 +507,7 @@ this.forEachCell = function(fn) {
 };
 \end{lstlisting}
 
-\subsubsection{Initialisierung der Zellen}
+\subsection{Initialisierung der Zellen}
 
 Zu Anfang werden alle Zellen des Automaten hergestellt und initialisiert:
 \begin{lstlisting}
@@ -526,9 +551,9 @@ Es macht sehr viel Sinn, die Zell-Nachbarschaften während der Initialisierung d
 \]
 zugegriffen werden müsste (wobei $R$ der ganze Zellraum und $N$ die Menge der Nachbarzellen einer Zelle sei).
 
-\subsubsection{Ein Iterationsschritt}
+\subsection{Ein Iterationsschritt}
 
-\subsection{Grafische Ausgabe}
+\section{Grafische Ausgabe}
 
 Die grafische Ausgabe des zellulären Automaten findet in einem {\tt canvas}-Element statt, in das mittels JavaScript-Code gezeichnet wird. Die dafür zuständigen Klassen heissen {\tt ...CanvasPainter}, wovon verschiedene Implementationen verfügbar sind. Es wird davon ausgegangen, dass jeder {\tt ...CanvasPainter} folgende Methoden anbietet:
 
@@ -543,7 +568,7 @@ Die Methoden {\tt begin()} und {\tt end()} sind für Implementationen gedacht, d
 
 In den folgenden Abschnitten sind die verfügbaren Implementationen grob erklärt. Es existiert ausserdem eine {\tt Noop}-Implementation, die aber trivial ist und verwendet werden kann, um die grafische Ausgabe komplett abzuschalten.
 
-\subsubsection{{\tt VectorCanvasPainter}}
+\subsection{{\tt VectorCanvasPainter}}
 
 Diese Klasse bezeichnet den {\tt canvas} durch Vektorgrafik-Operationen:
 
@@ -561,7 +586,7 @@ this.updateCellView = function(cell) {
 };
 \end{lstlisting}
 
-\subsubsection{{\tt PixelCanvasPainter}}
+\subsection{{\tt PixelCanvasPainter}}
 
 Diese Klasse bezeichnet den {\tt canvas} durch direkte Pixel-Manipulationen. Grundsätzlich funktionert das folgendermassen \cite{mdn:PixelCanvasDoku}:
 
@@ -614,7 +639,7 @@ this.end = function() {
 };
 \end{lstlisting}
 
-\section{Schlussfolgerung}
+\part{Schlussfolgerung}
 
 \bibliography{biblio}
 \bibliographystyle{plain}
