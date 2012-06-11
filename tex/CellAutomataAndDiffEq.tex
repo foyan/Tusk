@@ -20,7 +20,6 @@
 %   read geometry.pdf for detailed page layout information
 
 \usepackage{graphicx} % support the \includegraphics command and options
-\DeclareGraphicsRule{*}{mps}{*}{}
 
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
 
@@ -488,13 +487,54 @@ Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in d
 
 \section{Architektur}
 
-\includegraphics{uml/Architektur.1}
+Eine Übersicht über die grobe Architektur sei hier als Package-Diagramm skizziert:
 
-\section{\tt CellularAutomata}
+\includegraphics[scale=0.7]{uml/Architektur.pdf}
 
-Die Klasse {\tt CellularAutomata} hält die einzelnen Zellen, kontrolliert den Ablauf der Time-Slices und verarbeitet die Rückgabewerte der Gleichungsimplementation.
+\section{Testing}
 
-Sie besitzt eine sehr nützliche Hilfsmethode, die sowohl von ihr selber wie auch beispielsweise von der {\tt View}-Klasse benutzt wird:
+Unit Testing mit JavaScript ist nicht ganz einfach -- aber möglich und natürlich sinnvoll. Wenn die Unit Tests in einem tatsächlichen Browser auszuführen sind, weil sie beispielsweise mit dem Document Object Model interagieren, führt das zwangsläufig zu Mühsamitäten, vor allem bezüglich Continuous Integration.
+
+Da allerdings das UI nur einen kleinen Teil unseres Programms ausmacht, schien es ratsam, vor allem die anderen Bereiche zu testen. Daraus ergibt sich die Möglichkeit, auf eine Implementation von JavaScript in einem nicht-interaktiven Kontext zu setzen. Die Wahl fiel auf Node.js, eine auf WebKit aufbauende Server-Implementation von JavaScript \cite{Node}, sowie das Test-Framework Mocha \cite{Mocha}.
+Da das produktive Programm eine reine Browser-Geschichte ist, stehen während des produktiven Betriebs weder Build-Tools noch Server zur Verfügung, alle JavaScript-Files werden vom verwendenden HTML-Dokument über profane {\tt <script>}-Tags eingebunden.
+Um das sich daraus ergebende Dilemma zwischen Test- und Produktionsumgebung zu lösen, werden die Komponenten über Node-Module wo nötig zusammengestöpselt, aber nur dann, wenn Node tatsächlich zur Verfügung steht (der Ausführer also ein Test Runner ist):
+
+\begin{lstlisting}
+if (typeof(module) != "undefined") {
+	module.exports = CellularAutomata;
+	var Cell = require('../../src/automata/Cell.js');
+	var Swimmer = require('../../src/automata/Swimmer.js');
+}
+\end{lstlisting}
+
+Ein Unit Test (unter Verwendung der Should-Assertion Library) sieht dann beispielsweise folgendermassen aus:
+
+\begin{lstlisting}
+describe('CellularAutomata', function() {
+
+	it('should step without Tusk', function() {
+		var auto = new CellularAutomata();
+		auto.initCells();
+		var iterations = auto.iterations;
+		auto.step();
+		auto.iterations.should.equal(iterations+1);
+	});
+
+});
+\end{lstlisting}
+
+Die Summe der Tests kann dann auf der Kommandozeile (oder durch einen CI-Server) aufgerufen werden mit:
+\begin{verbatim}
+~/node node_modules/mocha/bin/mocha
+\end{verbatim}
+
+\section{Automata}
+
+Die Klasse {\tt CellularAutomata} implementiert zusammen mit ihren Hilfsklassen den zellulären Automaten:
+
+\includegraphics[scale=0.7]{uml/Automata.pdf}
+
+{\tt CellularAutomata} definiert zuallererst einmal eine coole Hilfsmethode, welche über alle Zellen des Automaten iteriert und eine beliebige Funktion ausführt:
 
 \begin{lstlisting}
 this.forEachCell = function(fn) {
@@ -507,37 +547,14 @@ this.forEachCell = function(fn) {
 };
 \end{lstlisting}
 
-\subsection{Initialisierung der Zellen}
-
-Zu Anfang werden alle Zellen des Automaten hergestellt und initialisiert:
-\begin{lstlisting}
-this.initCells = function() {
-	this.createCells();
-	this.wireNeighbourCells();
-};
-\end{lstlisting}
-
-Die Daten jeder Zelle sind abhängig von der gewählten {\tt Tusk}-Implementation und werden entsprechend von ihr selber initialisiert:
-
-\begin{lstlisting}
-this.createCells = function() {
-	// [...]
-	if (tusk != null) {
-		cell.currentData = tusk.createCellData();
-	}
-	// [...]
-}
-\end{lstlisting}
-
-Danach werden noch alle Zellen mit ihren Nachbarn verknüpft. Da die Art der Nachbarschaft (Von-Neumann, Moore...) wiederum von der gewählten {\tt Tusk}-Implementation abhängig ist, wird die entsprechende Implementation herangezogen\footnote{Ein Wort zu der auf den ersten Blick unnötig komplizierten Definition der von {\tt this.forEachCell()} auszuführenden anonymen Funktion: In JavaScript wird der Scope von Variablen durch die Funktion und nicht den Block begrenzt, darum gilt als Best Practice zur expliziten Scope-Gebung im Allgemeinen das Wrappen in einer anonymen Funktion und unmittelbarer Ausführung derselben \cite{UnderstandingClosures}.}:
-
+Diese Methode wird dann beispielsweise während der Initialisierung der Zellen folgendermassen verwendet\footnote{Ein Wort zu der auf den ersten Blick unnötig komplizierten Definition der von {\tt this.forEachCell()} auszuführenden anonymen Funktion: In JavaScript wird der Scope von Variablen durch die Funktion und nicht den Block begrenzt, darum gilt als Best Practice zur expliziten Scope-Gebung im Allgemeinen das Wrappen in einer anonymen Funktion und unmittelbarer Ausführung derselben \cite{UnderstandingClosures}. Da {\tt this} schlussendlich auch nur eine Variable in einem Funktionsscope ist, wäre {\tt this.tusk} keine sinnvolle Referenz, weil {\tt this} nicht bedingungslos (wie in anderen funktionalen Programmiersprachen üblich) eine Instanz von {\tt CellularAutomata} (den Definitionsscope von {\tt wireNeighbourCells()}), sondern der Caller ist (falls das Drücken eines Buttons zu einem Aufruf von {\tt wireNeighbourCells()} führte, wäre {\tt this} das Browser-{\tt document}).}:
 \begin{lstlisting}
 this.wireNeighbourCells = function() {
-	if (tusk != null) {
+	if (this.tusk != null) {
 		this.forEachCell(
 			(function(automata) {
 				return function(cell) {
-					cell.neighbours = this.tusk.getNeighbours(cell, automata.model);
+					cell.neighbours = automata.tusk.getNeighbours(cell, automata.model);
 				};
 			})(this)
 		);
@@ -545,13 +562,47 @@ this.wireNeighbourCells = function() {
 }
 \end{lstlisting}
 
-Es macht sehr viel Sinn, die Zell-Nachbarschaften während der Initialisierung des Automaten vorzunehmen; zum einen, weil sie sich während der Iterierung nicht mehr ändern werden, zum anderen, weil die Zellen im Automaten in einem $n$-dimensionalen Array abgelegt sind, auf das dann bei jedem Iterationsschritt mindestens
-\[
-	z_{\textrm{min}} = |R| \cdot |N|
-\]
-zugegriffen werden müsste (wobei $R$ der ganze Zellraum und $N$ die Menge der Nachbarzellen einer Zelle sei).
+Des weiteren führt {\tt CellularAutomata} die Zelltransitionen durch:
 
-\subsection{Ein Iterationsschritt}
+\begin{lstlisting}
+this.step = function() {		
+	if (this.tusk != null) {
+		this.fireEvents();		
+		this.integration.integrate(this);
+		this.travelSwimmers();
+	}	
+	this.iterations++;	
+}
+\end{lstlisting}
+
+Spannend hierbei zu sehen ist die Aufteilung der Verantwortlichkeiten. {\tt CellularAutomata} kennt weder  die Übergangsfunktion $\delta$, die Nachbarschaftsfunktion\footnote{Wie im Listing weiter oben ersichtlich, werden sämtliche Nachbarzellen sämtlicher Zellen während der Initialisierung aufgefunden und verknüpft. Da sich gemäss der Definition des Zellulären Automaten die Nachbarschaftsbeziehungen zwischen Zellen nie ändern, ergo von Anfang an feststehen, ist dies eine zulässige Performance-Optimierung; ansonsten müsste auf das Feld der Zellen bei jedem Iterationsschritt mindestens $|R|\cdot |N|$ mal zugegriffen werden (wobei $R$ der ganze Zellraum und $N$ die Menge der Nachbarzellen einer Zelle ist).} noch die Integrationsfunktion $\intr$, sondern verwendet via Strategy-Pattern die ihr zugeteilten Implementationen (beispielsweise die Wellengleichung mit dem Euler-Verfahren).
+
+Es ist sogar so, dass der eigentliche Zellinhalt (der ja nur von der Übergangsfunktion $\delta$ verwendet wird) unbekannt ist. Jeder Tusk besitzt entsprechend eine Factory-Methode, um einen solchen Zellinhalt herzustellen. Die Unterschiede in den Datenstrukturen sind frappant. Das Game Of Life begnügt sich mit:
+
+\begin{lstlisting}
+this.createCellData = function() {
+	return {status: 0};
+}
+\end{lstlisting}
+
+wogegen die Wellengleichung einige Daten mehr benötigt:
+\begin{lstlisting}
+this.createCellData = function() {
+	return {
+		u: 0,
+		udx: 0,
+		udxdx: 0,
+		udtdt: 0,
+		udt: 0,
+		vx: 0,
+		vy: 0
+	};
+};
+\end{lstlisting}
+
+\section{Tusk}
+
+
 
 \section{Grafische Ausgabe}
 

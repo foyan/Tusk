@@ -67,53 +67,55 @@ function CellularAutomata() {
 			);
 		}
 	}
-		
-	this.step = function() {
-				
-		if (this.tusk != null) {
-			
-			// fire events, such as rain, vorteces etc.
-			if (this.tusk.events) {
-				for (var i = 0; i < this.tusk.events.length; i++) {
-					if (this.tusk.events[i].enabled) {
-						this.tusk.events[i].apply(this);
-					}
+	
+	this.fireEvents = function() {
+		// fire events, such as rain, vorteces etc.
+		if (this.tusk.events) {
+			for (var i = 0; i < this.tusk.events.length; i++) {
+				if (this.tusk.events[i].enabled) {
+					this.tusk.events[i].apply(this);
 				}
 			}
-			
-			this.integration.integrate(this);
-			
-			// let swimmers travel
-			if (this.tusk.getVelocity) {
-				this.forEachSwimmer(
-					(function(automata) {
-						return function(swimmer) {
-							var cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
-							var velocity = automata.tusk.getVelocity(cell);
-							swimmer.move(velocity);
-							// swimmer collides with boundary => weggespickt!
-							if (swimmer.location.x < 0 || swimmer.location.x >= automata.cols || swimmer.location.y < 0 || swimmer.location.y >= automata.rows) {
-								if (swimmer.bounced) {
-									swimmer.bounced();
-									swimmer.move(velocity);
-								} else {
-									velocity = velocity.scale(-1);
-									swimmer.move(velocity);
-								}
-							}
-							cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
-							swimmer.scale = 1.2 + Math.min(1, Math.max(-1, automata.tusk.primaryPool.getValue(cell)));
-							if (swimmer.changeValue) {
-								automata.tusk.setCellValue(cell, swimmer.changeValue(automata.tusk.primaryPool.getValue(cell)));
-							}
-						};
-					})(this)
-				);
-			}
 		}
-				
-		this.iterations++;
-			
+	}
+	
+	this.travelSwimmers = function() {
+		// let swimmers travel
+		if (this.tusk.getVelocity) {
+			this.forEachSwimmer(
+				(function(automata) {
+					return function(swimmer) {
+						var cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
+						var velocity = automata.tusk.getVelocity(cell);
+						swimmer.move(velocity);
+						// swimmer collides with boundary => weggespickt!
+						if (swimmer.location.x < 0 || swimmer.location.x >= automata.cols || swimmer.location.y < 0 || swimmer.location.y >= automata.rows) {
+							if (swimmer.bounced) {
+								swimmer.bounced();
+								swimmer.move(velocity);
+							} else {
+								velocity = velocity.scale(-1);
+								swimmer.move(velocity);
+							}
+						}
+						cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
+						swimmer.scale = 1.2 + Math.min(1, Math.max(-1, automata.tusk.primaryPool.getValue(cell)));
+						if (swimmer.changeValue) {
+							automata.tusk.setCellValue(cell, swimmer.changeValue(automata.tusk.primaryPool.getValue(cell)));
+						}
+					};
+				})(this)
+			);
+		}
+	}
+		
+	this.step = function() {		
+		if (this.tusk != null) {
+			this.fireEvents();		
+			this.integration.integrate(this);
+			this.travelSwimmers();
+		}	
+		this.iterations++;	
 	}
 		
 }

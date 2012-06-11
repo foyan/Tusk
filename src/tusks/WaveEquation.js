@@ -5,6 +5,7 @@ if (typeof(module) != "undefined") {
 	var RainEvent = require('../../src/events/RainEvent.js');
 	var VortexEvent = require('../../src/events/VortexEvent.js');
 	var FountainEvent = require('../../src/events/FountainEvent.js');
+	var SmorkEvent = require('../../src/events/SmorkEvent.js');
 	var Pool = require('../../src/tusks/Pool.js');
 }
 

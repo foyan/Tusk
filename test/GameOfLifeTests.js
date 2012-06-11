@@ -11,7 +11,7 @@ describe('GameOfLife', function() {
 	
 	var assert = function(game, cell, model, expected) {
 		cell.neighbours = game.getNeighbours(cell, model);
-		var result = game.calcCell(cell, 1, 1, 1);
+		var result = game.applyDifferentials(cell, 1, 1, 1);
 		
 		result.status.should.equal(expected);
 	}

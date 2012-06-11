@@ -3,20 +3,20 @@
 \contentsline {section}{\numberline {2}Zellul\IeC {\"a}re Automaten}{2}{section.2}
 \contentsline {section}{\numberline {3}Vom zellul\IeC {\"a}ren Automaten zur Differentialgleichung}{5}{section.3}
 \contentsline {section}{\numberline {4}Numerische L\IeC {\"o}sung von Differentialgleichungen}{5}{section.4}
-\contentsline {subsection}{\numberline {4.1}Differenzierung nach dem Ort}{5}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Integration nach der Zeit mit Einschrittverfahren}{6}{subsection.4.2}
-\contentsline {subsubsection}{\numberline {4.2.1}Forderung}{6}{subsubsection.4.2.1}
+\contentsline {subsection}{\numberline {4.1}Differenzierung nach dem Ort}{6}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Integration nach der Zeit mit Einschrittverfahren}{7}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Forderung}{7}{subsubsection.4.2.1}
 \contentsline {subsubsection}{\numberline {4.2.2}Die impliziten Runge-Kutta-Verfahren}{7}{subsubsection.4.2.2}
-\contentsline {subsubsection}{\numberline {4.2.3}Die expliziten Runge-Kutta-Verfahren}{7}{subsubsection.4.2.3}
-\contentsline {subsection}{\numberline {4.3}Die homogene Wellengleichung}{8}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.2.3}Die expliziten Runge-Kutta-Verfahren}{8}{subsubsection.4.2.3}
+\contentsline {subsection}{\numberline {4.3}Die homogene Wellengleichung}{9}{subsection.4.3}
 \contentsline {part}{II\hspace {1em}Bemerkungen zur Implementation}{10}{part.2}
 \contentsline {section}{\numberline {5}Wahl des Umfelds}{10}{section.5}
 \contentsline {section}{\numberline {6}Architektur}{10}{section.6}
-\contentsline {section}{\numberline {7}\tt CellularAutomata}{10}{section.7}
-\contentsline {subsection}{\numberline {7.1}Initialisierung der Zellen}{11}{subsection.7.1}
-\contentsline {subsection}{\numberline {7.2}Ein Iterationsschritt}{12}{subsection.7.2}
-\contentsline {section}{\numberline {8}Grafische Ausgabe}{12}{section.8}
-\contentsline {subsection}{\numberline {8.1}{\tt VectorCanvasPainter}}{12}{subsection.8.1}
-\contentsline {subsection}{\numberline {8.2}{\tt PixelCanvasPainter}}{12}{subsection.8.2}
-\contentsline {part}{III\hspace {1em}Schlussfolgerung}{13}{part.3}
-\contentsline {section}{Literaturverzeichnis}{13}{section*.4}
+\contentsline {section}{\numberline {7}Testing}{11}{section.7}
+\contentsline {section}{\numberline {8}Automata}{12}{section.8}
+\contentsline {section}{\numberline {9}Tusk}{14}{section.9}
+\contentsline {section}{\numberline {10}Grafische Ausgabe}{14}{section.10}
+\contentsline {subsection}{\numberline {10.1}{\tt VectorCanvasPainter}}{14}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}{\tt PixelCanvasPainter}}{15}{subsection.10.2}
+\contentsline {part}{III\hspace {1em}Schlussfolgerung}{16}{part.3}
+\contentsline {section}{Literaturverzeichnis}{16}{section*.4}

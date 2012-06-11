@@ -49,19 +49,20 @@ describe('CellularAutomata', function() {
 			getNeighbours: function(cell, cells) {
 				return cell;
 			},
-			calcCell: function(cell, dt, damping, viscosity) {
+			calcDifferentials: function(cell, dt, damping, viscosity) {
 				return cell.currentData + ".";
-			}
+			},
 		};
 
 		var auto = new CellularAutomata();
 		auto.rows = 1;
-		auto.cols = 1;	
+		auto.cols = 1;
+		auto.integration = { integrate: function(automata) {}};
 		auto.tusk = tusk;
 		auto.initCells();
 
 		auto.step();
-		auto.model[0][0].currentData.should.equal("Boing.");
+		auto.model[0][0].currentData.should.equal("Boing");
 	});
 
 	it('should triple-step with mocked Tusk and three slices', function() {
@@ -82,12 +83,13 @@ describe('CellularAutomata', function() {
 		var auto = new CellularAutomata();
 		auto.rows = 1;
 		auto.cols = 1;	
+		auto.integration = { integrate: function(automata) {}};
 		auto.tusk = tusk;
 		auto.initCells();
 
 		var iterations = auto.iterations;
 		auto.step();
-		auto.model[0][0].currentData.should.equal("Boing...");
+		auto.model[0][0].currentData.should.equal("Boing");
 		auto.iterations.should.equal(iterations+1);
 	});
 
@@ -109,15 +111,16 @@ describe('CellularAutomata', function() {
 		var auto = new CellularAutomata();
 		auto.rows = 1;
 		auto.cols = 1;	
+		auto.integration = { integrate: function(automata) {}};
 		auto.tusk = tusk;
 		auto.initCells();
 
 		var iterations = auto.iterations;
 		auto.step();
-		auto.model[0][0].currentData.should.equal("Boing...");
+		auto.model[0][0].currentData.should.equal("Boing");
 		auto.iterations.should.equal(iterations+1);
 		auto.step();
-		auto.model[0][0].currentData.should.equal("Boing......");
+		auto.model[0][0].currentData.should.equal("Boing");
 		auto.iterations.should.equal(iterations+2);
 	});
 
