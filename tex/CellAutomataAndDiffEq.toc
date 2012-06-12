@@ -17,7 +17,7 @@
 \contentsline {section}{\numberline {9}Integration}{14}{section.9}
 \contentsline {section}{\numberline {10}Tusk}{15}{section.10}
 \contentsline {section}{\numberline {11}Grafische Ausgabe}{15}{section.11}
-\contentsline {subsection}{\numberline {11.1}{\tt VectorCanvasPainter}}{15}{subsection.11.1}
+\contentsline {subsection}{\numberline {11.1}{\tt VectorCanvasPainter}}{16}{subsection.11.1}
 \contentsline {subsection}{\numberline {11.2}{\tt PixelCanvasPainter}}{16}{subsection.11.2}
 \contentsline {part}{III\hspace {1em}Schlussfolgerung}{17}{part.3}
 \contentsline {section}{Literaturverzeichnis}{17}{section*.4}
