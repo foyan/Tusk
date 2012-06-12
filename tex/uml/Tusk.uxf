@@ -116,7 +116,7 @@ primaryPools</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>380</x>
-      <y>160</y>
+      <y>180</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
@@ -128,7 +128,7 @@ primaryPools</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>300</x>
-      <y>150</y>
+      <y>170</y>
       <w>100</w>
       <h>50</h>
     </coordinates>
@@ -157,5 +157,29 @@ primaryPools</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>80;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>380</x>
+      <y>130</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Pool
+--
+getValue()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>300</x>
+      <y>120</y>
+      <w>100</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;</panel_attributes>
+    <additional_attributes>30;30;80;30</additional_attributes>
   </element>
 </diagram>
