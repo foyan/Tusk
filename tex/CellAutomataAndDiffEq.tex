@@ -600,8 +600,41 @@ this.createCellData = function() {
 };
 \end{lstlisting}
 
-\section{Tusk}
+\section{Integration}
 
+Die Wahl der Integrationsmethode ist wiederum eine Anwendung des Strategy-Patterns, wie in der Übersicht ersichtlich:
+
+\includegraphics[scale=0.7]{uml/Integration.pdf}
+
+{\tt integrate()} iteriert dann typischerweise über alle Zellen des Automaten und führt die Integration unter ein- oder mehrmaligem Aufruf der Übergangsfunktion $\delta$ des Tusk durch. Hier ist das Beispiel für das explizite Euler-Verfahren dargestellt:
+
+\begin{lstlisting}
+this.integrate = function(automata) {
+	var dt = 1 / automata.tusk.slices;
+	for (var t = 0; t < automata.tusk.slices; t++) {
+		
+		automata.forEachCell(
+			function(cell) {
+				var differentials = automata.tusk.calcDifferentials(cell, dt, function(cell2) {
+					return cell2.currentData;
+				});
+				cell.nextData = automata.tusk.applyDifferentials(cell, dt, differentials, function(cell2) {
+					return cell2.currentData;
+				})
+			}
+		);
+		
+		automata.forEachCell(
+			function(cell) {
+				cell.currentData = cell.nextData;
+			}
+		);
+		
+	}
+}
+\end{lstlisting}
+
+\section{Tusk}
 
 
 \section{Grafische Ausgabe}
