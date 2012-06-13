@@ -12,8 +12,4 @@ function Cell() {
 	
 	this.neighbours = null;
 
-	this.currentVelocities = [0, 0];
-	this.nextVelocities = [0, 0];
-	this.custom=null;  // content depends on function
-	
 }
