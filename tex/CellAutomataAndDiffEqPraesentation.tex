@@ -82,32 +82,23 @@
 % does not look nice, try deleting the line with the fontenc.
 
 
-\title[Short Paper Title] % (optional, use only with long paper titles)
+\title % (optional, use only with long paper titles)
 {Zelluläre Automaten und Differentialgleichungen}
 
-\subtitle
-{Yeah.} % (optional)
-
-\author[Author, Another] % (optional, use only with lots of authors)
-{Detlev Ziereisen\inst{1} \and Florian Lüthi\inst{1}}
+\author[D.Z., F.L.] % (optional, use only with lots of authors)
+{Detlev Ziereisen \and Florian Lüthi}
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
 
 \institute[ZHAW] % (optional, but mostly needed)
 {
-  \inst{1}%
-  Department of Computer Science\\
-  ZHAW
+  ZHAW (HSZ-T)
 }
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
 
 \date[Short Occasion] % (optional)
 {16.06.2012}
-
-\subject{Talks}
-% This is only inserted into the PDF information catalog. Can be left
-% out. 
 
 
 
@@ -135,6 +126,15 @@
 
 %\beamerdefaultoverlayspecification{<+->}
 
+\def\signed #1{{\leavevmode\unskip\nobreak\hfil\penalty50\hskip2em
+  \hbox{}\nobreak\hfil(#1)%
+  \parfillskip=0pt \finalhyphendemerits=0 \endgraf}}
+
+\newsavebox\mybox
+\newenvironment{aquote}[1]
+  {\savebox\mybox{#1}\begin{quote}}
+  {\signed{\usebox\mybox}\end{quote}}
+
 
 \begin{document}
 
@@ -142,7 +142,13 @@
   \titlepage
 \end{frame}
 
-\begin{frame}{Outline}
+\begin{frame}
+\begin{aquote}{Konrad Zuse, Rechnender Raum, 1969}
+Das gesamte Geschehen im Universum ist das Ergebnis der Arbeit eines gigantischen Zellulären Automaten.
+\end{aquote}
+\end{frame}
+
+\begin{frame}{Agenda}
   \tableofcontents
   % You might wish to add the option [pausesections]
 \end{frame}
@@ -158,9 +164,9 @@
 % - Talk about 30s to 2min per frame. So there should be between about
 %   15 and 30 frames, all told.
 
-\section{Ziel}
+\section{Ziel des Projekts}
 
-\begin{frame}{Ziel}{}
+\begin{frame}{Ziel des Projekts}{}
   % - A title should summarize the slide in an understandable fashion
   %   for anyone how does not follow everything on the slide itself.
 
@@ -196,7 +202,6 @@ Ein Zellulärer Automat hat:
 \begin{frame}{Wolfram's eindimensionales Universum}
   % - A title should summarize the slide in an understandable fashion
   %   for anyone how does not follow everything on the slide itself.
-Ein Zellulärer Automat hat:
   \begin{itemize}
 \item eindimensional
 \item $|N| = 2$, $|Q| = 2$
@@ -240,13 +245,11 @@ a & B\\
 
 \begin{frame}{Beides zusammen}
 \begin{itemize}
-\item $R \approx \vec{x}$ in einer, zwei oder drei Dimensionen =< Florian
-\item  $(Q, D) \in R$ mit $Q$ als einer Menge von berechnungsfernen Zustandsinformationen und den Differentialen nach der Zeit
-\[
-D = \left( u, \frac{\partial u}{t}, \frac{\partial^2 u}{\partial t^2}, \cdots, \frac{\partial^n u}{t^n} \right)  \in \mathbb{R}^n
-\]
-\item Eine neue Generation entspricht jeweils der fortgelaufenen Zeit $\partial t$, welche sehr fein diskretisiert werden muss
-\item In der Übergangsfunktion $\delta$ steckt die eigentliche Differentialgleichung. In der Regel verändert sie nur die Elemente von $D$. Sollte die Differentialgleichung Terme mit verschiedenen Ordnungen enthalten, wird die Gleichung unter Zuhilfenahme entsprechender Hilfsgleichungen $\lambda_1, \lambda_2, \dots, \lambda_n$ in ein äquivalentes System gewöhnlicher Differentialgleichungen umgeformt. 
+\item $R$ beinhaltet die diskreten Werte der zu findenden "Funktion"
+\item $\Delta \vec{x}$ ist grob diskretisiert
+\item $\Delta t$ ist fein diskretisiert
+\item $(Q, D) \in R$ sind die Zustandsinformationen der Zellen (Differentiale nach der Zeit)
+\item In der Übergangsfunktion $\delta$ ist die Differentialgleichung.
 \end{itemize}
 
 \end{frame}
@@ -269,114 +272,169 @@ u_i &&&  u_i(t) +  \frac{\partial u_i(t+\Delta t)}{\partial t}\Delta t \\
 
 \section{Implementation}
 
-\subsection{JavaScript}
-
-\begin{frame}
-\begin{itemize}
-\item Portabel
-\item sdfsdfs
-\item Closures
-\end{itemize}
-\end{frame}
-
 \subsection{Testing}
+
+\begin{frame}[fragile]{Testing mit Node.js und Mocha}
 \begin{lstlisting}
 if (typeof(module) != "undefined") {
-	module.exports = DiffusionEquation;
-	var ATusk = require('../src/ATusk.js');
-	var VNA = require('../../src/VonNeumannNeighbourhood.js');
+  module.exports = DiffusionEquation;
+  var ATusk = require('../src/ATusk.js');
+  var VNA = require('../../src/VonNeumannNeighbourhood.js');
 }
-
 function DiffusionEquation() {
   /* ... */
 }
+
 \end{lstlisting}
-\subsection{Canvas}
-
-\section{Résumé}
-
-\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
-  % - A title should summarize the slide in an understandable fashion
-  %   for anyone how does not follow everything on the slide itself.
-
-  \begin{itemize}
-  \item
-    Use \texttt{itemize} a lot.
-  \item
-    Use very short sentences or short phrases.
-  \end{itemize}
 \end{frame}
 
-\begin{frame}{Make Titles Informative.}
-
-  You can create overlays\dots
-  \begin{itemize}
-  \item using the \texttt{pause} command:
-    \begin{itemize}
-    \item
-      First item.
-      \pause
-    \item    
-      Second item.
-    \end{itemize}
-  \item
-    using overlay specifications:
-    \begin{itemize}
-    \item<3->
-      First item.
-    \item<4->
-      Second item.
-    \end{itemize}
-  \item
-    using the general \texttt{uncover} command:
-    \begin{itemize}
-      \uncover<5->{\item
-        First item.}
-      \uncover<6->{\item
-        Second item.}
-    \end{itemize}
-  \end{itemize}
+\begin{frame}[fragile]{Testing mit Node.js und Mocha}
+\begin{lstlisting}
+describe('GameOfLife', function() {
+  it('should comply to rule 1', function() {
+    var cell = {x:1, y:1, currentData: {status: 0}};
+			
+    var model = [
+      [creator(1), creator(1), creator(1)],
+      [creator(0), cell      , creator(0)],
+      [creator(0), creator(0), creator(0)]
+    ];
+		
+    assert(game, cell, model, 1);
+				
+  });
+}
+\end{lstlisting}
 \end{frame}
 
+\subsection{Strategy}
 
-\subsection{Second Subsection}
-
-\begin{frame}{Make Titles Informative.}
+\begin{frame}[fragile]{Strategy}
+\begin{lstlisting}
+ViewUtils.bindStrategiesToCombobox(null, this.doc.painter, PainterFactory.types, function(p) {
+  return p.name;
+}, (function(view) { return function(p) {
+  view.primaryPainter = PainterFactory.create(p, view.doc.primaryCanvas, view);
+  view.secondaryPainter = PainterFactory.create(p, view.doc.secondaryCanvas, view);
+  view.updatePainterScaling();
+  view.doc.viscositySelector.onchange();
+  if (view.automata.tusk != null) {
+    view.primaryPainter.pool = view.automata.tusk.primaryPool;
+  }
+};})(this));	
+\end{lstlisting}
 \end{frame}
 
-\begin{frame}{Make Titles Informative.}
+\subsection{Painting}
+
+\begin{frame}[fragile]{Painting: Vektoriell}
+\begin{lstlisting}
+this.paintCell = function(cell) {
+		
+  var x = cell.x * this.scaling.x;
+  var y = cell.y * this.scaling.y;
+  var baseColor = this.baseColor;
+
+  var color = ViewUtils.getFormattedColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
+  this.context.fillStyle = color;
+  this.context.fillRect(x, y, this.scaling.x, this.scaling.y);
+};
+\end{lstlisting}
 \end{frame}
 
-
-
-\section*{Summary}
-
-\begin{frame}{Summary}
-
-  % Keep the summary *very short*.
-  \begin{itemize}
-  \item
-    The \alert{first main message} of your talk in one or two lines.
-  \item
-    The \alert{second main message} of your talk in one or two lines.
-  \item
-    Perhaps a \alert{third message}, but not more than that.
-  \end{itemize}
-  
-  % The following outlook is optional.
-  \vskip0pt plus.5fill
-  \begin{itemize}
-  \item
-    Outlook
-    \begin{itemize}
-    \item
-      Something you haven't solved.
-    \item
-      Something else you haven't solved.
-    \end{itemize}
-  \end{itemize}
+\begin{frame}[fragile]{Painting: Pixelesk}
+\begin{lstlisting}
+this.begin = function() {
+  this.imageData = this.context.createImageData(this.view.CANVAS_WIDTH, this.view.CANVAS_HEIGHT);
+  this.buf = new ArrayBuffer(this.imageData.data.length);
+  this.buf8 = new Uint8ClampedArray(this.buf);
+  this.data = new Uint32Array(this.buf);
+};
+	
+this.end = function() {
+  this.imageData.data.set(this.buf8);
+  this.context.putImageData(this.imageData, 0, 0);
+};
+\end{lstlisting}
+\end{frame}
+\begin{frame}[fragile]
+\begin{lstlisting}
+this.paintCell = function(cell) {
+  var x = cell.x * this.scaling.x;
+  var y = cell.y * this.scaling.y;		
+  var baseColor = this.baseColor;
+  var color = ViewUtils.getColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
+  for (var ix = x; ix < x + this.scaling.x; ix++) {
+    for (var iy = y; iy < y + this.scaling.y; iy++) {
+      var p = (iy * this.view.CANVAS_WIDTH + ix);			
+      this.data[p] = (255   << 24) |
+            		(color.b << 16) |
+            		(color.g <<  8) |
+             		color.r;
+    }
+  }
+};
+\end{lstlisting}
 \end{frame}
 
+\subsection{Lösung der Gleichung}
+
+\begin{frame}[fragile]{Wo ist $\delta$?}
+\begin{lstlisting}
+this.calcDifferentials = function(cell, dt, get) {
+  var c = 1.0 / this.viscosity;
+  var u = get(cell).u;		
+  var udx = u - (get(cell.neighbours.w).u + get(cell.neighbours.n).u) / 2;
+  var udxdx = -2 * u + (get(cell.neighbours.w).u + get(cell.neighbours.n).u) / 2
+    + (get(cell.neighbours.e).u + get(cell.neighbours.s).u) / 2;	
+  var udtdt = udxdx * c;
+  var udt = get(cell).udt + udtdt * dt;
+		
+  return {
+    udt: udt, udtdt: udtdt,			
+    udx: udx, udxdx: udxdx
+  };
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Integration}
+\begin{lstlisting}
+  this.integrate = function(automata) {
+    var dt = 1 / automata.tusk.slices;
+    for (var t = 0; t < automata.tusk.slices; t++) {		
+      automata.forEachCell(function(cell) {
+        var differentials = automata.tusk.calcDifferentials(cell, dt, function(cell2) {
+          return cell2.currentData;
+        });
+        cell.nextData = automata.tusk.applyDifferentials(cell, dt, differentials, function(cell2) {
+          return cell2.currentData;
+        })
+      });
+      automata.forEachCell(function(cell) {
+        cell.currentData = cell.nextData;
+      });
+  }
+}
+\end{lstlisting}
+\end{frame}
+
+\section{Fazit}
+
+\begin{frame}{Fazit}
+\begin{itemize}
+\item Zuse ist wohl auf dem richtigen Weg
+\item Portabilität nur beschränkt möglich
+\item Erweiterungspotenzial vorhanden
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fazit}
+\begin{itemize}
+\item Fragen?
+\item Verbindlichsten Dank für die Aufmerksamkeit
+\end{itemize}
+\end{frame}
 
 \end{document}
 

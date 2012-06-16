@@ -1,13 +1,13 @@
 \beamer@endinputifotherversion {3.10pt}
 \select@language {english}
-\beamer@sectionintoc {1}{Ziel}{3}{0}{1}
-\beamer@sectionintoc {2}{Theorie}{4}{0}{2}
-\beamer@subsectionintoc {2}{1}{Zellul\IeC {\"a}re Automaten}{4}{0}{2}
-\beamer@subsectionintoc {2}{2}{Differentialgleichungen}{7}{0}{2}
-\beamer@subsectionintoc {2}{3}{Beides zusammen}{10}{0}{2}
-\beamer@sectionintoc {3}{Implementation}{14}{0}{3}
-\beamer@subsectionintoc {3}{1}{JavaScript}{14}{0}{3}
-\beamer@subsectionintoc {3}{2}{Testing}{16}{0}{3}
-\beamer@subsectionintoc {3}{3}{Canvas}{17}{0}{3}
-\beamer@sectionintoc {4}{R\IeC {\'e}sum\IeC {\'e}}{19}{0}{4}
-\beamer@subsectionintoc {4}{1}{Second Subsection}{26}{0}{4}
+\beamer@sectionintoc {1}{Ziel des Projekts}{4}{0}{1}
+\beamer@sectionintoc {2}{Theorie}{5}{0}{2}
+\beamer@subsectionintoc {2}{1}{Zellul\IeC {\"a}re Automaten}{5}{0}{2}
+\beamer@subsectionintoc {2}{2}{Differentialgleichungen}{8}{0}{2}
+\beamer@subsectionintoc {2}{3}{Beides zusammen}{11}{0}{2}
+\beamer@sectionintoc {3}{Implementation}{15}{0}{3}
+\beamer@subsectionintoc {3}{1}{Testing}{15}{0}{3}
+\beamer@subsectionintoc {3}{2}{Strategy}{18}{0}{3}
+\beamer@subsectionintoc {3}{3}{Painting}{20}{0}{3}
+\beamer@subsectionintoc {3}{4}{L\IeC {\"o}sung der Gleichung}{24}{0}{3}
+\beamer@sectionintoc {4}{Fazit}{27}{0}{4}
