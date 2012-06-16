@@ -4,7 +4,7 @@
 % This is a simple template for a LaTeX document using the "article" class.
 % See "book", "report", "letter" for other types of document.
 
-\documentclass[11pt]{article} % use larger type; default would be 10pt
+\documentclass[11pt]{report} % use larger type; default would be 10pt
 
 \usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
 \usepackage{german}
@@ -103,8 +103,8 @@
 \newtheorem*{bemerkung}{Bemerkung}
 
 \title{Darstellung von Differentialgleichungen mit einem zellulären Automaten}
-\author{Detlev Ziereisen, Florian Lüthi, i10b}
-%\date{} % Activate to display a given date or no date (if empty),
+\author{Detlev Ziereisen (\url{zieredet@students.zhaw.ch}), \\ Florian Lüthi (\url{luethifl@students.zhaw.ch})}
+\date{ZHAW (HSZ-T), 16. Juni 2012} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
 
 \begin{document}
@@ -112,7 +112,7 @@
 
 \tableofcontents
 
-\section{Einleitung}
+\chapter{Einleitung}
 
 Diese Projektarbeit (bestehend aus diesem Dokument sowie der zugehörigen Software {\tt Tusk}) hat zum Ziel, partielle Differentialgleichungen aus dem Umfeld der physikalischen Simulationen mit einem zellulären Automaten zu berechnen sowie darzustellen. Es soll gezeigt werden, dass dies unter den konzeptionellen Restriktionen der Theorie der zellulären Automaten möglich ist, insbesondere soll die Annahme Konrad Zuses, dass die Naturgesetze diskreten Regeln folgten und das gesamte Geschehen im Universum das Ergebnis der Arbeit eines gigantischen zellulären Automaten sei \cite{wiki:zellautomat, zuse1969}, zumindest für den Scope dieser Arbeit bestätigt werden. Ausserdem soll gezeigt werden, dass die intuitiv erwarteten Resultate in sinnvoller Rechenzeit dargestellt werden können.
 
@@ -122,7 +122,7 @@ Das vorliegende Dokument ist so gegliedert, dass im folgenden Kapitel die nötig
 
 Der Autoren Dank geht (in alphabetischer Reihenfolge der Vornamen) an Albert Heuberger für geballte mathematische Kompetenz gepaart mit unendlicher Geduld, an Lukas Eppler für die ständige Begleitung, sowie an Philippe Nahlik für die tolle Kursführung.
 
-\part{Theorie}
+\chapter{Theorie}
 
 \section{Zelluläre Automaten}
 
@@ -400,23 +400,6 @@ a & B\\
 &=&  u_{\vec x, t} + h\cdot\intr\left(\duxtp{\frac 1 2} \right) \\
 \end{eqnarray*}
 
-\item[Runge-Kutta 4. Ordnung]
-\[
-\begin{bmatrix}
-\begin{array}{c|c}
-a & B\\
-\hline     & c \\
-\end{array}
-\end{bmatrix} = \begin{bmatrix}
-\begin{array}{c|cccc}
-0 & 0 \\
-\frac 1 2 & \frac 1 2 & 0 \\
-\frac 1 2 & 0 & \frac 1 2 & 0 \\
-1 & 0 & 0 & 1 & 0 \\\hline
-& \frac 1 6 & \frac 1 3 & \frac 1 3 & \frac 1 6
-\end{array}
-\end{bmatrix}
-\]
 \end{description}
 
 \subsection{Die homogene Wellengleichung}
@@ -462,20 +445,9 @@ Als Nachbarschaft wird die Von-Neumann-Nachbarschaft gewählt, weil bei der Moor
 \end{bmatrix}
 \end{eqnarray*}
 
-sowie unter der Annahme, dass die Richtung der Nachbarzellen bekannt sind (d.h. jeweils der Vorgänger beziehungsweise der Nachfolger innerhalb einer Dimension bekannt sind und deswegen $N$ auch ausgedrückt werden kann als:)
-\[
-N^* =\begin{pmatrix} \overbrace{n_{1,1} \in N}^{\textrm{1. Dimension}} & \overbrace{n_{2,1} \in N}^{\textrm{2. Dimension}} & \cdots & \overbrace{n_{\frac{1}{2}|N|, 1} \in N}^{\textrm{$\frac{1}{2}|N|$te Dimension}} & \textrm{Vorgänger} \\
-n_{1,2} \in N & n_{2,2} \in N & \cdots & n_{\frac{1}{2}|N|, 2} \in N & \textrm{Nachfolger}
- \end{pmatrix}
-\]
+Und damit sind wir im Grunde bereit für die Implementation.
 
-kann die Übergangsfunktion $\delta$ für die Wellengleichung folgendermassen formuliert werden:
-
-\begin{eqnarray*}
-\delta(r, N^*) = 
-\end{eqnarray*}
-
-\part{Bemerkungen zur Implementation}
+\chapter{Bemerkungen zur Implementation}
 
 \section{Wahl des Umfelds}
 
@@ -484,6 +456,12 @@ Die Wahl des Umfelds fiel auf eine Kombination aus JavaScript und dem HTML5-{\tt
 Bedenken wurden vorgängig und während der ersten Implementierungsphase vor allem in Bezug auf die Perfomance geäussert, konnten aber im Laufe des Projekts zerstreut werden, auch weil gezeigt werden konnte, dass Optimierungen möglich sind (paralleles Berechnen, Umstellung von Vektorgrafik-Operationen auf Bitmap-Manipulationen).
 
 Als Alternativen waren das Game-Framework XNA sowie die 3D-LED-Installation in der Haupthalle des Zürcher Hauptbahnhofs in Betracht gezogen worden.
+
+\section{Implementatorische Paradigmen}
+
+Da JavaScript keine typisierte Sprache ist, ist ein formaler Aufbau à la Java weder möglich noch sinnvoll. Wir lehnen uns in unserem Stil dem Duck-Typing-Paradigma von Ruby an, damit sind wir inhärent polymorph. Die in den in den folgenden Abschnitten dargestellten UML-Diagrammen vorkommenden abstrakten Klassen oder Interfaces existieren darum nicht im realen Code, sondern dienen mehr der Veranschaulichung und Strukturierung der Diagramme.
+
+Natürlich gibt es keine Regel ohne Ausnahme: Die Klasse {\tt ATusk} existiert tatsächlich und wird über Prototyping gesubklasst -- einfach damit wir das mal gemacht haben \cite{OOJSone, OOJStwo, OOJSthree}.
 
 \section{Architektur}
 
@@ -634,52 +612,254 @@ this.integrate = function(automata) {
 }
 \end{lstlisting}
 
-\section{Tusk}
+
+\section{Tusks, Regen, Enten und andere obskure Objekte}
 
 Die Tusks sind die Hard Worker in der ganzen Konstruktion:
 
 \includegraphics[scale=0.7]{uml/Tusk.pdf}
 
-Im folgenden seien die Methoden/Eigenschaften kurz erklärt und wo nötig kommentiert.
+\subsection{Zellzustände und Pools}
+
+Der Aufbau der Zellstände sind nur für den Tusk von Bedeutung; die Verwender des Tusk (beispielsweise {\tt CellularAutomata} weiss nichts darüber. Der Tusk implementiert die $\delta$-Funktion (über {\tt calcDifferentials()} und {\tt applyDifferentials()}) und dient als Fassade für alle weiteren Zellzustands-Operationen:
 
 \begin{description}
-\item g
+\item[createCellData()] dient als Factory-Methode, um neue Zellzustände herzustellen;
+\item[setCellValue(Cell, value)] setzt den $u$-Wert einer Zelle,
+\item[getVelocity(Cell)] liefert den Geschwindigkeitsvektor einer Zelle (falls sinnvoll).
 \end{description}
 
-\section{Grafische Ausgabe}
+Des weiteren kann ein Tusk beliebig viele Pools definieren, die im Normalfall einen einzigen Aspekt des Zellzustands visualisieren sollen. Diese Pools können mit einem Namen und einem Bild versehen werden und tauchen dann in der Liste der Sekundär-Pools der View auf. Die Methode {\tt pool.getValue()} liefert dann den Wert dieses Aspektes, wie zum Beispiel das erste Differential $\frac{\Delta}{\Delta \vec x} u$ in {\tt DifferentialEquation}:
 
-Die grafische Ausgabe des zellulären Automaten findet in einem {\tt canvas}-Element statt, in das mittels JavaScript-Code gezeichnet wird. Die dafür zuständigen Klassen heissen {\tt ...CanvasPainter}, wovon verschiedene Implementationen verfügbar sind. Es wird davon ausgegangen, dass jeder {\tt ...CanvasPainter} folgende Methoden anbietet:
+\begin{lstlisting}
+this.pools = [
+	new Pool("du/dx", "_assets/pics/udx.png", function(cell) {
+		return cell.currentData.dudx;
+	})
+];
+\end{lstlisting}
+
+Für den Primär-Pool für $u$ gilt dasselbe:
+\begin{lstlisting}
+this.primaryPool = new Pool("u", "", function(cell) {
+	return cell.currentData.u; }
+);
+\end{lstlisting}
+
+\subsection{Swimmers}
+
+Zu einer ernstzunehmenden Simulation von Flüssigkeiten gehören natürlich schwimmende Objekte -- im Idealfall sind das Badeenten. Diese Badeenten bewegen sich entlang der Gefälle der Oberfläche, sprich der Ableitungsvektoren entlang der Dimensionen $\frac {\Delta}{\Delta x_1}u, \frac {\Delta}{\Delta x_2}u, \dots, \frac {\Delta}{\Delta x_n}u$. Aus diesem Grund gibt es im Tusk die Methode {\tt getVelocity(Cell)}, zum Beispiel für die Wellengleichung:
+
+\begin{lstlisting}
+this.getVelocity = function(cell) {
+	var v = new Vector();
+	v.x = cell.currentData.vx;
+	v.y = cell.currentData.vy;
+	return v;
+}
+\end{lstlisting}
+
+Die Badeenten (oder auch Fussbälle) ändern dann ihre Positionen anhand dieser Vektoren:
+\begin{lstlisting}
+this.forEachSwimmer(
+	(function(automata) {
+		return function(swimmer) {
+			var cell = automata.model[Math.floor(swimmer.location.y)][Math.floor(swimmer.location.x)];
+			var velocity = automata.tusk.getVelocity(cell);
+			swimmer.move(velocity);
+		}
+	})(this);
+}
+
+\end{lstlisting}
+
+Zu guter Letzt wird noch der Darstellungswinkel der Schwimmer über ein paar Takte Trigonometrie (für zweidimensionale Zellräume) berechnet:
+\[
+\varphi = \begin{cases}
+\tan^{-1} \left(-\frac x y\right) & \textrm{für } x \ge 0 \land y < 0, \\
+\tan^{-1} \left(-\frac y x\right)  + \frac \pi 2& \textrm{für } x > 0 \land y \ge 0, \\
+\tan^{-1} \left(-\frac x y\right)  + \pi& \textrm{für } x \le 0 \land y > 0, \\
+\tan^{-1} \left(-\frac y x\right)  + \frac 3\pi 2& \textrm{für } x < 0 \land y \le 0
+\end{cases}
+\]
+
+Die dritte Art von Schwimmern sind Boote (aus Holz), die über einen Motor verfügen und darum eine Eigengeschwindigkeit haben, die zur aus dem Gefälle resultierenden Geschwindigkeit gerechnet wird:
+
+\begin{lstlisting}
+function AutoSwimmer() {
+	this.move = function(d) {
+		this.velocity
+			= this.autoVelocity.clone().scale(0.8).add(d.scale(0.2));
+		this.location.add(this.autoVelocity);
+	}
+}
+\end{lstlisting}
+
+\subsection{Events}
+
+Events bringen die Natur zurück in die Informatik durch periodische Manipulation der Zellzustände. Die Tusks definieren, welche Events für sie sinnvoll sind. Hier die Übersicht:
+
+\includegraphics[scale=0.7]{uml/Events.pdf}
+
+{\tt CellularAutomata} lässt dann vor jeder Iteration jedes Event ausführen:
+
+\begin{lstlisting}
+this.fireEvents = function() {
+	// fire events, such as rain, vorteces etc.
+	if (this.tusk.events) {
+		for (var i = 0; i < this.tusk.events.length; i++) {
+			if (this.tusk.events[i].enabled) {
+				this.tusk.events[i].apply(this);
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+Wenn man beispielsweise Regen als gleichverteiltes Verändern der Wassermenge an einzelnen Punkten betrachtet, könnte man folgendes programmieren:
+
+\begin{lstlisting}
+function RainEvent(applyCell) {
+
+	this.dropsPerIteration = 4;
+	this.sign = 1;
+	
+	this.apply = function(automata) {
+		var drops = this.dropsPerIteration == 0 ? 0
+			: this.dropsPerIteration >= 1 ? this.dropsPerIteration
+			: automata.iterations
+				% (Math.floor(1 / this.dropsPerIteration)) == 0 ? 1 : 0;
+		
+		for (var i = 0; i < drops; i++) {
+			var x = Math.floor(Math.random() * automata.cols);
+			var y = Math.floor(Math.random() * automata.rows);
+			var cell = automata.model[x][y];
+			this.sign = this.sign * -1;
+			applyCell(cell, this.sign);
+		}
+	}
+}
+\end{lstlisting}
+
+Da die Tusks die Events definieren (in diesem Beispiel so:)
+
+\begin{lstlisting}
+this.events = [
+	new RainEvent(
+		function(cell, value) {
+			cell.currentData.udt = value - cell.currentData.u;
+			cell.currentData.u = value;
+		}
+	),
+ 	/* ... */
+];
+\end{lstlisting}
+
+wissen die Events nichts von den Tusks, also geben die Tusks eine Funktion mit, mittels derer das Event die Zellzustände sinnvoll manipulieren kann ({\tt applyCell}).
+
+Des weiteren ist jedes Event unter Umständen in Aspekten konfigurierbar -- im Beispiel des Regens die Intensität, dargestellt als Anzahl Tropfen pro Iteration. Die View weiss allerdings nichts davon, also braucht es hier eine Konstruktion, mit der das Event sein Konfigurations-UI dynamisch zur Verfügung stellen kann. Dies wird von der Methode {\tt createView()} übernommen:
+
+\begin{lstlisting}
+this.createView = function(doc) {
+	var table = doc.createElement("table");
+	var tr1 = doc.createElement("tr");
+	var tr1Label = doc.createElement("td");
+	var tr1Val = doc.createElement("td");
+	var drops = doc.createElement("input");
+	drops.type = "text";
+	drops.style.width = "50px"
+	drops.value = this.dropsPerIteration;
+	drops.onchange = (function(evt, val) {
+		return function() {
+			evt.dropsPerIteration = val.value;
+		}
+	})(this, drops);
+	
+	table.appendChild(tr1);
+	tr1.appendChild(tr1Label);
+	tr1.appendChild(tr1Val);
+	tr1Val.appendChild(drops);
+	tr1Label.innerHTML = "Drops/Iteration";
+	
+	return table;
+}
+\end{lstlisting}
+
+Sobald die View dann weiss, welcher Tusk aktiv ist (beispielsweise durch Auswahl durch den Benutzer), durchläuft die View alle Events des Tusks, ruft die entsprechende {\tt createView()}-Methode auf und baut das zurückgegebene Element ins {\tt document} ein.
+
+\section{View}
+
+Um auch das UI testbar zu halten, wird es hauptsächlich in eine {\tt View}- und eine {\tt Doc}-Klasse aufgeteilt, wovon die zweitere das HTML-{\tt document} abstrahiert und für das Testing entsprechend zu mocken ist:
+
+\includegraphics[scale=0.7]{uml/View.pdf}
+
+Die für die Interaktivität nötige Logik ist in den verschiedenen Controller-Klassen, hier als Anschauung ein Ausschnitt aus {\tt TransportController}:
+
+\begin{lstlisting}
+function TransportController(doc, view) {
+	
+	this.doc = doc;
+	this.view = view;
+	
+	this.running = false;
+
+	/* ... */
+
+	this.step = function() {
+		this.view.automata.step();
+		this.view.paintAll();
+		this.doc.iterationLabel.innerHTML = this.view.automata.iterations;
+		if (this.running) {
+			window.setTimeout((function(controller) {
+				return function() {
+					controller.step();
+				};
+			})(this), 0);
+		}
+	}
+
+	/* ... */
+
+}
+\end{lstlisting}
+
+\subsection{Pool Canvas Painting}
+
+Die grafische Ausgabe des zellulären Automaten findet in einem {\tt canvas}-Element statt, in das mittels JavaScript-Code gezeichnet wird. Es gibt verschiedene Arten, dies zu tun, ergo existieren verschiedene Implementationen:
+
+\includegraphics[scale=0.7]{uml/Painters.pdf}
+
+Die relevanten Methoden sind:
 
 \begin{description}
 \item[\tt begin()] Beginnt den Zeichnungszyklus.
-\item[\tt updateCellView(cell)] Zeichnet eine einzelne Zelle ({\tt cell}) neu.
-\item[\tt drawDuck(duck, cell)] Zeichnet eine Ente ({\tt duck}) in eine einzelne Zelle ({\tt cell}).
+\item[\tt paintCell(cell)] Zeichnet eine einzelne Zelle ({\tt cell}) neu.
+\item[\tt paintSwimmer(swimmer, cell)] Zeichnet eine Ente ({\tt duck}) in eine einzelne Zelle ({\tt cell}).
 \item[\tt end()] Beendet den Zeichnungszyklus.
 \end{description}
 
-Die Methoden {\tt begin()} und {\tt end()} sind für Implementationen gedacht, die sich nur sinnvoll verhalten wenn sie den gesamten {\tt canvas} neu bezeichnen können und deswegen nach einem atomaren Aufruf von {\tt updateCellView()} einen inkonsistenten Zustand aufweisen.
+Die Methoden {\tt begin()} und {\tt end()} sind für Implementationen gedacht, die sich nur sinnvoll verhalten wenn sie den gesamten {\tt canvas} neu bezeichnen können und deswegen nach einem atomaren Aufruf von {\tt paintCell()} einen inkonsistenten Zustand aufweisen.
 
-In den folgenden Abschnitten sind die verfügbaren Implementationen grob erklärt. Es existiert ausserdem eine {\tt Noop}-Implementation, die aber trivial ist und verwendet werden kann, um die grafische Ausgabe komplett abzuschalten.
+In den folgenden Abschnitten sind die verfügbaren Implementationen (ausser {\tt NoopCanvasPainter}, welche trivial ist und verwendet werden kann, um die grafische Ausgabe komplett abzuschalten) grob erklärt. 
 
-\subsection{{\tt VectorCanvasPainter}}
+\subsubsection{{\tt VectorCanvasPainter}}
 
 Diese Klasse bezeichnet den {\tt canvas} durch Vektorgrafik-Operationen:
 
 \begin{lstlisting}
-this.updateCellView = function(cell) {
-	var du = cell.currentGradients; // get values
-	var x = cell.x * scaleWidth; // calculate x position in pixels
-	var y = cell.y * scaleHeight; //  calculate y position in pixels
-	var baseColor = this.getBaseColor(); // get base painter color
-	// let Tusk calculate actual cell color, and format it as 'rgb(r,g,b)'
-	var color = getFormattedColor(du[this.getUIndex()], baseColor.r, baseColor.g, baseColor.b);
+this.paintCell = function(cell) {
+	var x = cell.x * this.scaling.x;
+	var y = cell.y * this.scaling.y;
+	
+	var baseColor = this.baseColor;
+	var color = ViewUtils.getFormattedColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
+	
 	this.context.fillStyle = color;
-	// draw and fill a rectangle.
-	this.context.fillRect(x, y, scaleWidth, scaleHeight);
+	this.context.fillRect(x, y, this.scaling.x, this.scaling.y);
 };
 \end{lstlisting}
 
-\subsection{{\tt PixelCanvasPainter}}
+\subsubsection{{\tt PixelCanvasPainter}}
 
 Diese Klasse bezeichnet den {\tt canvas} durch direkte Pixel-Manipulationen. Grundsätzlich funktionert das folgendermassen \cite{mdn:PixelCanvasDoku}:
 
@@ -707,11 +887,17 @@ this.begin = function() {
 Dadurch ist es möglich, die in {\tt this.data} enthaltenen Daten als ganze Pixel zu bearbeiten (und nicht den Alpha-, Rot-, Grün- und Blau-Kanal einzeln):
 
 \begin{lstlisting}
-this.updateCellView = function(cell) {
-	/* [...] */
-	for (var ix = x; ix < x + scaleWidth; ix++) {
-		for (var iy = y; iy < y + scaleHeight; iy++) {
-			var p = (iy * WIDTH + ix);		
+this.paintCell = function(cell) {
+	var x = cell.x * this.scaling.x;
+	var y = cell.y * this.scaling.y;
+	
+	var baseColor = this.baseColor;
+	var color = ViewUtils.getColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
+		
+	for (var ix = x; ix < x + this.scaling.x; ix++) {
+		for (var iy = y; iy < y + this.scaling.y; iy++) {
+			var p = (iy * this.view.CANVAS_WIDTH + ix);
+			
 			this.data[p] =
 				(255   << 24) | // alpha
 				(color.b << 16) |
@@ -719,8 +905,7 @@ this.updateCellView = function(cell) {
 				color.r;
 		}
 	}
-	/* [...] */
-}
+};
 \end{lstlisting}
 
 Abschliessend werden dann die manipulierten Pixel wieder zurückgeschrieben:
@@ -732,9 +917,110 @@ this.end = function() {
 };
 \end{lstlisting}
 
-\part{Schlussfolgerung}
+Ein Problem bleibt aber noch: By design exponiert {\tt Uint32Array} die exakten Daten so wie sie im Memory liegen -- das heisst, die obige Implementation funktioniert nur für Geräte, die mit Little Endian kutschieren. Bei der Ausführung auf Big Endian-Geräten würden die Farben ein bisschen lustig aussehen, weil die Werte in vertauschter Reihenfolge gesetzt werden müssten:
+
+\begin{lstlisting}
+this.data[p] =
+	(color.r   << 24) |
+	(color.g << 16) |
+	(color.b <<  8) |
+	255; // alpha
+\end{lstlisting}
+
+Aus Mangel an Testgeräten (selbst iPhones sind Little Endian) wird aber davon abgesehen, dies auch noch zu implementieren (obschon das Testen auf die Endianness gar nicht mal so eine Sache wäre). \cite{mdn:PixelCanvas}
+
+\subsection{Strategie, Strategie, Strategie...}
+
+Wir haben uns nun einiges an Theorie und noch mehr an Code zu Gemüte geführt -- und meistens haben wir gesehen, dass mehrere Wege zum Ziel führen, beziehungsweise es mehrere richtige Lösungsansätze gibt. Deshalb ist das Strategy-Pattern eine coole Sache. Damit es aber schlussendlich nicht an der Darstellung scheitert, wird noch ein Satz Hilfsmethoden implementiert, welche der View helfen sollen, mit den verschiedenen Strategien umgehen zu können. Als Beispiel sei hier die Methode gelistet, die alle Implementationen in eine ComboBox einfüllen kann und entsprechend reagiert, wenn der Benutzer eine auswählt:
+
+\begin{lstlisting}
+bindStrategiesToCombobox: function(id, combobox, strategies, text, onchange) {
+	ViewUtils.clearStrategies(id);
+	for (var strategy in strategies) {
+		var opt = document.createElement("option");
+		opt.text = text(strategies[strategy]);
+		opt.value = strategy;
+		combobox.options.add(opt);
+		ViewUtils.addStrategy(id, opt);
+	}
+	combobox.onchange = function() {
+		var strategy = strategies[combobox.value];
+		onchange(strategy);
+	};
+}
+\end{lstlisting}
+
+Entsprechend existieren solche Methoden für alle möglichen Darstellungsarten von Strategien.
+
+\chapter{Schlussfolgerung}
+
+\section{Erweiterungsmöglichkeiten}
+
+Wir haben lange über Multithreading nachgedacht, um die heutzutage üblichen Multi Core-Geräte sinnvoll auszulasten. Das ist grundsätzlich mittels WebWorker-Spawning möglich \cite{mdn:WebWorkers}; man würde dann den Zellraum geografisch oder modular auf die WebWorkers aufteilen und so den einzelnen Zeitschritt parallel rechnen. Das würde darum funktionieren, weil die Resultate nur von den Resultaten des vorhergehenden Zeitschritts abhängig sind. Die Hauptproblematik sehen wir jedoch darin, dass die WebWorkers (v/o Threads)  über kein gemeinsames Memory verfügen. Es müsste also jedes Mal der gesamte Zellraum hin- und herkopiert werden, was in uns grosse Bedenken bezüglich der Overhead-Performance weckt. Ausserdem würde das einigermassen tief in die momentane Architektur eingreifen, weil der Memory-Transfer über JSON-Serialisierung funktioniert, welches (aus nachvollziehbaren Gründen) keine zirkulären Objektreferenzen zulässt -- aber genau das haben wir durch die Vorverlinkung der Nachbarzellen natürlich en masse. Chrome hat zwar ein eigenes Verfahren entwickelt über Ownership-Transfer \cite{lightningFast}, aber das ist halt nicht kompatibel zum Rest der Welt. Ausserdem wird dabei -- wie der Name sagt -- das Objekt verschoben. Da in einem zellulären Automaten aber jede Zelle der Nachbar von irgendeiner anderen Zelle ist und sie ergo in der $\delta$-Funktion des Nachbarn benötigt wird, muss sie geklont werden (weil sie in verschiedenen Threads gleichzeitig verwendet werden möchte), und wir sind so schlau als je zuvor. Vielleicht ist die Zeit einfach noch nicht reif für diese Erweiterung.
+
+Eine sinnvolle Erweiterung wäre aber natürlich die Generalisierung der Runge-Kutta-Verfahren. Die Idee dabei wäre, ein beliebiges Butcher-Tableau konfigurieren zu können, das dann zur Anwendung kommt. Ausserdem wäre die momentane Beschränkung auf explizite Verfahren aufzuheben -- mit der entsprechenden Implementierung eines iterativen Verfahrens zur Lösung von nichtlinearen Gleichungssystemen.
+
+Des weiteren wäre es möglich, den Zellraum weiter zu generaisieren, so dass beispielsweise beliebig viele Dimensionen verwendet werden könnten. Das Problem ist dann natürlich die Darstellung; drei Raumdimensionen sind schon mühsam, vier Raumdimensionen eine echte Herausforderung.
+
+\section{Caveats}
+
+Der primäre Fokus dieses Projekts war nicht, ein perfektes UI zu schreiben -- es wird also Konstellationen geben, in denen es sich nicht so verhält wie erwartet. Ausserdem funktioniert das Pixel-Painting nur auf Little-Endian-Geräten, wie oben besprochen.
+
+\section{Fazit}
+
+Auf der technischen Ebene haben wir gezeigt, dass mit relativ wenig Code eine Struktur erzeugt werden kann, die sich zumindest irgendwie so verhält wie eine Flüssigkeit. Das Problem ist wie immer bei numerischen Verfahren schlussendlich die Genauigkeit -- und da sich die Flüssigkeit immer weiterbewegt, führt das zwangsweise zur Akkumulierung der Ungenauigkeit und schlussendlichem Abdriften der Lösung ins Absurde. Als Seiteneffekt dessen wurde wieder einmal gezeigt, dass das explizite Euler-Verfahren in der Praxis nutzlos ist -- Runge-Kutta-Verfahren höherer Ordnung aber einigermassen gut funktionieren, so mühsam sie auch zu rechnen sein mögen.
+
+Abgesehen davon war es ein äusserst lehrreiches Projekt. Wir haben gezeigt, dass es grundsätzlich möglich ist, Differentialgleichungen mit einem zellulären Automaten darzustellen -- Konrad Zuse hatte in dieser Beziehung also recht. Diese Art von Automaten sind in der Tat mächtig genug, diesen Aspekt der Natur abzubilden. Ob allerdings der Umkehrschluss, dass die Natur selber ein zellulärer Raum sei, zutrifft, ist eine Frage mit weit grösserer philosophischer Tragweite, als dass sie in einem derartigen Projekt auch nur ansatzweise beantwortet werden könnte. Rein intuitiv ist sie allerdings nicht von vornherein zu verneinen.
 
 \bibliography{biblio}
 \bibliographystyle{plain}
+
+\begin{appendix}
+
+\chapter{Projektdurchführung}
+
+Das Projekt wurde iterativ angesetzt. Es wurden vier Iterationen mit jeweils drei Wochen Laufzeit durchgeführt. Im Folgenden ist die Zuordnung zu den User Stories mit den enstprechenden Story Point Estimates sowie das Burndown-Chart aufgeführt.
+
+\section{Iteration \#1 (20. März--4. April)}
+\begin{itemize}
+\item Benutzer möchte die Differentialgleichung der Diffusion in einem zellulären Automaten dargestellt haben. (3p) 
+\item Benutzer möchte interaktiv die Anfangswerte der Zellen verändern können. (1p)
+\end{itemize}
+
+\includegraphics[scale=0.7]{burndowns/one.png}
+
+\section{Iteration \#2 (5. April--30. April)}
+
+\begin{itemize}
+\item Benutzer möchte die Differentialgleichung der Welle dargestellt haben. (4p) 
+\item Benutzer möchte alle Ableitungen nach dem Ort dargestellt haben. (2p) 
+\item Benutzer möchte die Schrittweite der Integration einstellen können. (1p) 
+\item Benutzer möchte Objekte mit spezifischer Geometrie ins Medium werfen. (4p)
+\end{itemize}
+
+\includegraphics[scale=0.7]{burndowns/two.png}
+
+\section{Iteration \#3 (1. Mai--30. Mai)}
+
+\begin{itemize}
+\item Benutzer möchte Badeenten (ohne Eigengeschwindigkeit, durch 1 Zelle identifiziert) in den Pool setzen können. (3p) 
+\item Benutzer möchte genauere Kontrolle über den Ablauf haben. (1p) 
+\item Schönere Darstellung. (1p) 
+\item Darstellung und Berechnung soll beschleunigt werden. (5p)
+\item Benutzer möchte verschiedene Parameter des Mediums beeinflussen können. (2p) 
+\item Benutzer möchte zwischen verschiedenen Differentialgleichungen umschalten können. (3p)
+\end{itemize}
+
+\includegraphics[scale=0.7]{burndowns/three.png}
+
+\section{Iteration \#4 (1. Juni--15. Juni)}
+
+\begin{itemize}
+\item Benutzer möchte Integrationsalgorithmus einstellen können. (2p) 
+\item Benutzer möchte eine sinnvolle Dokumentation der mathematischen Zusammenhänge. (5p)
+\item Benutzer möchte eine sinnvolle Dokumentation der Implementation. (2p)
+\end{itemize}
+
+\end{appendix}
 
 \end{document}

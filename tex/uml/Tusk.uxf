@@ -23,14 +23,15 @@
     <panel_attributes>/ATusk/
 --
 createCellData()
-getNeighbours()
-calcDifferentials()
-applyDifferentials()
-setCellValue()
-getVelocity()
+getNeighbours(Cell)
+calcDifferentials(Cell, dt)
+applyDifferentials(Cell)
+setCellValue(Cell, value)
+getVelocity(Cell)
 --
 pools[]
-primaryPools</panel_attributes>
+primaryPool
+events[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -117,7 +118,7 @@ primaryPools</panel_attributes>
     <coordinates>
       <x>380</x>
       <y>180</y>
-      <w>100</w>
+      <w>110</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>/Event/
@@ -140,7 +141,7 @@ primaryPools</panel_attributes>
     <coordinates>
       <x>380</x>
       <y>230</y>
-      <w>100</w>
+      <w>110</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>/Neighbourhood/
@@ -163,12 +164,12 @@ primaryPools</panel_attributes>
     <coordinates>
       <x>380</x>
       <y>130</y>
-      <w>100</w>
+      <w>110</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>Pool
 --
-getValue()</panel_attributes>
+getValue(Cell)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
