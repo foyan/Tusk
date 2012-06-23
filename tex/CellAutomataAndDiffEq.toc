@@ -1,0 +1,37 @@
+\contentsline {chapter}{\numberline {1}Einleitung}{3}{chapter.1}
+\contentsline {chapter}{\numberline {2}Theorie}{4}{chapter.2}
+\contentsline {section}{\numberline {2.1}Zellul\IeC {\"a}re Automaten}{4}{section.2.1}
+\contentsline {section}{\numberline {2.2}Vom zellul\IeC {\"a}ren Automaten zur Differentialgleichung}{6}{section.2.2}
+\contentsline {section}{\numberline {2.3}Numerische L\IeC {\"o}sung von Differentialgleichungen}{7}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Differenzierung nach dem Ort}{7}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Integration nach der Zeit mit Einschrittverfahren}{8}{subsection.2.3.2}
+\contentsline {subsubsection}{Forderung}{8}{section*.4}
+\contentsline {subsubsection}{Die impliziten Runge-Kutta-Verfahren}{8}{section*.5}
+\contentsline {subsubsection}{Die expliziten Runge-Kutta-Verfahren}{9}{section*.6}
+\contentsline {subsection}{\numberline {2.3.3}Die homogene Wellengleichung}{10}{subsection.2.3.3}
+\contentsline {chapter}{\numberline {3}Bemerkungen zur Implementation}{12}{chapter.3}
+\contentsline {section}{\numberline {3.1}Wahl des Umfelds}{12}{section.3.1}
+\contentsline {section}{\numberline {3.2}Implementatorische Paradigmen}{12}{section.3.2}
+\contentsline {section}{\numberline {3.3}Architektur}{13}{section.3.3}
+\contentsline {section}{\numberline {3.4}Testing}{13}{section.3.4}
+\contentsline {section}{\numberline {3.5}Automata}{14}{section.3.5}
+\contentsline {section}{\numberline {3.6}Integration}{16}{section.3.6}
+\contentsline {section}{\numberline {3.7}Tusks, Regen, Enten und andere obskure Objekte}{17}{section.3.7}
+\contentsline {subsection}{\numberline {3.7.1}Zellzust\IeC {\"a}nde und Pools}{17}{subsection.3.7.1}
+\contentsline {subsection}{\numberline {3.7.2}Swimmers}{18}{subsection.3.7.2}
+\contentsline {subsection}{\numberline {3.7.3}Events}{19}{subsection.3.7.3}
+\contentsline {section}{\numberline {3.8}View}{21}{section.3.8}
+\contentsline {subsection}{\numberline {3.8.1}Pool Canvas Painting}{23}{subsection.3.8.1}
+\contentsline {subsubsection}{{\tt VectorCanvasPainter}}{23}{section*.7}
+\contentsline {subsubsection}{{\tt PixelCanvasPainter}}{24}{section*.8}
+\contentsline {subsection}{\numberline {3.8.2}Strategie, Strategie, Strategie...}{25}{subsection.3.8.2}
+\contentsline {chapter}{\numberline {4}Schlussfolgerung}{27}{chapter.4}
+\contentsline {section}{\numberline {4.1}Erweiterungsm\IeC {\"o}glichkeiten}{27}{section.4.1}
+\contentsline {section}{\numberline {4.2}Caveats}{28}{section.4.2}
+\contentsline {section}{\numberline {4.3}Fazit}{28}{section.4.3}
+\contentsline {chapter}{Literaturverzeichnis}{29}{chapter*.9}
+\contentsline {chapter}{\numberline {A}Projektdurchf\IeC {\"u}hrung}{32}{appendix.A}
+\contentsline {section}{\numberline {A.1}Iteration \#1 (20. M\IeC {\"a}rz--4. April)}{32}{section.A.1}
+\contentsline {section}{\numberline {A.2}Iteration \#2 (5. April--30. April)}{32}{section.A.2}
+\contentsline {section}{\numberline {A.3}Iteration \#3 (1. Mai--30. Mai)}{33}{section.A.3}
+\contentsline {section}{\numberline {A.4}Iteration \#4 (1. Juni--15. Juni)}{34}{section.A.4}

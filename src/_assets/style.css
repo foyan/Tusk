@@ -1,0 +1,126 @@
+body {
+	background-color: black;
+	color: white;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+}
+
+.ut_body {
+	background-color: white;
+	color: black;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	width:1200px;
+	height:1000px;
+}
+
+
+table {
+	border-collapse: collapse;
+	border-style: none;
+	border-width: 2px;
+}
+
+td {
+	border-style: none;
+	border-width: 1px;
+}
+
+table td {
+	width: 7px;
+	height: 7px;
+	font-size: 8pt;
+}
+
+p.cellvalues { font-size: 14pt; }
+
+.cellTitle {
+	height: 50px;
+}
+
+.button { width:80px; margin-bottom: 2px; }
+
+p.iterationCount { font-size: 20pt; }
+
+.keyShortHelp li { float:left; width:140px;}
+
+#poolList * {
+	vertical-align: middle;
+}
+
+.ctrlSection {
+	margin-top: 4px;
+	float: left;
+	border: 1px solid white;
+	margin-right: 4px;
+	padding-bottom: 2px;
+}
+
+.ctrlSection h1 {
+	display: block;
+	background-color: white;
+	color: black;
+	margin: 0px;
+	font-size: 11px;
+	padding: 4px;
+	padding-top:2px;
+	margin-bottom:2px;
+}
+
+.ctrlSection * {
+	margin-left: 2px;
+	margin-right: 2px;	
+}
+
+.disabled {
+	border: 1px solid gray !important;
+}
+
+.disabled h1 {
+	background-color: gray !important;
+}
+
+
+.title {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.ctrlSection canvas {
+	margin:0;
+	border: 1px solid black;
+}
+
+#cellInspector td {
+	border: 1px solid #111111;
+	width: 70px;
+	height: 20px;
+	text-align: center;
+}
+
+a.buttonLink {
+	color: white;
+	font-weight: bold;
+	background-color: #729fcf;
+	border: 1px solid #445f7c;
+	padding: 1px;
+	padding-bottom: 3px;
+	text-decoration: none;
+	display: block;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding-right: 10px;
+}
+
+a.buttonLink:hover {
+	background-color: #445f7c;
+}
+
+a.buttonLink img {
+	padding: 0;
+	margin: 0;
+	margin-bottom: -4px;
+	margin-right: 4px;
+}
+
+

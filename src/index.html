@@ -1,0 +1,139 @@
+﻿<html>
+	
+	<head>
+		<script type="text/javascript" src="ui/ViewUtils.js"></script>
+		<script type="text/javascript" src="utils/Viscosity.js"></script>
+		<script type="text/javascript" src="tusks/Pool.js"></script>
+		<script type="text/javascript" src="automata/Swimmer.js"></script>
+		<script type="text/javascript" src="automata/AutoSwimmer.js"></script>
+		<script type="text/javascript" src="automata/SwimmerFactory.js"></script>
+		<script type="text/javascript" src="utils/Vector.js"></script>
+		<script type="text/javascript" src="events/RainEvent.js"></script>
+		<script type="text/javascript" src="events/VortexEvent.js"></script>
+		<script type="text/javascript" src="events/FountainEvent.js"></script>
+		<script type="text/javascript" src="events/SmorkEvent.js"></script>
+		<script type="text/javascript" src="tusks/ATusk.js"></script>
+		<script type="text/javascript" src="integrations/Euler.js"></script>
+		<script type="text/javascript" src="integrations/Runge.js"></script>
+		<script type="text/javascript" src="integrations/RungeKutta.js"></script>
+		<script type="text/javascript" src="integrations/IntegrationRegistry.js"></script>
+		<script type="text/javascript" src="automata/VonNeumannNeighbourhood.js"></script>
+		<script type="text/javascript" src="automata/MooreNeighbourhood.js"></script>
+		<script type="text/javascript" src="automata/Cell.js"></script>
+		<script type="text/javascript" src="automata/CellularAutomata.js"></script>
+		<script type="text/javascript" src="tusks/GameOfLife.js"></script>
+		<script type="text/javascript" src="tusks/WaveEquation.js"></script>
+		<script type="text/javascript" src="tusks/DiffusionEquation.js"></script>
+		<script type="text/javascript" src="tusks/TuskRegistry.js"></script>
+		<script type="text/javascript" src="ui/Doc.js"></script>
+		<script type="text/javascript" src="ui/TransportController.js"></script>
+		<script type="text/javascript" src="ui/CellInspectorController.js"></script>
+		<script type="text/javascript" src="ui/ScratchPadController.js"></script>
+		<script type="text/javascript" src="ui/GodsPanelController.js"></script>
+		<script type="text/javascript" src="ui/View.js"></script>
+		<script type="text/javascript" src="ui/painters/VectorCanvasPainter.js"></script>
+		<script type="text/javascript" src="ui/painters/PixelCanvasPainter.js"></script>
+		<script type="text/javascript" src="ui/painters/NoopCanvasPainter.js"></script>
+		<script type="text/javascript" src="ui/painters/PainterFactory.js"></script>
+
+		<link type="text/css" rel="stylesheet" href="_assets/style.css" />
+		<title>Tusk</title>
+	</head>
+
+	<body>
+		<div class="title">
+			The Tusk @ <span id="iterationCount">0</span> Iterations.
+		</div>
+		<div class="ctrlSection" style="padding:0">
+			<h1 style="margin-bottom:0px;height:37px;">
+				<div style="float:right;vertical-align:middle;">Differential Equation:
+					<select id="diffFormel" name="diffFormel" size="1"></select>
+				</div>
+			</h1>
+			<canvas id="pool"></canvas>
+		</div>
+		<div class="ctrlSection" style="padding:0" id="pool2div">
+			<h1 style="margin-bottom:0px;"><div id="poolList"></div></h1>
+			<canvas id="pool1"></canvas>
+		</div>
+		
+		<div style="width:220px;margin:0;padding:0;float:left;">
+			<div class="ctrlSection" style="width:220px;">
+				<h1>Scratch Pad</h1>
+				Modify cell values by writing: "x1,y1,u0,u1,...,un;x2,y2,u0,u1,...,un;..."<br/>
+				<textarea id="InitData" style="width:200px;height:200px;">39,9,1,1;40,9,1</textarea><br/>
+				<input id="applyScratchPad" type="button" value="Apply" />
+			</div>
+			
+			<div class="ctrlSection" id="templates">
+				<h1>Templates</h1>
+			</div>
+		</div>
+				
+		<div style="clear:both;" />
+		
+		<div class="ctrlSection" style="width: 100px;">
+			<h1>Transport</h1>
+			<a href="#" id="run" class="buttonLink"><img src="_assets/pics/transport_run.png" alt="Run" />Run</a>
+			<a href="#" id="pause" class="buttonLink" style="display: none;"><img src="_assets/pics/transport_stop.png" alt="Pause" />Pause</a>
+			<a href="#" id="step" class="buttonLink"><img src="_assets/pics/transport_step.png" alt="Step" />Step</a>
+			<a href="#" id="reset" class="buttonLink"><img src="_assets/pics/transport_reset.png" alt="Reset" />Reset</a>
+		</div>
+		<div class="ctrlSection">
+			<h1>Automata</h1>
+			<table>
+				<tr>
+					<td>Size</td>
+					<td><input type="text" id="rows" value="100" style="width:50px;" />x<input type="text" id="cols" value="100" style="width:50px;" /></td>
+				</tr>
+				<tr>
+					<td>Time&nbsp;Slices</td>
+					<td><input type="text" id="slices" value="4" style="width:50px;" /></td>
+				</tr>
+				<tr>
+					<td>Viscosity</td>
+					<td><select id="viscosity" name="viscosity" size="1">
+		  			</select></td>
+				</tr>
+				<tr>
+					<td>Painter</td>
+					<td><select id="painter" name="painter" size="1"></select></td>
+				</tr>
+				<tr>
+					<td>Integration</td>
+					<td><select id="integration" name="integration" size="1"></select></td>
+				</tr>
+			</table>
+		</div>
+		<div class="ctrlSection">
+			<h1>God's Panel</h1>
+			<div style="padding: 2px;">
+				SHIFT will inspect cell.<br/>
+				CTRL will change cell value to
+				<input type="text" id="setValue" style="width:50px;" value="-0.9" /><br/>
+				<div id="swimmers" style="margin:0;padding:0;margin-bottom:2px;"></div>
+				<input type="button" value="Remove Swimmers" id="removeSwimmers" />
+			</div>
+		</div>
+		<div class="ctrlSection" id="lastBeforeCustom">
+			<h1>Cell Inspector</h1>
+			<table id="cellInspector">
+				<tr>
+					<td id="cellInspector_NW"></td>
+					<td id="cellInspector_N"></td>
+					<td id="cellInspector_NE"></td>
+				</tr>
+				<tr>
+					<td id="cellInspector_W"></td>
+					<td id="cellInspector_C"></td>
+					<td id="cellInspector_E"></td>
+				</tr>
+				<tr>
+					<td id="cellInspector_SW"></td>
+					<td id="cellInspector_S"></td>
+					<td id="cellInspector_SE"></td>
+				</tr>
+			</table>
+		</div>
+	</body>	
+</html>
