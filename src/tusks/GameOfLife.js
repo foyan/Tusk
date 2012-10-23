@@ -87,6 +87,9 @@ function GameOfLife() {
 	this.createLivingCell = function() {
 		return {status: 1};
 	}
+	this.cellStatus = function(val) {
+		return {status: val};
+	}
 	
 	this.createCellData = this.createDeadCell;
 
@@ -105,10 +108,16 @@ function GameOfLife() {
 		*/
 				
 		var livingNeighours = 0;
+		
+		return cell.neighbours[0].currentData.status + cell.neighbours[1].currentData.status;
+		
+		
 		for (var idx = 0; idx < cell.neighbours.length; idx++) {
 			livingNeighours += cell.neighbours[idx].currentData.status;
 		}
 
+		
+		
 		if (cell.currentData.status == 1) {
 			if (livingNeighours == 3) {
 				return this.createLivingCell();
