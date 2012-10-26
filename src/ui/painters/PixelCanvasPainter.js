@@ -26,7 +26,7 @@ PixelCanvasPainter = function(ctx) {
 		var y = cell.y * this.scaling.y;
 		
 		var baseColor = this.baseColor;
-		var color = ViewUtils.getColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
+		var color = this.view.colorizer.getColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
 		
 		for (var ix = x; ix < x + this.scaling.x; ix++) {
 			for (var iy = y; iy < y + this.scaling.y; iy++) {

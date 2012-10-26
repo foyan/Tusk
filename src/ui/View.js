@@ -25,6 +25,7 @@ function View() {
 		
 		this.primaryPainter = PainterFactory.create(PainterFactory.types[0], this.doc.primaryCanvas, this);
 		this.secondaryPainter = PainterFactory.create(PainterFactory.types[0], this.doc.secondaryCanvas, this);
+		this.colorizer = ColorizerFactory.types[0];
 		
 		this.doc.removeSwimmers.onclick = (function(view) {
 			return function() {
@@ -108,13 +109,22 @@ function View() {
 			};
 		})(this));	
 
+		ViewUtils.bindStrategiesToCombobox(null, this.doc.colorizer, ColorizerFactory.types, function(p) {
+			return p.name;
+		}, (function(view) {
+			return function(c) {
+				view.colorizer = c;
+			};
+		})(this));	
+
 		ViewUtils.bindStrategiesToCombobox(null, this.doc.integration, IntegrationRegistry, function(i) {
 			return i.name;
 		}, (function(view) {
 			return function(i) {
 				view.automata.integration = i;
 			};
-		})(this));	
+		})(this));
+
 	}
 	
 	this.bindTuskStrategies = function(tusk) {

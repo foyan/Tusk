@@ -1,9 +1,12 @@
 VectorCanvasPainter = function(ctx) {
+
 	this.context = ctx;
 	
 	this.scaling = new Vector();
 	
 	this.baseColor = {r: 128, g: 128, b: 128};
+	
+	this.view = null;
 
 	this.paintCell = function(cell) {
 		
@@ -15,7 +18,7 @@ VectorCanvasPainter = function(ctx) {
 		var y = cell.y * this.scaling.y;
 		var baseColor = this.baseColor;
 
-		var color = ViewUtils.getFormattedColor(this.pool.getValue(cell), baseColor.r, baseColor.g, baseColor.b);
+		var color = ViewUtils.formatColor(this.view.colorizer.getColor(baseColor));
 		this.context.fillStyle = color;
 
 		this.context.fillRect(x, y, this.scaling.x, this.scaling.y);

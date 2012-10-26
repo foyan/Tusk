@@ -46,6 +46,8 @@ function Doc() {
 	
 	this.painter = document.getElementById("painter");
 	
+	this.colorizer = document.getElementById("colorizer");
+	
 	this.size = {
 		rows: document.getElementById("rows"),
 		cols: document.getElementById("cols")
